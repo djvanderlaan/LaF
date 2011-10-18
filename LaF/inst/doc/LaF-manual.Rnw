@@ -1,0 +1,363 @@
+\documentclass[a4paper,11pt]{article}
+%\VignetteIndexEntry{LaF-manual}
+
+\title{{\Huge\texttt{LaF}}\\A package for processing large ASCII files}
+\author{D.J. van der Laan}
+\date{2011-09-20}
+
+\begin{document}
+
+\maketitle
+
+\section{Introduction}
+\texttt{LaF} is a R package for reading large ASCII files. It offers some
+functionality that is missing from the regular R routines for processing ASCII
+files. First of all, it is optimised for speed. Especially reading fixed width
+files is very slow with the regular R routine \texttt{read.fwf}. However, since
+it is optimised for speed some of the flexibility of the regular routines is
+lost. Seconly, it offers random access: only those rows and columns are read
+that are needed. With the regular routines one always has to read all columns. 
+
+The problem with big files is that they do not fit into memory. One could
+consider this even to be the definition of `big'. To comfortably work with data
+in R the data set needs to fit multiple ($\sim$3) times into memory. There are
+roughly two methods for working with data that doesn't fit into memory. The
+first is to read the data in blocks that do fit into memory process each of
+these block and merge the results. More on this can be found in
+section~\ref{sec:blockwise}. The second is to read only that part of the data
+into memory which is needed for the calculation at hand hoping that that subset
+does fit into memory. For example to crosstabulate two variabeles one only needs
+these two variables. As most datasets contain dozens of variables this can
+easily reduce the memory needed for the operation by a factor of ten.  More on
+this in section~\ref{sec:subsets}.
+
+Why ASCII? Why not use a binary format like \texttt{ff} and similar packages do?
+True, binary storage allows for much faster access since the conversion from
+ASCII to binary format is not needed and data can often be stored much more
+compact. The main reason is portability. Almost every program designed for data
+precessing can read ASCII files. And even if one wants to use a package like
+\texttt{ff}, the source files are often ASCII files and first need to be
+converted to \texttt{ff} format. \texttt{LaF} can also speed up this last
+process. 
+
+
+\section{Opening a file}
+\label{sec:opening}
+
+<<echo=FALSE,results=hide>>=
+options(width=54)
+library(LaF)
+
+# Generate data
+n <- 10000
+data <- data.frame(
+        id = trunc(runif(n, 1, 1E6)),
+        gender = sample(c("M", "F"), n, replace=TRUE),
+        postcode = paste(
+            trunc(runif(n, 1000, 9999)),
+            sample(LETTERS, n, replace=TRUE),
+            sample(LETTERS, n, replace=TRUE), sep=""),
+        age = round(runif(n, 0, 109)),
+        income = round(rexp(n, 1/1000), 2),
+    stringsAsFactors=FALSE)
+
+# Generate fwf file
+lines <- sprintf("%6.0f%1s%6s%3d%8.2f", data$id, data$gender, data$postcode,
+    data$age, data$income)
+writeLines(lines, con="file.fwf")
+
+# Generate CSV file
+lines <- sprintf("%.0f,%s,%s,%d,%f", data$id, data$gender, data$postcode,
+    data$age, data$income)
+writeLines(lines, con="file.csv")
+@
+
+\subsection{Column types}
+LaF currently supports the following column types
+\begin{description}
+  \item[double] Fields containing floating point numbers. Scientific notation
+  (e.g. 1.9E-16) is not supported. The character used for the decimal mark can
+  be specified using the \texttt{dec} option of the functions used to open
+  files. 
+  \item[integer] Fields containing positive or negative integer numbers (e.g.
+  42, -100)
+  \item[categorical] Categorical fields are treated as character fields except
+  that a table is built mapping all observed values to integers. A factor vector
+  is returned in R when this type is used. The levels can be read and set using
+  the \texttt{levels} method. 
+  \item[string] Character fields such as postcodes, identification numbers. 
+\end{description}
+
+\subsection{Fixed width files}
+\label{sec:fixedwidth}
+In fixed width files columns are defined by character positions in the files.
+For example, the first seven characters of each line belong to the first column,
+the next two characters belong to the second, etc. Each line therefore has the
+same number of characters. This is also a disadvantage of the format. If there
+is a column with variable string lenghts, the column has to be wide enough to
+accomodate the widest field. The main advantage of the format is that reading in
+large files (and especially random access) can be very efficient as the
+positions of rows and columns can be calculated.
+
+Fixed width files can be openen using the function \texttt{laf\_open\_fwf}. In
+order to open a file the following options can be specified:
+\begin{description}
+  \item[filename] name of the file to be opened.
+  \item[column\_types] Character vector containing the types of data in each of
+  the columns. Valid types are: double, integer, categorical and string.
+  \item[column\_widths] Numeric vector containing the width in number of
+  character of each of the columns.
+  \item[column\_names (optional)] Optional character vector containing the names
+  of the columns. The default names are `V1', `V2', etc.
+  \item[dec (optional)] Optional character specifying the decimal mark. The
+  default value is `.'.
+\end{description}
+
+Suppose the following data is stored in the file `file.fwf' in the current
+working directory (showing only the first five lines):
+<<echo=FALSE>>=
+lines <- readLines("file.fwf", n=5)
+cat(paste(lines,collapse="\n"), "\n")
+@
+Then this file can be openened using the following command:
+<<echo=TRUE,results=hide>>=
+dat <- laf_open_fwf(filename="file.fwf", 
+    column_types=c("integer", "categorical", 
+        "string", "integer", "double"), 
+    column_names=c("id", "gender", "postcode", "age", "income"),
+    column_widths=c(6, 1, 6, 3, 8))
+@
+\texttt{dat} is now a \texttt{laf} object. Data can be extracted from this
+object using the commands described in sections~\ref{sec:blockwise}
+and~\ref{sec:subsets}. For example, to read all data in the file one can use the
+following command:
+<<echo=TRUE,results=hide>>=
+alldata <- dat[ , ]
+@
+
+\subsection{Comma separated files}
+In comma seperated files each line contains a row of data, the columns are
+seperated using a seperator character which is usually a comma although other
+seperator characters are also used (e.g. the `;' is often used in Europe where
+the comma is often used as the decimal seperator). It is a often used format.
+The disadvantage compared to the fixed width format is that the positions of
+columns and rows in the file can not be calculated. Therefore, a program reading
+a comma seperated file has to scan through the entire file to find a certain row
+or column making random access much slower than with fixed width files. 
+
+A comma seperated file for the \texttt{LaF} package has to observe the following
+rules someof which slightly deviate from the `official' rules of comma seperated
+files:
+\begin{itemize}
+  \item The first row can not contain the column names. These should be
+  specified using the option \texttt{column\_names} of the function
+  \texttt{laf\_open\_csv}. The first line in the file is treated as the first
+  data row and the columns in this line should be of the correct type. 
+  \item Quotes are treated slightly different from the way they are normally
+  treated in csv files. Only double quotes are accepted.  Everything inside
+  double quotes is considered part of the field except newline characters and
+  double quotes. Double quotes in text fields are therefore not possible. Below
+  are a few examples of how quotes are interpreted:
+    \begin{itemize}
+      \item \texttt{12345} = \texttt{12345}
+      \item \texttt{"12345"} = \texttt{12345}
+      \item \texttt{"123"45} = \texttt{12345}
+      \item \texttt{"123""45"} = \texttt{123"45"}
+      \item \texttt{"123$\setminus$n45"} = ERROR
+      \item \texttt{12"345"} = \texttt{12"345"}
+    \end{itemize}
+
+  \item Each line in the file should contain exactly one row of data. Normally
+  line breaks should be possible inside quoted columns. In order to keep the
+  code as fast as possible, this is not the case in the \texttt{LaF} package. 
+\end{itemize}
+Comma seperated files can be opened using the function \texttt{laf\_open\_csv}.
+This function accepts the following arguments:
+\begin{description}
+  \item[filename] name of the file to be opened.
+  \item[column\_types] Character vector containing the types of data in each of
+  the columns. Valid types are: double, integer, categorical and string.
+  \item[column\_names (optional)] Optional character vector containing the names
+  of the columns. The default names are `V1', `V2', etc.
+  \item[sep (optional)] Optional character specifying seperator mark used
+  between the columns. The default value is `,'.
+  \item[dec (optional)] Optional character specifying the decimal mark. The
+  default value is `.'.
+\end{description}
+
+Suppose the following data is stored in the file `file.csv' in the current
+working directory (showing only the first five lines):
+<<echo=FALSE>>=
+lines <- readLines("file.csv", n=5)
+cat(paste(lines,collapse="\n"), "\n")
+@
+Then this file can be openened using the following command:
+<<echo=TRUE,results=hide>>=
+dat <- laf_open_csv(filename="file.csv", 
+    column_types=c("integer", "categorical", 
+        "string", "integer", "double"), 
+    column_names=c("id", "gender", "postcode", "age", "income"))
+@
+\texttt{dat} is now a \texttt{laf} object. Data can be extracted from this
+object using the commands described in sections~\ref{sec:blockwise}
+and~\ref{sec:subsets}. For example, to read all data in the file one can use the
+following command:
+<<echo=TRUE,results=hide>>=
+alldata <- dat[ , ]
+@
+
+
+
+\section{Blockwise processing}
+\label{sec:blockwise} 
+Blockwise processing of a file usually has the following structure:
+\begin{enumerate}
+  \item Go to the beginning of the file
+  \item Read a block of data
+  \item Perform calculations on this block perhaps using results from the
+  previous block. 
+  \item Store results
+  \item Repeat 2--4 until all data has been processed. 
+  \item If necessary combine the results of all the blocks. 
+\end{enumerate}
+
+In order to go to a specific position in the file \texttt{LaF} offers two
+methods: \texttt{begin} and \texttt{goto}. The first method simply goes to the
+beginning of the file while the second goes to the specified line. Assume, a
+\texttt{laf} object named \texttt{dat} has been created (see
+section~\ref{sec:opening} for this). The only argument needed by \texttt{begin}
+is the \texttt{laf} object:
+<<echo=TRUE>>=
+begin(dat)
+@
+For \texttt{goto} also the line number needs to be specified. The following
+command sets the filepointer at the beginning of line 1000. The next call to
+\texttt{next\_block} (see below) will therefore return as first row the data
+belonging in line 1000 of the file. 
+<<echo=TRUE>>=
+goto(dat, 1000)
+@
+
+Blocks of data can be read using \texttt{next\_block}. The first argument needs
+to be the reference to the file (the \texttt{laf} object); other arguments are
+optional. By default all columns and 5000 lines are read:
+<<echo=TRUE>>=
+d <- next_block(dat)
+nrow(d)
+@
+The number of lines can be specified using the \texttt{nrows} argument and the
+columns that should be read can be specified using the \texttt{columns}
+argument. The following command reads 100 lines and the first and third column. 
+<<echo=TRUE>>=
+d <- next_block(dat, columns=c(1,3), nrows=100)
+dim(d)
+@
+If possible the use of the \texttt{columns} argument is advised. This can
+significantly speed up the processing of the file. First of all, the amount of
+data that needs to be transfered to R is much smaller. Second, the strings in
+the unread columns do not need to be converted to numerical values. 
+
+When the end of the file is reached \texttt{next\_block} returns a
+\texttt{data.frame} with zero rows. This can be used to detect the end of file.
+The following example shows how \texttt{begin} and \texttt{} can be
+used to calculate the number of elements equal to 2 in the second column.
+<<echo=TRUE>>=
+n <- 0
+begin(dat)
+while (TRUE) {
+    d <- next_block(dat, 2)
+    n <- n + sum(d$gender == 'M')
+    if (nrow(d) == 0) break;
+}
+print(n)
+@
+
+Since processing a file in this way is such a common task, the method
+\texttt{process\_blocks} has been defined that automates this and is faster.
+This method accepts as its first argument a \texttt{laf} object. The second
+argument should be the function that should be applied to each of the blocks.
+This function should accept as its first argument the data blocks. The last time
+the function is called it receives a \texttt{data.frame} with zero rows. This
+can be used to do some end calculations. The second argument of the function is
+the result of the previous function call. The first time the function is called
+the second argument had the value \texttt{NULL}. This can be used to perform
+initialisation. Additional arguments to \texttt{process\_blocks} are passed on
+to the function. The previous example can be translated into:
+<<echo=TRUE>>=
+count <- function(d, prev) {
+  if (is.null(prev)) prev <- 0
+  return(prev + sum(d$gender == 'M'))
+}
+(n <- process_blocks(dat, count))
+@
+Using \texttt{process\_blocks} is faster than using \texttt{next\_block}
+repeatedly since the \texttt{data.frame} containing the data that is read in, is
+destroyed and created every iteration, while in \texttt{process\_blocks} this
+\texttt{data.frame} is created only once. 
+
+Below is an example that calculates the average of the third column of the file
+and illustrates initialisation and finilisation (note this is not how you will
+want to calculate the average over a column in a large file). Since only the
+third column of the file is needed for this calculation, the \texttt{columns}
+option is used which makes the calculation much faster.
+<<echo=TRUE>>=
+ave <- function(d, prev) {
+  # initialisation
+  if (is.null(prev)) {
+    prev <- c(sum=0, n=0)
+  }
+  # finilisation
+  if (nrow(d) == 0) {
+    return(as.numeric(prev[1]/prev[2]))
+  }
+  result <- prev + c(sum(d$income), nrow(d))
+  return(result)
+}
+(n <- process_blocks(dat, ave, columns=5))
+@
+
+\section{Selecting subsets}
+\label{sec:subsets}
+
+An other common way of handling large files is to only read in the data that is
+needed for the operation at hand. This is feasible when such a subset of the
+data does fit into memory. For this, selections can be performed on a
+\texttt{laf} object using the same methods one would use for a regular
+\texttt{data.frame}. The code below shows several different examples:
+<<echo=TRUE>>=
+# select the first 10 rows
+result <- dat[1:10, ]
+# select the second column
+result <- dat[ , 2]
+# select the first 10 rows and the second column
+result <- dat[1:10, 2]
+@
+Indexing a \texttt{laf} object always results in a \texttt{data.frame}. For
+example, the second and last example would have resulted in a vector when
+applied to a \texttt{data.frame}, while in the examples above a
+\texttt{data.frame} with one column is returned. 
+
+Using the \texttt{\$} and \texttt{$[[$} operators columns can be selected from
+the \texttt{laf} object. The result is an object of type \texttt{laf\_column}
+which is a subclass of \texttt{laf}. It is a \texttt{laf} object with a field
+containing the column number. To get the data inside these columns indexing can
+be used as is shown in the following examples. In the first example the records
+are selected from the file for which the age is higher than 65:
+<<echo=TRUE>>=
+result <- dat[dat$age[] > 65, ]
+@
+The same can be done using the column number
+<<echo=TRUE>>=
+result <- dat[dat[[4]][] > 65, ]
+@
+or 
+<<echo=TRUE>>=
+result <- dat[dat[ , 3] > 65, ]
+@
+or
+<<echo=TRUE>>=
+result <- dat[dat[ , "age"] > 65, ]
+@
+
+
+\end{document}

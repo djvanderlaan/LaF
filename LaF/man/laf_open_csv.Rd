@@ -1,0 +1,71 @@
+\name{laf_open_csv}
+\alias{laf_open_csv}
+\title{
+  Create a connection to a comma seperated value (CSV) file.
+}
+\description{
+  A connection to the file filename is created. Column types have to be
+  specified. These are not determined automatically as for example read.csv
+  does.  This has been done to increase speed. 
+
+  After the connection is created data can be extracted using indexing (as in a
+  normal data.frame) or methods such as read_lines and next_block can be used to
+  read in blocks. For processing the file in blocks the (faster) convenience
+  function process_blocks can be used. 
+}
+\usage{
+  laf_open_csv(filename, column_types, 
+    column_names = paste("V", seq_len(length(column_types)), sep = ""), 
+    sep = ",", dec = ".")
+}
+\arguments{
+  \item{filename}{character containing the filename of the CSV-file}
+  \item{column_types}{character vector containing the types of data in each of
+  the columns. Valid types are: double, integer, categorical and string.}
+  \item{column_names}{optional character vector containing the names of the
+  columns.}
+  \item{sep}{optional character specifying the field seperator used in the
+  file.}
+  \item{dec}{optional character specifying the decimal mark.}
+}
+\details{
+  The CSV-file should not contain headers. 
+}
+\value{
+  Object of type \code{\linkS4class{laf}}. Values can be extracted from this
+  object using indexing, and methods such as \code{\link{read_lines}},
+  \code{\link{next_block}}. 
+}
+\author{
+  D.J. van der Laan \email{djvanderlaan@unrealizedtime.nl}
+}
+\seealso{
+  See \code{\link{read.csv}} for conventional access of CSV files. 
+}
+\examples{
+# Generate test data
+ntest <- 10
+column_types <- c("integer", "integer", "double", "string")
+testdata <- data.frame(
+    a = 1:ntest,
+    b = sample(1:2, ntest, replace=TRUE),
+    c = round(runif(ntest), 13),
+    d = sample(c("jan", "pier", "tjores", "corneel"), ntest, replace=TRUE)
+    )
+# Write test data to csv file
+write.table(testdata, file="tmp.csv", row.names=FALSE, col.names=FALSE, sep=',')
+
+# Create LaF-object
+laf <- laf_open_csv("tmp.csv", column_types=column_types)
+
+# Read from file using indexing
+first_column <- laf[ , 1]
+first_row    <- laf[1, ]
+
+# Read from file using blockwise operators
+begin(laf)
+first_block <- next_block(laf, nrows=2)
+second_block <- next_block(laf, nrows=2)
+
+}
+
