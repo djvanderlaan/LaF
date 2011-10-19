@@ -18,8 +18,6 @@ LaF.  If not, see <http://www.gnu.org/licenses/>.
 #include "fwfreader.h"
 #include "conversion.h"
 #include <cassert>
-#include <iostream>
-#include <iomanip>
 #include <cstring>
 #include <cassert>
 
@@ -32,12 +30,6 @@ FWFReader::FWFReader(const std::string& filename, unsigned int buffersize, unsig
   line_[0] = 0;
   if (nlines == 0) nlines_ = determine_nlines();
   reset();
-  /*{
-    std::cerr << "Opening file '" << filename << "'" << std::endl;
-    std::cerr << "  line size = " << linesize_ << std::endl;
-    std::cerr << "  number of lines = " << nlines_ << std::endl;
-    std::cerr << "  buffer size = " << buffersize << " lines = " << buffersize_ << " characters" << std::endl;
-  }*/
 }
 
 FWFReader::~FWFReader() {

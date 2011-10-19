@@ -47,11 +47,9 @@ int IntFactorColumn::get_value() const {
 void IntFactorColumn::set_level(int value, const std::string& label) {
   LevelMap::iterator p = map_.find(value);
   if (p == map_.end()) {
-    std::cout << "Adding level: '" << value << "' '" << label << "'" << std::endl;
     int level = map_.size() + 1;
     map_[value] = LevelLabel(level, label);
   } else {
-    std::cout << "Modifying level: '" << value << "' '" << label << "'" << std::endl;
     p->second.second = label;
   }
 }

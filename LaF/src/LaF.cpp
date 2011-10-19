@@ -15,8 +15,6 @@ You should have received a copy of the GNU General Public License along with
 LaF.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <iostream>
-#include <iomanip>
 #include "csvreader.h"
 #include "fwfreader.h"
 #include "readermanager.h"
