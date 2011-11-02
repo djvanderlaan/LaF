@@ -29,7 +29,8 @@ FactorColumn::~FactorColumn() {
 int FactorColumn::get_value() const {
   const char*  buffer = reader_->get_buffer(column_);
   unsigned int length = reader_->get_length(column_);
-  if (length == 0) return NA_INTEGER;
+  if (length == 0 || all_chars_equal(buffer, length, ' ')) return NA_INTEGER;
+  //OLDif (length == 0) return NA_INTEGER;
   std::string value(buffer, length);
   if (levels_[value] == 0) {
     levels_[value] = levels_.size();

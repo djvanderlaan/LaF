@@ -1,7 +1,7 @@
 Package: LaF
 Type: Package
 Title: Fast access to large ASCII files
-Version: 0.2
+Version: 0.2-1
 Date: 2011-10-18
 Author: Jan van der Laan 
 Maintainer: Jan van der Laan <djvanderlaan@unrealizedtime.nl>
