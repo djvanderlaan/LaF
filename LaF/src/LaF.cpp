@@ -230,21 +230,14 @@ BEGIN_RCPP
   Rcpp::IntegerVector pv(p);
   Rcpp::IntegerVector column(r_column);
   Reader* reader = ReaderManager::instance()->get_reader(pv[0]);
-  std::vector<std::string> levels;
   if (reader) {
-    
     const FactorColumn* factor = dynamic_cast<const FactorColumn*>(reader->get_column(column[0]));
     if (factor) {
       const std::map<std::string, int>& levels_map = factor->get_levels();
-      for (std::map<std::string, int>::const_iterator p = levels_map.begin(); p != levels_map.end(); ++p) {
-        levels.push_back(p->first);
-      }
+      return Rcpp::wrap(levels_map);
     }
   }
-  Rcpp::CharacterVector r_levels(levels.size());
-  for (unsigned int i = 0; i < levels.size(); ++i) {
-    r_levels[i] = levels[i];
-  }
+  Rcpp::IntegerVector r_levels(0);
   return r_levels;
 END_RCPP
 }

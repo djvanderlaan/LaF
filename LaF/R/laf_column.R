@@ -153,6 +153,7 @@ setMethod(
     definition = function(x) {
         levels <- .Call("laf_levels", as.integer(x@file_id), 
                 as.integer(x@column-1))
+        levels <- names(levels)[order(levels)]
         return(levels)
     }
 )
