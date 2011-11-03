@@ -16,6 +16,7 @@ fi
 echo "Copying package directory to build directory"
 cp -r $package/ $builddir/
 cd $builddir
+rm -f -r $package/work
 
 echo "Building source package..."
 R CMD build $package
