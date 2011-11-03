@@ -17,4 +17,5 @@ URL: http://code.google.com/p/laf-r/
 License: GPL-3
 LazyLoad: yes
 Depends: Rcpp (>= 0.9.0), methods
+Suggests: testthat
 LinkingTo: Rcpp
