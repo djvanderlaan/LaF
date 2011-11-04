@@ -13,8 +13,8 @@ data <- data.frame(
       id=c(1,2,3,NA,4,5,6,7),
       gender=as.factor(c("M", "F", NA, "M", "F", "M", "M", "F")),
       x=c(1.45, 12, 0.22, 22, 12345, NA, -12.1, -1),
-      city=c("Rotterdam ", "Amsterdam ", "Berlin    ", "Paris     ", 
-          "London    ", "Copenhagen", "          ", "Oslo      "),
+      city=c("Rotterdam", "Amsterdam", "Berlin", "Paris", 
+          "London", "Copenhagen", "", "Oslo"),
       stringsAsFactors=FALSE
     )
 
@@ -114,6 +114,4 @@ test_that(
     })
 
 
-# following code generates warning
-#laf[[2]]
-
+unlink("tmp.fwf")

@@ -150,3 +150,27 @@ double strtodouble(const char* str, unsigned int nchar, char dec) {
   return sign * exponent*(before_decimal + after_decimal);
 }
 
+// ============================================================================
+// ===                 CONVERSION FROM CHAR* TO STRING                     ====
+// ============================================================================
+
+std::string chartostring(const char* c, unsigned int length, bool trim) {
+  if (trim) {
+    unsigned int newlength = length;
+    for (unsigned int i = 0; i < length; ++i) {
+      if (*c != ' ') break;
+      c++;
+      newlength--;
+    }
+    length = newlength;
+    const char* cend = c + length - 1;
+    for (unsigned int i = 0; i < newlength; ++i) {
+      if (*cend != ' ') break;
+      cend--;
+      length--;
+    }
+  }
+  return std::string(c, length);
+}
+
+

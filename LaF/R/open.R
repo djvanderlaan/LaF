@@ -19,7 +19,7 @@
 #
 laf_open_csv <-function(filename, column_types, 
         column_names = paste("V", seq_len(length(column_types)), sep=""),
-        sep=",", dec='.') {
+        sep=",", dec='.', trim=FALSE) {
     # check filename
     if (!is.character(filename))
         stop("filename should be of type character.")
@@ -46,8 +46,12 @@ laf_open_csv <-function(filename, column_types,
     dec <- dec[1]
     if (nchar(dec) != 1)
         stop("The number of characters in dec is not equal to one.")
+    # check trim
+    if (!is.logical(trim))
+        stop("trim should be of type logical")
+    trim <- trim[1]
     # open file
-    p <- .Call("laf_open_csv", filename, types, sep, dec)
+    p <- .Call("laf_open_csv", filename, types, sep, dec, trim)
     # create laf-object
     result <- new(Class="laf", 
         file_id = as.integer(p),
@@ -65,7 +69,7 @@ laf_open_csv <-function(filename, column_types,
 #
 laf_open_fwf <-function(filename, column_types, column_widths,
         column_names = paste("V", seq_len(length(column_types)), sep=""),
-        dec = ".") {
+        dec = ".", trim=TRUE) {
     # check filename
     if (!is.character(filename))
         stop("filename should be of type character.")
@@ -92,8 +96,12 @@ laf_open_fwf <-function(filename, column_types, column_widths,
     dec <- dec[1]
     if (nchar(dec) != 1)
         stop("The number of characters in dec is not equal to one.")
+    # check trim
+    if (!is.logical(trim))
+        stop("trim should be of type logical")
+    trim <- trim[1]
     # open file
-    p <- .Call("laf_open_fwf", filename, types, column_widths, dec)
+    p <- .Call("laf_open_fwf", filename, types, column_widths, dec, trim)
     # create laf-object
     result <- new(Class="laf", 
         file_id = as.integer(p),

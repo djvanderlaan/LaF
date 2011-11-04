@@ -27,6 +27,9 @@ class FactorColumn : public Column {
     FactorColumn(const Reader* reader, unsigned int column);
     ~FactorColumn();
 
+    void set_trim(bool trim);
+    bool get_trim() const;
+
     int get_value() const;
 
     const std::map<std::string, int>& get_levels() const;
@@ -45,6 +48,7 @@ class FactorColumn : public Column {
     }
     
   private:
+    bool trim_;
     mutable std::map<std::string, int> levels_;
     Rcpp::IntegerVector v;
     int* pv;

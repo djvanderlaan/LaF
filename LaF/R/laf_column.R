@@ -46,7 +46,7 @@ setMethod(
         if (object@file_type == "fwf")
             cat("  Column width = ", object@column_widths[object@column], "\n", sep="")
         cat("Showing first 10 elements:\n")
-        print(object[1:10])
+        print(next_block(object, nrows=10))
     }
 )
 

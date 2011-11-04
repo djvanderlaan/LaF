@@ -20,14 +20,25 @@ LaF.  If not, see <http://www.gnu.org/licenses/>.
 #include "conversion.h"
 
 StringColumn::StringColumn(const Reader* reader, unsigned int column) :
-  Column(reader, column)
+  Column(reader, column), trim_(false)
 { }
 
 StringColumn::~StringColumn() {
 }
 
+void StringColumn::set_trim(bool trim) {
+  trim_ = trim;
+}
+
+bool StringColumn::get_trim() const {
+  return trim_;
+}
+    
 std::string StringColumn::get_value() const {
-  return std::string(reader_->get_buffer(column_), reader_->get_length(column_));
+  const char*  buffer = reader_->get_buffer(column_);
+  unsigned int length = reader_->get_length(column_);
+  return chartostring(buffer, length, trim_);
+  //return std::string(reader_->get_buffer(column_), reader_->get_length(column_));
 }
 
 

@@ -28,3 +28,5 @@ test_that(
         expect_that(testdata, equals(data))
     })
 
+unlink("tmp.fwf")
+

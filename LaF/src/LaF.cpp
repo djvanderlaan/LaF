@@ -20,7 +20,8 @@ LaF.  If not, see <http://www.gnu.org/licenses/>.
 #include "readermanager.h"
 #include <Rcpp.h>
 
-RcppExport SEXP laf_open_csv(SEXP r_filename, SEXP r_types, SEXP r_sep, SEXP r_dec) {
+RcppExport SEXP laf_open_csv(SEXP r_filename, SEXP r_types, SEXP r_sep, 
+    SEXP r_dec, SEXP r_trim) {
 BEGIN_RCPP
   Rcpp::CharacterVector filenamev(r_filename);
   Rcpp::IntegerVector types(r_types);
@@ -29,9 +30,12 @@ BEGIN_RCPP
   int sep = static_cast<int>(sepv[0][0]);
   Rcpp::CharacterVector decv(r_dec);
   char dec = static_cast<char>(decv[0][0]);
+  Rcpp::LogicalVector trimv(r_trim);
+  bool trim = static_cast<bool>(trimv[0]);
   Rcpp::IntegerVector p = Rcpp::IntegerVector::create(1);
   CSVReader* reader = new CSVReader(filename, sep);
   reader->set_decimal_seperator(dec);
+  reader->set_trim(trim);
   for (int i = 0; i < types.size(); ++i) {
     if (types[i] == 0) {
       reader->add_double_column();
@@ -50,7 +54,8 @@ BEGIN_RCPP
 END_RCPP
 }
 
-RcppExport SEXP laf_open_fwf(SEXP r_filename, SEXP r_types, SEXP r_widths, SEXP r_dec) {
+RcppExport SEXP laf_open_fwf(SEXP r_filename, SEXP r_types, SEXP r_widths, 
+    SEXP r_dec, SEXP r_trim) {
 BEGIN_RCPP
   Rcpp::CharacterVector filenamev(r_filename);
   Rcpp::IntegerVector types(r_types);
@@ -58,9 +63,12 @@ BEGIN_RCPP
   std::string filename = static_cast<char*>(filenamev[0]);
   Rcpp::CharacterVector decv(r_dec);
   char dec = static_cast<char>(decv[0][0]);
+  Rcpp::LogicalVector trimv(r_trim);
+  bool trim = static_cast<bool>(trimv[0]);
   Rcpp::IntegerVector p = Rcpp::IntegerVector::create(1);
   FWFReader* reader = new FWFReader(filename);
   reader->set_decimal_seperator(dec);
+  reader->set_trim(trim);
   for (int i = 0; i < types.size(); ++i) {
     if (types[i] == 0) {
       reader->add_double_column(widths[i]);

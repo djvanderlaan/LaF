@@ -18,7 +18,7 @@ LaF.  If not, see <http://www.gnu.org/licenses/>.
 #include "reader.h" 
 
 Reader::Reader() :
-  decimal_seperator_('.')
+  decimal_seperator_('.'), trim_(false)
 {
 }
 
@@ -40,11 +40,13 @@ const IntColumn* Reader::add_int_column() {
 
 const StringColumn* Reader::add_string_column() {
   StringColumn* column = new StringColumn(this, columns_.size());
+  column->set_trim(trim_);
   columns_.push_back(column);
   return column;
 }
 const FactorColumn* Reader::add_factor_column() {
   FactorColumn* column = new FactorColumn(this, columns_.size());
+  column->set_trim(trim_);
   columns_.push_back(column);
   return column;
 }
@@ -71,3 +73,10 @@ char Reader::get_decimal_seperator() const {
   return decimal_seperator_;
 }
 
+void Reader::set_trim(bool trim) {
+  trim_ = trim;
+}
+
+bool Reader::get_trim() const {
+  return trim_;
+}

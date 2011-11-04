@@ -26,6 +26,9 @@ class StringColumn : public Column {
     StringColumn(const Reader* reader, unsigned int column);
     ~StringColumn();
 
+    void set_trim(bool trim);
+    bool get_trim() const;
+
     std::string get_value() const;
 
     virtual void assign() {
@@ -42,6 +45,7 @@ class StringColumn : public Column {
     }
 
   private:
+    bool trim_;
     Rcpp::CharacterVector v;
     int index;
 };

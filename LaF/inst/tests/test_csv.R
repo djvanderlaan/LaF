@@ -105,6 +105,4 @@ test_that(
     })
 
 
-# following code generates warning
-#laf[[2]]
-
+unlink("tmp.csv")

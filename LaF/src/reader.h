@@ -52,9 +52,14 @@ class Reader {
 
     void set_decimal_seperator(char seperator);
     char get_decimal_seperator() const;
+
+    void set_trim(bool trim);
+    bool get_trim() const; 
+
   private:
     std::vector<Column*> columns_;
     char decimal_seperator_;
+    bool trim_;
 };
 
 #endif

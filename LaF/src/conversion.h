@@ -19,6 +19,7 @@ LaF.  If not, see <http://www.gnu.org/licenses/>.
 #define CONVERSION_H
 
 #include <exception>
+#include <string>
 
 class ConversionError : public std::exception {};
 
@@ -26,6 +27,8 @@ int strtoint(const char* str, unsigned int nchar);
 double strtodouble(const char* str, unsigned int nchar, char dec = '.');
 
 bool all_chars_equal(const char* str, unsigned int n, char c = ' ');
+
+std::string chartostring(const char* str, unsigned int length, bool trim = false);
 
     
 #endif

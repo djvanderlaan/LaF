@@ -1,6 +1,6 @@
 
-include(LaF)
-include(testthat)
+library(LaF)
+library(testthat)
 
 test_package("LaF")
 

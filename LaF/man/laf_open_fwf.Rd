@@ -14,7 +14,9 @@
   function process_blocks can be used. 
 }
 \usage{
-laf_open_fwf(filename, column_types, column_widths, column_names = paste("V", seq_len(length(column_types)), sep = ""), dec = ".")
+laf_open_fwf(filename, column_types, column_widths, 
+    column_names = paste("V", seq_len(length(column_types)), sep = ""), 
+    dec = ".", trim=TRUE)
 }
 \arguments{
   \item{filename}{character containing the filename of the CSV-file.}
@@ -25,6 +27,8 @@ laf_open_fwf(filename, column_types, column_widths, column_names = paste("V", se
   \item{column_names}{optional character vector containing the names of the 
     columns.}
   \item{dec}{optional character specifying the decimal mark.}
+  \item{trim}{optional logical specifying whether or not whitespace at the end
+  of factor levels or character strings should be trimmed.}
 }
 \value{
   Object of type \code{\linkS4class{laf}}. Values can be extracted from this object 
