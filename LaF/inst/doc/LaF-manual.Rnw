@@ -191,6 +191,10 @@ This function accepts the following arguments:
   character strings should be trimmed left and right from white space. This
   applies to both columns of type `string' as `categorical'. For comma separated
   files files the default is false (do not trim white space).
+  \item[skip (optional)] Optional numeric value specifying the number of lines
+  at the beginning of the file that should be skipped before starting to read
+  data. This can be used, for example, to skip the header as headers are not
+  supported: the user is required to specify the types and names of the columns.
 \end{description}
 
 Suppose the following data is stored in the file `file.csv' in the current
