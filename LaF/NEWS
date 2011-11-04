@@ -1,0 +1,11 @@
+
+LaF version 0.3
+===============================================================================
+* Fixed bug with categorical columns. The levels of the categorical columns not
+  always match those in the file.
+* Added option to laf_open_fwf and laf_open_csv to trim white space from string
+  and categorical columns.
+* Added option to laf_open_csv to skip the first lines in the file.
+* Added ability to read floating point numbers in scientific format.
+* Added tests.
+
