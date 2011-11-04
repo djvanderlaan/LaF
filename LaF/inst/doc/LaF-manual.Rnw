@@ -111,6 +111,10 @@ order to open a file the following options can be specified:
   of the columns. The default names are `V1', `V2', etc.
   \item[dec (optional)] Optional character specifying the decimal mark. The
   default value is `.'.
+  \item[trim (optional)] Optional logical value specifying whether of not
+  character strings should be trimmed left and right from white space. This
+  applies to both columns of type `string' as `categorical'. For fixed width
+  files the default is true (trim white space).
 \end{description}
 
 Suppose the following data is stored in the file `file.fwf' in the current
@@ -183,6 +187,10 @@ This function accepts the following arguments:
   between the columns. The default value is `,'.
   \item[dec (optional)] Optional character specifying the decimal mark. The
   default value is `.'.
+  \item[trim (optional)] Optional logical value specifying whether of not
+  character strings should be trimmed left and right from white space. This
+  applies to both columns of type `string' as `categorical'. For comma separated
+  files files the default is false (do not trim white space).
 \end{description}
 
 Suppose the following data is stored in the file `file.csv' in the current
