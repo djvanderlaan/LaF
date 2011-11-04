@@ -24,9 +24,10 @@ LaF.  If not, see <http://www.gnu.org/licenses/>.
 
 class CSVReader : public Reader {
   public:
-    CSVReader(const std::string& filename, int sep = ',', unsigned int buffer_size = 1E5);
+    CSVReader(const std::string& filename, int sep = ',', unsigned int skip = 0, 
+      unsigned int buffer_size = 1E5);
     virtual ~CSVReader();
-    
+
     unsigned int nlines() const;
 
     void reset();
@@ -42,6 +43,7 @@ class CSVReader : public Reader {
 
   protected:
     unsigned int determine_ncolumns(const std::string& filename);
+    unsigned int determine_offset(const std::string& filename, unsigned int skip);
 
   private:
     // file
@@ -49,6 +51,8 @@ class CSVReader : public Reader {
     int sep_;
     std::fstream file_;
     unsigned int ncolumns_;
+    unsigned int offset_;
+    unsigned int skip_;
     // buffer
     char* buffer_;
     unsigned int buffer_size_;

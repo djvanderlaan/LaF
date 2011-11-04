@@ -21,7 +21,7 @@ LaF.  If not, see <http://www.gnu.org/licenses/>.
 #include <Rcpp.h>
 
 RcppExport SEXP laf_open_csv(SEXP r_filename, SEXP r_types, SEXP r_sep, 
-    SEXP r_dec, SEXP r_trim) {
+    SEXP r_dec, SEXP r_trim, SEXP r_skip) {
 BEGIN_RCPP
   Rcpp::CharacterVector filenamev(r_filename);
   Rcpp::IntegerVector types(r_types);
@@ -32,8 +32,10 @@ BEGIN_RCPP
   char dec = static_cast<char>(decv[0][0]);
   Rcpp::LogicalVector trimv(r_trim);
   bool trim = static_cast<bool>(trimv[0]);
+  Rcpp::IntegerVector skipv(r_skip);
+  unsigned int skip = static_cast<unsigned int>(skipv[0]);
   Rcpp::IntegerVector p = Rcpp::IntegerVector::create(1);
-  CSVReader* reader = new CSVReader(filename, sep);
+  CSVReader* reader = new CSVReader(filename, sep, skip);
   reader->set_decimal_seperator(dec);
   reader->set_trim(trim);
   for (int i = 0; i < types.size(); ++i) {

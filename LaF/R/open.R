@@ -19,7 +19,7 @@
 #
 laf_open_csv <-function(filename, column_types, 
         column_names = paste("V", seq_len(length(column_types)), sep=""),
-        sep=",", dec='.', trim=FALSE) {
+        sep=",", dec='.', trim=FALSE, skip=0) {
     # check filename
     if (!is.character(filename))
         stop("filename should be of type character.")
@@ -50,8 +50,12 @@ laf_open_csv <-function(filename, column_types,
     if (!is.logical(trim))
         stop("trim should be of type logical")
     trim <- trim[1]
+    # check skip
+    if (!is.numeric(skip))
+        stop("skip should be of type numeric")
+    skip <- as.integer(skip[1])
     # open file
-    p <- .Call("laf_open_csv", filename, types, sep, dec, trim)
+    p <- .Call("laf_open_csv", filename, types, sep, dec, trim, skip)
     # create laf-object
     result <- new(Class="laf", 
         file_id = as.integer(p),

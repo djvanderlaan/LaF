@@ -21,18 +21,21 @@ LaF.  If not, see <http://www.gnu.org/licenses/>.
 #include <cstring>
 #include <stdexcept>
 
-CSVReader::CSVReader(const std::string& filename, int sep, unsigned int buffer_size) : Reader(),
-  filename_(filename), sep_(sep), buffer_size_(buffer_size), buffer_filled_(1), pointer_(0),
-  current_line_(0)
+CSVReader::CSVReader(const std::string& filename, int sep, unsigned int skip, unsigned int buffer_size) : Reader(),
+  filename_(filename), sep_(sep), skip_(skip), buffer_size_(buffer_size), buffer_filled_(1), 
+  pointer_(0), current_line_(0)
 {
+  offset_ = determine_offset(filename, skip_);
   line_size_ = 1024;
   line_ = new char[line_size_];
   file_.open(get_filename().c_str());
   if (file_.fail()) throw std::runtime_error("Failed to open file");
+  reset();
   buffer_ = new char[buffer_size_];
   ncolumns_ = determine_ncolumns(get_filename());
   positions_ = new unsigned int[ncolumns_];
   lengths_ = new unsigned int[ncolumns_];
+
 }
 
 CSVReader::~CSVReader() {
@@ -65,7 +68,7 @@ unsigned int CSVReader::nlines() const {
 
 void CSVReader::reset() {
   file_.clear();
-  file_.seekg(0, std::ios::beg);
+  file_.seekg(offset_, std::ios::beg);
   buffer_filled_ = 0;
   pointer_ = 0;
   current_line_ = 0; 
@@ -158,8 +161,23 @@ const std::string& CSVReader::get_filename() const {
 // ============================================================================
 // ============================================================================
 
+unsigned int CSVReader::determine_offset(const std::string& filename, unsigned int skip) {
+  std::ifstream input(filename.c_str());
+  unsigned int offset = 0;
+  while (skip > 0) {
+    int c = input.get();
+    offset++;
+    if (c == '\n') skip--;
+    if (input.eof()) break;
+  }
+  input.close();
+  return offset;
+}
+
 unsigned int CSVReader::determine_ncolumns(const std::string& filename) {
   std::ifstream input(filename.c_str());
+  input.clear();
+  input.seekg(offset_, std::ios::beg);
   int ncolumns = 0;
   bool empty = true;
   while (true) {

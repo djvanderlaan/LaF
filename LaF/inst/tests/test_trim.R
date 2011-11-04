@@ -57,5 +57,5 @@ test_that(
     })
 
 
-unlink("tmp.fwf")
+#unlink("tmp.fwf")
 
