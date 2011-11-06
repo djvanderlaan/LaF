@@ -1,0 +1,428 @@
+\documentclass[a4paper,11pt]{article}
+\title{\texttt{LaF} benchmarks}
+\author{D.J. van der Laan}
+\date{2011-11-06}
+
+\begin{document}
+
+\maketitle
+
+\section{Introduction}
+\texttt{LaF} is a package for R for working with large ASCII files in R. The manual vignette
+contains an discription of the functionality provided. In this vignette the performance of the
+\texttt{LaF} package is compared to that of the built in R routines for reading comma separated
+files (\texttt{read.table}) and fixed width files (\texttt{read.fwf}). 
+
+
+% =================================================================================================
+% ====                                  GENERATE TEST FILES                                    ====
+% =================================================================================================
+\section{The test files}
+
+<<generatedata,echo=FALSE,results=hide>>=
+nsmall <- 1E5
+filesmallfwf <- "small.fwf"
+filesmallcsv <- "small.csv"
+
+nlarge <- 10E4
+filelarge <- "large"
+filelargefwf <- "large.fwf"
+filelargecsv <- "large.csv"
+
+options(width=54)
+
+library(LaF)
+
+generate_fwf <- function(filename, n) {
+  lines <- c(
+    " 1M 1.45Rotterdam ",
+    " 2F12.00Amsterdam ",
+    " 3  .22 Berlin    ",
+    " 8  .24 Berlin    ",
+    "  M22   Paris     ",
+    "10F54321London    ",
+    " 4F12345London    ",
+    " 5M     Copenhagen",
+    " 6M-12.1          ",
+    " 7F   -1Oslo      ")
+  lines <- rep(lines, round(1E5/length(lines)))
+  con <- file(filename, "wt")
+  nwritten <- 0
+  while(nwritten < n) {
+    if ((n - nwritten) < 1E5) {
+        lines <- lines[seq_len(n-nwritten)]
+    }
+    writeLines(lines, con=con, sep="\n")
+    nwritten <- nwritten + length(lines)
+  }
+  close(con)
+}
+
+generate_csv <- function(filename, n) {
+  lines <- c(
+    "1,M,1.45,Rotterdam",
+    "2,F,12.00,Amsterdam",
+    "3,,.22,Berlin",
+    "8,,.24,Berlin",
+    ",M,22,Paris",
+    "10,F,54321,London",
+    "4,F,12345,London",
+    "5,M,,Copenhagen",
+    "6,M,-12.1,",
+    "7,F,-1,Oslo")
+  lines <- rep(lines, round(1E5/length(lines)))
+  con <- file(filename, "wt")
+  nwritten <- 0
+  while(nwritten < n) {
+    if ((n - nwritten) < 1E5) {
+        lines <- lines[seq_len(n-nwritten)]
+    }
+    writeLines(lines, con=con, sep="\n")
+    nwritten <- nwritten + length(lines)
+  }
+  close(con)
+}
+
+# generate files
+generate_fwf(filesmallfwf, nsmall)
+generate_fwf(filelargefwf, nlarge)
+generate_csv(filesmallcsv, nsmall)
+generate_csv(filelargecsv, nlarge)
+@
+
+In total four files are generated. Two in fixed width format and two in comma separated format. For
+the comma seperated file the following ten lines are repeated until the required amount of lines are
+obtained:
+<<showcsv,echo=FALSE>>=
+lines <- readLines(filesmallcsv, n=10)
+cat(paste(lines,collapse="\n"), "\n")
+@
+For the fixed width file, the following ten lines are repeated until the required amount of lines are
+obtained:
+<<showfwf,echo=FALSE>>=
+lines <- readLines(filesmallfwf, n=10)
+cat(paste(lines,collapse="\n"), "\n")
+@
+For each of the two formats two files are generated. One small one that is used when reading the
+complete dataset into memory and a large one that is used for all other operation. The small files
+consist of \Sexpr{format(nsmall, scientific=FALSE, big.mark=" ")} rows the large files of
+\Sexpr{format(nlarge, scientific=FALSE, big.mark=" ")} rows.
+
+% =================================================================================================
+% ====                                COMPLETE FILE IN MEMORY                                  ====
+% =================================================================================================
+\section{Reading complete files}
+
+In the following tests a complete file of \Sexpr{format(nsmall, scientific=FALSE, big.mark=" ")}
+rows is read completely into memory. 
+
+\subsection{Fixed width}
+
+\subsubsection{\texttt{LaF}}
+<<alldatalaf>>=
+system.time({
+    laf <- laf_open_fwf(filename=filesmallfwf, 
+        column_types=c("integer", "categorical", "double", "string"),
+        column_widths=c(2,1,5,10))
+    tst <- laf[,]
+})
+@
+<<echo=FALSE,results=hide>>=
+rm(tst)
+gc()
+@
+
+\subsubsection{\texttt{read.table}}
+<<alldatart>>=
+system.time({
+    tst <- read.fwf(file=filesmallfwf, widths=c(2,1,5,10), comment.char="",
+        colClasses=c("integer", "factor", "numeric", "character"))
+})
+@
+<<echo=FALSE,results=hide>>=
+rm(tst)
+gc()
+@
+
+
+\subsection{Separated}
+\subsubsection{\texttt{LaF}}
+<<alldatalafcsv>>=
+system.time({
+    laf <- laf_open_csv(filename=filesmallcsv, 
+        column_types=c("integer", "categorical", "double", "string"))
+    tst <- laf[,]
+})
+@
+<<echo=FALSE,results=hide>>=
+rm(tst)
+gc()
+@
+
+\subsubsection{\texttt{read.table}}
+<<alldatartcsv>>=
+system.time({
+    tst <- read.table(file=filesmallcsv, sep=',', comment.char="", quote="",
+        colClasses=c("integer", "factor", "numeric", "character"))
+})
+@
+<<echo=FALSE,results=hide>>=
+rm(tst)
+gc()
+@
+
+
+% =================================================================================================
+% ====                                     BLOCKWISE                                           ====
+% =================================================================================================
+\section{Blockwise processing}
+\label{sec:blockwise}
+
+Blockwise processing of files (reading and processing files in blocks or chunks that fit into
+memory).  In the following tests the sum of the third column in the file is calculated using
+blockwise processing. 
+
+\subsection{Fixed width}
+
+\subsubsection{\texttt{LaF}}
+<<blocklafwfw>>=
+calc_sum_laf <- function(block, result) {
+    if (is.null(result)) result <- 0
+    result + sum(block$V3, na.rm=TRUE)
+}
+system.time({
+    laf <- laf_open_fwf(filename=filelargefwf, 
+        column_types=c("integer", "categorical", "double", "string"),
+        column_widths=c(2,1,5,10))
+    sm  <- process_blocks(laf, calc_sum_laf)
+})
+@
+The previous code can be made faster by using the \texttt{columns} argument of
+\texttt{process\_blocks}:
+<<blocklafwfw2>>=
+system.time({
+    sm  <- process_blocks(laf, calc_sum_laf, columns=3)
+})
+@
+An other option is to first read the complete column into memory (if that fits) and then work with
+the column in memory:
+<<blocklafwfw3>>=
+system.time({
+    sm  <- mean(laf[,3], na.rm=TRUE)
+})
+@
+
+\subsubsection{\texttt{read.fwf}}
+The following code shows how a file can be processed in blocks using \texttt{read.table} and
+\texttt{read.fwf}. First, a connection to the file is made and opened. When, \texttt{read.table} is
+passed an open connection, it starts reading the specified number of lines (\texttt{n}) and does not
+close the connection after reading. The \texttt{try} block is needed in case the previous call to
+\texttt{read.table} stopped reading exactly at the end of the file. Checking for the end-of-file is
+unfortunately not possible in R (as far as I know). An other solution would be to use a combination
+of \texttt{readLines} and \texttt{read.table}. However, this was found to be much slower. Therefore,
+the solution below was choosen. It is used in most examples with \texttt{read.table} and
+\texttt{read.fwf} in the following sections. 
+<<blockrtwfw>>=
+calc_sum_r_fwf <- function(filename) {
+    result <- 0
+    con    <- file(filename, "rt")
+    while (TRUE) {
+        block <- data.frame()
+        try({
+            block <- read.fwf(file=con, n=5000, widths=c(2,1,5,10), comment.char="", 
+                colClasses=c("NULL", "NULL", "numeric", "NULL"))
+            result <- result + sum(block[,1], na.rm=TRUE)
+        })
+        if (nrow(block) < 5000) break;
+    }
+    close(con)
+    return(result)
+}
+system.time({
+    sm <- calc_sum_r_fwf(filelargefwf)
+})
+@
+
+\subsection{Separated}
+
+\subsubsection{\texttt{LaF}}
+
+<<blocklafcsv>>=
+system.time({
+    laf <- laf_open_csv(filename=filelargecsv, 
+        column_types=c("integer", "categorical", "double", "string"))
+    sm  <- process_blocks(laf, calc_sum_laf)
+})
+@
+<<blocklafcsv2>>=
+system.time({
+    sm  <- process_blocks(laf, calc_sum_laf, columns=3)
+})
+@
+
+\subsubsection{\texttt{read.table}}
+
+<<blockrtcsv>>=
+calc_sum_r_csv <- function(filename) {
+    result <- 0
+    con    <- file(filename, "rt")
+    while (TRUE) {
+        block <- data.frame()
+        try({
+            block <- read.table(file=con, sep=',', nrows=5000, comment.char="", quote="",
+                colClasses=c("NULL", "NULL", "numeric", "NULL"))
+            result <- result + sum(block[,1], na.rm=TRUE)
+        })
+        if (nrow(block) < 5000) break;
+    }
+    close(con)
+    return(result)
+}
+system.time({
+    sm <- calc_sum_r_csv(filelargecsv)
+})
+@
+
+
+% =================================================================================================
+% ====                                        READ SUBSET                                      ====
+% =================================================================================================
+\section{Reading subset}
+
+In the tests below all data belonging to the municipality of `Rotterdam' is read. 
+
+
+% ==== FIXED WIDTH
+\subsection{Fixed width}
+
+\subsubsection{\texttt{LaF}}
+<<sublaffwf>>=
+system.time({
+    laf <- laf_open_fwf(filename=filelargefwf, 
+        column_types=c("integer", "categorical", "double", "string"),
+        column_widths=c(2,1,5,10))
+    d <- laf[laf$V4[] == "Rotterdam ", ]
+    print(nrow(d))
+})
+@
+<<echo=FALSE,results=hide>>=
+rm(d)
+gc()
+@
+
+\subsubsection{\texttt{read.fwf}}
+<<subrtfwf>>=
+system.time({
+    d   <- data.frame()
+    con <- file(filelargefwf, "rt")
+    while (TRUE) {
+        block <- data.frame()
+        try({
+            block <- read.fwf(file=con, n=5000, widths=c(2,1,5,10), comment.char="", 
+                colClasses=c("integer", "factor", "numeric", "character"))
+            d <- rbind(d,block[block[,4] == "Rotterdam ",])
+        })
+        if (nrow(block) < 5000) break;
+    }
+    close(con)
+    print(nrow(d))
+})
+@
+<<echo=FALSE,results=hide>>=
+#rm(d)
+gc()
+@
+The example above takes a very long time. One of the reasons is that we have a growing
+\texttt{data.frame} which is slow and memory inefficient. A faster solution would be to first
+allocate the \texttt{data.frame} before reading. Unfortunately, the end size of the
+\texttt{data.frame} is usually not known beforehand. One could first calculate the end size using
+code similar to that used in section~\ref{sec:blockwise}, or one could guess the size. As an optimal
+example, using the usually unknown end size of \texttt{d}, the following result is obtained (we will
+use \texttt{d} from the previous example):
+<<subrtfwf2>>=
+system.time({
+    con <- file(filelargefwf, "rt")
+    i   <- 1
+    while (TRUE) {
+        block <- data.frame()
+        try({
+            block <- read.fwf(file=con, n=5000, widths=c(2,1,5,10), comment.char="", 
+                colClasses=c("integer", "factor", "numeric", "character"))
+            sel   <- block[,4] == "Rotterdam "
+            d[seq_len(sum(sel))+i-1, ] <- block[sel, ]
+            i <- i+sum(sel)
+        })
+        if (nrow(block) < 5000) break;
+    }
+    close(con)
+    print(nrow(d))
+})
+@
+<<echo=FALSE,results=hide>>=
+rm(d)
+gc()
+@
+
+
+% ==== SEPARATED
+\subsection{Separated}
+\subsubsection{\texttt{LaF}}
+<<sublafcsv>>=
+system.time({
+    laf <- laf_open_csv(filename=filelargecsv, 
+        column_types=c("integer", "categorical", "double", "string"))
+    d <- laf[laf$V4[] == "Rotterdam", ]
+    print(nrow(d))
+})
+@
+<<echo=FALSE,results=hide>>=
+rm(d)
+gc()
+@
+
+\subsubsection{\texttt{read.table}}
+<<subrtcsv>>=
+system.time({
+    d   <- data.frame()
+    con <- file(filelargecsv, "rt")
+    while (TRUE) {
+        block <- data.frame()
+        try({
+            block <- read.table(file=con, sep=',', nrows=5000, comment.char="", quote="",
+                colClasses=c("integer", "factor", "numeric", "character"))
+            d <- rbind(d,block[block[,4] == "Rotterdam",])
+        })
+        if (nrow(block) < 5000) break;
+    }
+    close(con)
+    print(nrow(d))
+})
+@
+<<echo=FALSE,results=hide>>=
+gc()
+@
+Using the usually unknown end size of \texttt{d} (see the discussion for \texttt{read.fwf}):
+<<subrtcsv2>>=
+system.time({
+    con <- file(filelargecsv, "rt")
+    i   <- 1
+    while (TRUE) {
+        block <- data.frame()
+        try({
+            block <- read.table(file=con, sep=',', nrows=5000, comment.char="", quote="",
+                colClasses=c("integer", "factor", "numeric", "character"))
+            sel   <- block[,4] == "Rotterdam"
+            d[seq_len(sum(sel))+i-1, ] <- block[sel, ]
+            i <- i+sum(sel)
+        })
+        if (nrow(block) < 5000) break;
+    }
+    close(con)
+    print(nrow(d))
+})
+@
+<<echo=FALSE,results=hide>>=
+rm(d)
+gc()
+@
+\end{document}

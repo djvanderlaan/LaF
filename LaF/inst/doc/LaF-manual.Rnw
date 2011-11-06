@@ -3,7 +3,7 @@
 
 \title{{\Huge\texttt{LaF}}\\A package for processing large ASCII files}
 \author{D.J. van der Laan}
-\date{2011-09-20}
+\date{2011-11-06}
 
 \begin{document}
 
