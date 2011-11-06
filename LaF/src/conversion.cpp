@@ -125,7 +125,7 @@ inline int read_after_decimal(double* part2, const char** c, unsigned int* i, un
 inline double read_exponent(const char** c, unsigned int* i, unsigned int nchar) {
   int e = strtoint(*c, nchar-*i);
   *i = nchar;
-  return pow(10, e);
+  return std::pow(10.0, e);
 }
 
 double strtodouble(const char* str, unsigned int nchar, char dec) {

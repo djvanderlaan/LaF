@@ -11,7 +11,7 @@ Description: The LaF package provides methods for fast access to large ASCII
     large to fit into memory, although the package can also be used to
     efficiently access files that do fit into memory. Methods are provided to
     access and process files blockwise. Furthermore, an opened file can be
-    accessed as one would an ordinary data.frame. The LaF vingette gives an
+    accessed as one would an ordinary data.frame. The LaF vignette gives an
     overview of the functionality provided. 
 URL: http://code.google.com/p/laf-r/
 License: GPL-3
