@@ -28,6 +28,9 @@ class Column
     Column(const Reader* reader, unsigned int column);
     ~Column();
 
+    virtual double get_double() const = 0; 
+    virtual int get_int() const = 0; 
+
     virtual void assign() = 0;
     virtual void init(Rcpp::List::Proxy proxy) = 0;
     virtual void next() = 0;

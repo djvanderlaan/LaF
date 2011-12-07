@@ -27,6 +27,13 @@ class FactorColumn : public Column {
     FactorColumn(const Reader* reader, unsigned int column);
     ~FactorColumn();
 
+    double get_double() const {
+      return get_value();
+    }
+    int get_int() const {
+      return get_value();
+    }
+
     void set_trim(bool trim);
     bool get_trim() const;
 

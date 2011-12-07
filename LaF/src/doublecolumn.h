@@ -30,6 +30,13 @@ class DoubleColumn : public Column {
 
     double get_value() const;
 
+    double get_double() const {
+      return get_value();
+    }
+    int get_int() const {
+      return get_value();
+    }
+
     virtual void assign() {
       (*pv) = get_value();
     }

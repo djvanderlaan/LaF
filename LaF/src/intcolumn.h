@@ -25,6 +25,13 @@ class IntColumn : public Column {
     IntColumn(const Reader* reader, unsigned int column);
     ~IntColumn();
 
+    double get_double() const {
+      return get_value();
+    }
+    int get_int() const {
+      return get_value();
+    }
+
     int get_value() const;
 
     virtual void assign() {

@@ -29,6 +29,13 @@ class StringColumn : public Column {
     void set_trim(bool trim);
     bool get_trim() const;
 
+    double get_double() const {
+      return get_value().size();
+    }
+    int get_int() const {
+      return get_value().size();
+    }
+
     std::string get_value() const;
 
     virtual void assign() {

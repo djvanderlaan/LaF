@@ -26,6 +26,13 @@ class IntFactorColumn : public Column {
     IntFactorColumn(const Reader* reader, unsigned int column);
     ~IntFactorColumn();
 
+    double get_double() const {
+      return get_value();
+    }
+    int get_int() const {
+      return get_value();
+    }
+
     int get_value() const;
 
     virtual void assign() {
