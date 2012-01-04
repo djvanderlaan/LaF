@@ -1,4 +1,4 @@
-# Copyright 2011 Jan van der Laan
+# Copyright 2011-2012 Jan van der Laan
 #
 # This file is part of LaF.
 #
@@ -24,7 +24,7 @@ laf_open_csv <-function(filename, column_types,
     if (!is.character(filename))
         stop("filename should be of type character.")
     filename <- as.character(filename[1])
-    if (file.access(filename, 4) != 0)
+    if (!.file_readable(filename))
         stop("Can not access file '", filename, "'.")
     # check column_types
     types <- .laf_to_typecode(column_types)
@@ -78,7 +78,7 @@ laf_open_fwf <-function(filename, column_types, column_widths,
     if (!is.character(filename))
         stop("filename should be of type character.")
     filename <- as.character(filename[1])
-    if (file.access(filename, 4) != 0)
+    if (!.file_readable(filename))
 	stop("Can not access file '", filename, "'.")
     # check column_types
     types <- .laf_to_typecode(column_types)
