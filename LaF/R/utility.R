@@ -21,7 +21,7 @@
 .file_readable <- function(filename) {
     tryCatch({
             con <- file(filename, "r")
-            close(fp)
+            close(con)
             return(TRUE)
         }, error = function(e) {}, warning = function(w) {})
     return(FALSE)
