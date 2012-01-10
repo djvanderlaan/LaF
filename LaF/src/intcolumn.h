@@ -26,7 +26,9 @@ class IntColumn : public Column {
     ~IntColumn();
 
     double get_double() const {
-      return get_value();
+      int value = get_value();
+      if (value == NA_INTEGER) return NA_REAL;
+      return value;
     }
     int get_int() const {
       return get_value();

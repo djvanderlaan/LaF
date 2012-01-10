@@ -96,11 +96,6 @@ const FactorColumn* FWFReader::add_factor_column(unsigned int width) {
   return Reader::add_factor_column();
 }
 
-const IntFactorColumn* FWFReader::add_int_factor_column(unsigned int width) {
-  add_column(width);
-  return Reader::add_int_factor_column();
-}
-
 // ============================================================================
 // ============================================================================
 // ============================================================================

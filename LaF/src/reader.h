@@ -19,7 +19,6 @@ LaF.  If not, see <http://www.gnu.org/licenses/>.
 #define reader_h
 
 #include "intcolumn.h"
-#include "intfactorcolumn.h"
 #include "doublecolumn.h"
 #include "stringcolumn.h"
 #include "factorcolumn.h"
@@ -45,7 +44,6 @@ class Reader {
     const IntColumn* add_int_column();
     const StringColumn* add_string_column();
     const FactorColumn* add_factor_column();
-    const IntFactorColumn* add_int_factor_column();
 
     const std::vector<Column*>& get_columns() const;
     Column* get_column(unsigned int i) const;

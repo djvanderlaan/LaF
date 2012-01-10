@@ -136,13 +136,20 @@ setMethod(
         # perform calculation
         result <- .Call("colfreq", as.integer(x@file_id), as.integer(columns-1))
         # contruct end result
-        result <- lapply(result, function(a) {
-            r <- array(a$count, dim=length(a$count), dimnames=list(a$value))
-            if (useNA == "always" | (useNA == "ifany" & a$missing))
-                r <- c(r, "NA" = a$missing)
+        for (i in seq_along(result)) {
+            r <- result[[i]]$count
+            n <- result[[i]]$value
+            if (x@column_types[columns[i]] == 2) 
+                n <- levels(x[[columns[i]]])
+            if (useNA == "always" | (useNA == "ifany" & result[[i]]$missing)) {
+                r <- c(r, result[[i]]$missing)
+                n <- c(n, NA)
+            }
+            r <- array(r, dim=length(r), 
+                    dimnames=list(n))
             class(r) <- "table"
-            return(r)
-        })
+            result[[i]] <- r
+        }
         names(result) <- names(x)[columns]
         if (length(result) == 1) {
             return(result[[1]])
@@ -236,7 +243,7 @@ setMethod(
             stop("na.rm should be a logical vector")
         na.rm <- na.rm[1]
         # compute
-        result <- .Call("colsum", as.integer(x@file_id), as.integer(columns-1))
+        result <- .Call("colfreq", as.integer(x@file_id), as.integer(columns-1))
         # contruct end result
         result <- sapply(result, function(a) {
             return(a$missing)

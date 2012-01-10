@@ -51,12 +51,6 @@ const FactorColumn* Reader::add_factor_column() {
   return column;
 }
 
-const IntFactorColumn* Reader::add_int_factor_column() {
-  IntFactorColumn* column = new IntFactorColumn(this, columns_.size());
-  columns_.push_back(column);
-  return column;
-}
-
 const std::vector<Column*>& Reader::get_columns() const {
   return columns_;
 }

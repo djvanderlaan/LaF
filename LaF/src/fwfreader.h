@@ -45,7 +45,6 @@ class FWFReader : public Reader
     const IntColumn* add_int_column(unsigned int width);
     const StringColumn* add_string_column(unsigned int width);
     const FactorColumn* add_factor_column(unsigned int width);
-    const IntFactorColumn* add_int_factor_column(unsigned int width);
 
   protected:
     void add_column(unsigned int start, unsigned int nchar);

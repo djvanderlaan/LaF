@@ -23,6 +23,14 @@ LaF.  If not, see <http://www.gnu.org/licenses/>.
 #include <iostream>
 #include <iomanip>
 
+//TEST
+bool isna(double v) {
+  return R_IsNA(v);
+}
+bool isna(int v) {
+  return v == NA_INTEGER;
+}
+
 // =======================================================================================
 // Iterator template.
 
@@ -59,7 +67,7 @@ class Sum {
 
     void update(Column* column) {
       double value = column->get_double();
-      if (R_IsNA(value)) missing_++;
+      if (isna(value)) missing_++;
       else {
         sum_ += value;
         n_++;
@@ -94,7 +102,7 @@ class Freq {
 
     void update(Column* column) {
       int value = column->get_int();
-      if (R_IsNA(value)) missing_++;
+      if (isna(value)) missing_++;
       else table_[value] = table_[value] + 1;
     }
 
@@ -131,7 +139,7 @@ class Range {
 
     void update(Column* column) {
       double value = column->get_double();
-      if (R_IsNA(value)) missing_++;
+      if (isna(value)) missing_++;
       else if (first_) {
         min_ = value;
         max_ = value;

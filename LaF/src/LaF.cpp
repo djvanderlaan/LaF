@@ -47,8 +47,6 @@ BEGIN_RCPP
       reader->add_factor_column();
     } else if (types[i] == 3) {
       reader->add_string_column();
-    } else if (types[i] == 4) {
-      reader->add_int_factor_column();
     }
   }
   p[0] = ReaderManager::instance()->new_reader(reader);
@@ -80,8 +78,6 @@ BEGIN_RCPP
       reader->add_factor_column(widths[i]);
     } else if (types[i] == 3) {
       reader->add_string_column(widths[i]);
-    } else if (types[i] == 4) {
-      reader->add_int_factor_column(widths[i]);
     }
   }
   p[0] = ReaderManager::instance()->new_reader(reader);
@@ -254,28 +250,6 @@ BEGIN_RCPP
   }
   return Rcpp::List::create(Rcpp::Named("levels") = Rcpp::wrap(levels),
     Rcpp::Named("labels") = Rcpp::wrap(labels));
-END_RCPP
-}
-
-RcppExport SEXP laf_set_levels(SEXP p, SEXP r_column, SEXP r_levels, SEXP r_labels) {
-BEGIN_RCPP
-  Rcpp::IntegerVector pv(p);
-  Rcpp::IntegerVector column(r_column);
-  Rcpp::IntegerVector levels(r_levels);
-  Rcpp::CharacterVector labels(r_labels);
-  Reader* reader = ReaderManager::instance()->get_reader(pv[0]);
-  if (reader) {
-    
-    IntFactorColumn* factor = dynamic_cast<IntFactorColumn*>(reader->get_column(column[0]));
-    if (factor) {
-      for (int i = 0; i < levels.size(); ++i) {
-        int level = levels[i];
-        std::string label = static_cast<char*>(labels[i]);
-        factor->set_level(level, label);
-      }
-    }
-  }
-  return r_levels;
 END_RCPP
 }
 
