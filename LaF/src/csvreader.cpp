@@ -28,7 +28,7 @@ CSVReader::CSVReader(const std::string& filename, int sep, unsigned int skip, un
   offset_ = determine_offset(filename, skip_);
   line_size_ = 1024;
   line_ = new char[line_size_];
-  file_.open(get_filename().c_str());
+  file_.open(get_filename().c_str(), std::ios::in|std::ios::binary);
   if (file_.fail()) throw std::runtime_error("Failed to open file");
   reset();
   buffer_ = new char[buffer_size_];
@@ -47,7 +47,7 @@ CSVReader::~CSVReader() {
 }
 
 unsigned int CSVReader::nlines() const {
-  std::ifstream input(filename_.c_str());
+  std::ifstream input(filename_.c_str(), std::ios::in|std::ios::binary);
   input.seekg(offset_, std::ios::beg);
   char buffer[1000000];
   char* bp;
@@ -163,7 +163,7 @@ const std::string& CSVReader::get_filename() const {
 // ============================================================================
 
 unsigned int CSVReader::determine_offset(const std::string& filename, unsigned int skip) {
-  std::ifstream input(filename.c_str());
+  std::ifstream input(filename.c_str(), std::ios::in|std::ios::binary);
   unsigned int offset = 0;
   while (skip > 0) {
     int c = input.get();
@@ -176,7 +176,7 @@ unsigned int CSVReader::determine_offset(const std::string& filename, unsigned i
 }
 
 unsigned int CSVReader::determine_ncolumns(const std::string& filename) {
-  std::ifstream input(filename.c_str());
+  std::ifstream input(filename.c_str(), std::ios::in|std::ios::binary);
   input.clear();
   input.seekg(offset_, std::ios::beg);
   int ncolumns = 0;
