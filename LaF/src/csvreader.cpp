@@ -1,5 +1,5 @@
 /*
-Copyright 2011 Jan van der Laan
+Copyright 2011-2012 Jan van der Laan
 
 This file is part of LaF.
 
@@ -48,6 +48,7 @@ CSVReader::~CSVReader() {
 
 unsigned int CSVReader::nlines() const {
   std::ifstream input(filename_.c_str());
+  input.seekg(offset_, std::ios::beg);
   char buffer[1000000];
   char* bp;
   unsigned int n = 0;
