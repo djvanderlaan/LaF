@@ -45,16 +45,20 @@
 # in the C++-code to determine the column type)
 #
 .laf_to_typecode <- function(type) {
-    BFTYPES     <- c("double", "integer", "categorical", "string", "integer_categorical")
-    BFRTYPES    <- c("numeric", "integer", "integer", "character", "integer")
-    BFTYPECODES <- 0:4
+    TYPECODES = c( "double" = 0L, "numeric" = 0L
+                 , "integer" = 1L
+                 , "categorical" = 2L, "factor" = 2L
+                 , "string" = 3L, "character" = 3L
+                 , "integer_categorical" = 4L
+                 )
     if (!is.character(type))
-        stop("type should be a character vector.")
-    type <- match(type, BFTYPES)
+      stop("type should be a character vector.")
+    type <- match(type, names(TYPECODES))
     if (any(is.na(type))) 
-        stop("Invalid type. Type can be any of: '", 
-            paste(BFTYPES, collapse="', '"), "'.")
-    type <- as.integer(BFTYPECODES[type])
+      stop("Invalid type. Type can be any of: '", 
+           paste(names(TYPECODES), collapse="', '"), "'.")
+    
+    type <- as.integer(TYPECODES[type])
     return(type)
 }
 
