@@ -26,9 +26,6 @@ export sourcepackage=`ls LaF*.tar.gz | tail -n 1`
 echo "Testing package $sourcepackage ..."
 R CMD check $sourcepackage
 
-echo "Building binary package..."
-R CMD build --binary $package
-
 rm -f *.tar
 
 cd ..
