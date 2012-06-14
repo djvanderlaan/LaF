@@ -371,5 +371,38 @@ or
 result <- dat[dat[ , "age"] > 65, ]
 @
 
+\section{Calculating column statistics}
+\label{sec:stats}
+
+When analysing a dataset often some summary statistics are needed of certain
+columns. For example, the maximum and minimum value in a column, a frequency
+table of all the values in a column, or the number of missing values in a
+column. These can of course be calculated using a suitable function with
+\texttt{process\_blocks}. However, as some of these will be used regularly some
+functions have been implemented in the package. 
+
+\begin{tabular}{p{0.3\textwidth} p{0.65\textwidth}}
+\texttt{colsum}      & Calculate column sums \\
+\texttt{colmean}     & Calculate column means \\
+\texttt{colfreq}     & Calculate frequency tables of columns \\
+\texttt{colrange}    & Calculate the maximum and minimum value of columns \\
+\texttt{colnmissing} & Calculate the number of missing values in columns \\
+\end{tabular}
+
+All methods accept as first argument either a \texttt{laf} or
+\texttt{laf\_column} object. In case of a \texttt{laf} object the second
+argument should be a vector of column numbers for which the statistics should be
+calculated. For example, to calculate the average age the following options are
+available:
+<<echo=TRUE>>=
+m1 <- colmean(laf, columns=3)
+m1 <- colmean(laf$age)
+@
+Most methods also accept an \texttt{na.rm} argument, which ignores, as one would
+expect, missing values when calculating the statistics. The method
+\texttt{colnmissing} does not have this argument which would be meaningless.
+\texttt{colfreq} has the argument \texttt{useNA} which can take one the values
+`ifany', `always' or `no'.
+
 
 \end{document}
