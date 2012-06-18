@@ -1,4 +1,4 @@
-# Copyright 2011 Jan van der Laan
+# Copyright 2011-2012 Jan van der Laan
 #
 # This file is part of LaF.
 #
@@ -243,7 +243,7 @@ setMethod(
             stop("na.rm should be a logical vector")
         na.rm <- na.rm[1]
         # compute
-        result <- .Call("colfreq", as.integer(x@file_id), as.integer(columns-1))
+        result <- .Call("colnmissing", as.integer(x@file_id), as.integer(columns-1))
         # contruct end result
         result <- sapply(result, function(a) {
             return(a$missing)
