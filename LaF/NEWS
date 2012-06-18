@@ -1,6 +1,12 @@
 
-LaF version 0.3.1
+LaF version 0.4
 ===============================================================================
+* Added methods for the calculation of simple column statistics such as mean, 
+  sum, number of missings, frequency table, min, max. 
+* Fixed bug in skip option in laf_open_csv on windows machines with files with 
+  DOS-line breaks
+* laf_open_csv and laf_open_fwf now also accept r'isch column types: numeric, 
+  and factor instead of double and categorical.
 * Fixed bug with checking if file can be opened on some windows network shares
 
 LaF version 0.3
