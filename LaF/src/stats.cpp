@@ -1,5 +1,5 @@
 /*
-Copyright 2011 Jan van der Laan
+Copyright 2011-2012 Jan van der Laan
 
 This file is part of LaF.
 
@@ -174,4 +174,31 @@ BEGIN_RCPP
   return iterate_column<Range>(reader, r_columns);
 END_RCPP
 } 
+
+// =======================================================================================
+// COLNMISSING
+
+class NMissing {
+  public:
+    NMissing() : missing_(0) {};
+
+    void update(Column* column) {
+      int value = column->get_int();
+      if (isna(value)) missing_++;
+    }
+
+    SEXP result() {
+      return Rcpp::List::create(Rcpp::Named("missing") = Rcpp::wrap(missing_));
+    }
+
+    int missing_;
+};
+
+RcppExport SEXP colnmissing(SEXP p, SEXP r_columns) {
+BEGIN_RCPP
+  Rcpp::IntegerVector pv(p);
+  Reader* reader = ReaderManager::instance()->get_reader(pv[0]);
+  return iterate_column<NMissing>(reader, r_columns);
+END_RCPP
+}
 

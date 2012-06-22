@@ -35,6 +35,8 @@ test_that(
             equals(mean(data[,1], na.rm=FALSE)))
         expect_that(as.numeric(colmean(laf, 3, na.rm=FALSE)), 
             equals(mean(data[,3], na.rm=FALSE)))
+        expect_that(as.numeric(colmean(laf$V3, na.rm=FALSE)), 
+            equals(mean(data[,3], na.rm=FALSE)))
     })
 test_that(
     "colsum works",
@@ -47,6 +49,8 @@ test_that(
             equals(sum(data[,1], na.rm=FALSE)))
         expect_that(as.numeric(colsum(laf, 3, na.rm=FALSE)), 
             equals(sum(data[,3], na.rm=FALSE)))
+        expect_that(as.numeric(colsum(laf$V3, na.rm=FALSE)), 
+            equals(sum(data[,3], na.rm=FALSE)))
     })
 test_that(
     "colrange works",
@@ -58,6 +62,8 @@ test_that(
         expect_that(as.numeric(colrange(laf, 1, na.rm=FALSE)), 
             equals(range(data[,1], na.rm=FALSE)))
         expect_that(as.numeric(colrange(laf, 3, na.rm=FALSE)), 
+            equals(range(data[,3], na.rm=FALSE)))
+        expect_that(as.numeric(colrange(laf$V3, na.rm=FALSE)), 
             equals(range(data[,3], na.rm=FALSE)))
     })
 test_that(
