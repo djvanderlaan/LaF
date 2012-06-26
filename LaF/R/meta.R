@@ -1,35 +1,4 @@
 
-
-determine_nlines <- function(filename) {
-    if (!is.character(filename)) stop("filename should be a character vector")
-    result <- .Call("nlines", as.character(filename))
-    return(result)
-}
-
-get_lines <- function(filename, line_number) {
-    if (!is.character(filename)) stop("filename should be a character vector")
-    line_order  <- order(line_number)
-    line_number <- line_number[line_order]
-    result <- .Call("r_get_line", as.character(filename), as.integer(line_number)-1)
-    result <- result[order(seq_along(line_number)[line_order])]
-    return(result)
-}
-
-sample_lines <- function(filename, n, nlines = NULL) {
-    if (!is.character(filename)) stop("filename should be a character vector")
-    if (!is.numeric(n)) stop("n should be a number")
-    if (!is.null(nlines) && !is.numeric(nlines))
-        stop("nlines should be a number")
-    if (is.null(nlines)) {
-        nlines <- determine_nlines(filename)
-    }
-    n <- n[1]
-    if (n < 0) stop("n is negative; you can't sample a negative number of lines")
-    if (n < 1) n <- round(n * nlines)
-    lines <- sample(nlines, n, replace=FALSE)
-    return(read_lines(filename, lines))
-}
-
 detect_datamodel_csv <- function(filename, sep=",", dec=".", header=FALSE, 
         nlines=1000, sample=FALSE, ...) {
     if (sample) {
@@ -72,9 +41,16 @@ read_data_model <- function(model, ...) {
     close(con)
     result <- list()
     for (i in seq_len(nrow(lines))) {
-        # try to convert to numeric
-        val <- suppressWarnings(as.numeric(lines[i,2]))
-        if (is.na(val)) val <- lines[i,2]
+        # try to convert to boolean
+        if (lines[i,2] == "TRUE") {
+          val <- TRUE
+        } else if (lines[i,2] == "FALSE") {
+          val <- FALSE
+        } else {
+            # try to convert to numeric
+            val <- suppressWarnings(as.numeric(lines[i,2]))
+            if (is.na(val)) val <- lines[i,2]
+        }
         result[[lines[i,1]]] <- val
     }
     result$columns <- read.table(model, sep=',', header=TRUE, 
@@ -84,6 +60,20 @@ read_data_model <- function(model, ...) {
 }
 
 write_data_model <- function(model, filename) {
+    # if model is a laf_object
+    if (inherits(p, "laf")) {
+        laf <- model
+        model <- list()
+        model$type <- laf@file_type
+        model$filename <- laf@filename
+        model$columns <- data.frame(names=laf@column_names,
+            types=.laf_to_type(laf@column_types))
+        if (length(laf@column_widths)) 
+            model$columns$widths <- laf@column_widths
+        model[names(laf@options)] <- laf@options
+
+    }
+    # open the file to which the model will be written
     con <- file(filename, "wt")
     # write first part (the part containing all information except the columns)
     for (name in names(model)) {

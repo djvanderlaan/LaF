@@ -26,7 +26,8 @@ setClass(
         file_type = "character",
         column_names = "character",
         column_types = "integer",
-        column_widths = "integer"
+        column_widths = "integer",
+        options = "list"
     )
 )
 

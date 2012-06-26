@@ -63,7 +63,12 @@ laf_open_csv <-function(filename, column_types,
         file_type = "csv",
         column_types = types,
         column_names = column_names,
-        column_widths = integer(0)
+        column_widths = integer(0),
+        options = list(
+            sep=sep,
+            dec=dec,
+            skip=skip,
+            trim=trim)
     )
     return(result)
 }
@@ -113,7 +118,10 @@ laf_open_fwf <-function(filename, column_types, column_widths,
         file_type = "fwf",
         column_types = types,
         column_names = column_names,
-        column_widths = column_widths
+        column_widths = column_widths,
+        options = list(
+            dec=dec,
+            trim=trim)
     )
     return(result)
 }
