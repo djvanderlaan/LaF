@@ -44,7 +44,7 @@ read_data_model <- function(filename, ...) {
             model$columns[[col]] <- sapply(columns, function(d) d[[col]])
         }
     }
-    model$columns <- as.data.frame(model$columns)
+    model$columns <- as.data.frame(model$columns, stringsAsFactors=FALSE)
     # overwrite options in file by extra options given in call
     model[names(list(...))] <- list(...)
     return(model)
