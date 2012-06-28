@@ -1,11 +1,27 @@
+# Copyright 2012 Jan van der Laan
+#
+# This file is part of LaF.
+#
+# LaF is free software: you can redistribute it and/or modify it under the terms
+# of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later
+# version.
+#
+# LaF is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+# A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# LaF.  If not, see <http://www.gnu.org/licenses/>.
+
 
 detect_dm_csv <- function(filename, sep=",", dec=".", header=FALSE, 
-        nlines=1000, sample=FALSE, factor_fraction=0.4, ...) {
+        nrow=1000, nlines=NULL, sample=FALSE, factor_fraction=0.4, ...) {
     if (sample) {
-        lines <- sample_lines(filename, n=nlines)
+        lines <- sample_lines(filename, n=nrow, nlines=nlines)
         con <- textConnection(lines)
     } else con <- file(filename, "rt")
-    data  <- read.table(con, nrow=nlines, sep=sep, dec=dec, header=header, ...)
+    data  <- read.table(con, nrow=nrow, sep=sep, dec=dec, header=header, ...)
     close(con)
     name <- names(data)
     type <- sapply(data, function(d) {
