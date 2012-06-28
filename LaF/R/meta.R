@@ -1,6 +1,6 @@
 
 detect_dm_csv <- function(filename, sep=",", dec=".", header=FALSE, 
-        nlines=1000, sample=FALSE, factor_fraction=0.2, ...) {
+        nlines=1000, sample=FALSE, factor_fraction=0.4, ...) {
     if (sample) {
         lines <- sample_lines(filename, n=nlines)
         con <- textConnection(lines)
