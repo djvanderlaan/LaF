@@ -32,7 +32,7 @@ detect_datamodel_csv <- function(filename, sep=",", dec=".", header=FALSE,
     ))
 }
 
-read_data_model <- function(filename, ...) {
+read_dm <- function(filename, ...) {
     if (!require("yaml")) 
         stop("The library yaml is required to read and write data models.")
     model <- yaml.load_file(filename)
@@ -50,7 +50,7 @@ read_data_model <- function(filename, ...) {
     return(model)
 }
 
-write_data_model <- function(model, filename) {
+write_dm <- function(model, filename) {
     if (!require("yaml")) 
         stop("The library yaml is required to read and write data models.")
     # if model is a laf object, build data model from laf object
