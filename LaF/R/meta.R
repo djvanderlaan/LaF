@@ -1,5 +1,5 @@
 
-detect_datamodel_csv <- function(filename, sep=",", dec=".", header=FALSE, 
+detect_dm_csv <- function(filename, sep=",", dec=".", header=FALSE, 
         nlines=1000, sample=FALSE, factor_fraction=0.2, ...) {
     if (sample) {
         lines <- sample_lines(filename, n=nlines)
