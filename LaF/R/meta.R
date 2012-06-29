@@ -54,7 +54,7 @@ write_dm <- function(model, filename) {
     if (!require("yaml")) 
         stop("The library yaml is required to read and write data models.")
     # if model is a laf object, build data model from laf object
-    if (inherits(p, "laf")) {
+    if (inherits(model, "laf")) {
         laf <- model
         model <- list()
         model$type <- laf@file_type
@@ -73,6 +73,7 @@ laf_open <- function(model, ...) {
     model[names(list(...))] <- list(...)
     model$column_names  <- model$columns$name
     model$column_types <- model$columns$type
+    if (is.null(model$type)) stop("Type is missing from data model")
     if (identical(model$type, "csv")) {
         open <- "laf_open_csv"
     } else if (identical(model$type, "fwf")) {
