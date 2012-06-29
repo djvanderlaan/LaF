@@ -66,7 +66,7 @@ test_that(
     })
 
 test_that("detect_dm_csv works", {
-    model <- detect_datamodel_csv("tmp.csv", header=FALSE, factor_fraction=0.8)
+    model <- detect_dm_csv("tmp.csv", header=FALSE, factor_fraction=0.8)
     laf <- laf_open(model)
     testdata <- laf[]
     expect_that(testdata[,1], equals(data[,1]))
