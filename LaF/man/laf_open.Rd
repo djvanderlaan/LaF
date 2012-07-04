@@ -1,0 +1,66 @@
+\name{laf_open}
+\alias{laf_open}
+\title{
+  Create a connection to a file using a data model.
+}
+\description{
+  Uses a data model to create a connection to a file. The data model contains
+  all the information needed to open the file (column types, column widths,
+  etc.). 
+}
+\usage{
+  laf_open(model, ...)
+}
+\arguments{
+  \item{model}{A \link{data_model}{data model}.}
+  \item{...}{Additional arguments can be used to overwrite the values specified
+  by the data model.}
+}
+\details{
+  Depending on the field `type' \code{laf_open} uses \code{\link{laf_open_csv}}
+  and \code{\link{laf_open_fwf}} to open the file. The data model should contain
+  all information needed by these routines to open the file.
+}
+\value{
+  Object of type \code{\linkS4class{laf}}. Values can be extracted from this
+  object using indexing, and methods such as \code{\link{read_lines}},
+  \code{\link{next_block}}. 
+}
+\author{
+  D.J. van der Laan \email{djvanderlaan@unrealizedtime.nl}
+}
+\seealso{
+  See \code{\link{read_dm}} and \code{\link{detect_dm_csv}} for ways of creating
+  data models. 
+}
+\examples{
+# Generate test data
+ntest <- 10
+column_types <- c("integer", "integer", "double", "string")
+testdata <- data.frame(
+    a = 1:ntest,
+    b = sample(1:2, ntest, replace=TRUE),
+    c = round(runif(ntest), 13),
+    d = sample(c("jan", "pier", "tjores", "corneel"), ntest, replace=TRUE)
+    )
+# Write test data to csv file
+write.table(testdata, file="tmp.csv", row.names=FALSE, col.names=FALSE, sep=',')
+
+# Create LaF-object
+laf <- laf_open_csv("tmp.csv", column_types=column_types)
+
+# Write data model to file
+write_dm(laf, "tmp.yaml")
+
+# Read data model and open file
+laf <- laf_open(read_dm("tmp.yaml"))
+
+# Write test data to second csv file
+write.table(testdata, file="tmp2.csv", row.names=FALSE, col.names=FALSE, sep=',')
+
+# Read data model and open seconde file, demonstrating the use of the optional
+# arguments to laf_open
+laf2 <- laf_open(read_dm("tmp.yaml"), filename="tmp2.csv")
+
+}
+

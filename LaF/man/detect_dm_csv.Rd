@@ -42,7 +42,8 @@
 }
 \value{
   \code{read_dm} returns a data model which can be used by
-  \code{\link{laf_open}}. 
+  \code{\link{laf_open}}. The data model can be written to file using
+  \code{\link{write_dm}}.
 }
 \author{
   D.J. van der Laan \email{djvanderlaan@unrealizedtime.nl}
