@@ -25,7 +25,7 @@
   D.J. van der Laan \email{djvanderlaan@unrealizedtime.nl}
 }
 \seealso{
-  See \code{\line{readLines}} to read in all lines a text file;
+  See \code{\link{readLines}} to read in all lines a text file;
   \code{\link{get_lines}} and \code{\link{sample_lines}} can be used to read in
   spcified, or random lines.
 }

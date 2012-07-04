@@ -14,7 +14,7 @@
   \item{n}{The number of lines that should be sampled from the file.}
   \item{nlines}{The total number of lines in the file. If not specified or
   \code{NULL} the number of lines is first determined using
-  \code{\link{determine_nlines}}.
+  \code{\link{determine_nlines}}.}
 }
 \details{
   When \code{nlines} is not specified, the total number of lines is first
@@ -30,7 +30,7 @@
   D.J. van der Laan \email{djvanderlaan@unrealizedtime.nl}
 }
 \seealso{
-  See \code{\line{readLines}} to read in all lines a text file;
+  See \code{\link{readLines}} to read in all lines a text file;
   \code{\link{get_lines}} can be used to read in specified lines.
 }
 \examples{

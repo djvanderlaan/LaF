@@ -8,7 +8,7 @@
   data models can be done using \code{\link{laf_open}}.
 }
 \usage{
-  detect_dm_csv(filename, sep=",", dec=".", header=FALSE, nrow=1000, 
+  detect_dm_csv(filename, sep=",", dec=".", header=FALSE, nrows=1000, 
     nlines=NULL, sample=FALSE, factor_fraction=0.4, ...) 
 }
 \arguments{
@@ -16,12 +16,12 @@
   \item{sep}{character vector containing the separator used in the file.}
   \item{dec}{the character used for decimal points.}
   \item{header}{does the first line in the file contain the column names.}
-  \item{nrow}{the number of lines that should be read in to detect the column
+  \item{nrows}{the number of lines that should be read in to detect the column
   types. The more lines the more likely that the correct types are detected.}
   \item{nlines}{(only needed when the sample option is used) the expected number
   of lines in the file. If not specified the number of lines in the file is
   first calculated.}
-  \item{sample}{by default the first \code{nrow} lines are read in for
+  \item{sample}{by default the first \code{nrows} lines are read in for
   determining the column types. When sample is used random lines from the file
   are used. This is more robust, but takes longer.}
   \item{factor_fraction}{the fraction of unique string in a column below which
