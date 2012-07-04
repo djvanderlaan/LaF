@@ -48,10 +48,10 @@ detect_dm_csv <- function(filename, sep=",", dec=".", header=FALSE,
     ))
 }
 
-read_dm <- function(filename, ...) {
+read_dm <- function(modelfile, ...) {
     if (!require("yaml")) 
         stop("The library yaml is required to read and write data models.")
-    model <- yaml.load_file(filename)
+    model <- yaml.load_file(modelfile)
     # columns are stored rowwise in file convert to column wise
     columns <- model$columns
     model$columns <- list()
@@ -66,7 +66,7 @@ read_dm <- function(filename, ...) {
     return(model)
 }
 
-write_dm <- function(model, filename) {
+write_dm <- function(model, modelfile) {
     if (!require("yaml")) 
         stop("The library yaml is required to read and write data models.")
     # if model is a laf object, build data model from laf object
@@ -82,7 +82,7 @@ write_dm <- function(model, filename) {
             model$columns$width <- laf@column_widths
     }
     # write model to file in yaml format
-    writeLines(as.yaml(model, column.major=F), con=filename)
+    writeLines(as.yaml(model, column.major=F), con=modelfile)
 }
 
 laf_open <- function(model, ...) {

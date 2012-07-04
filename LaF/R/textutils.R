@@ -23,10 +23,10 @@ determine_nlines <- function(filename) {
 get_lines <- function(filename, line_numbers) {
     if (!is.character(filename)) 
         stop("filename should be a character vector")
-    if (!is.numeric(lines_numbers))
+    if (!is.numeric(line_numbers))
         stop("line_numbers should be a numeric vector")
     line_order  <- order(line_numbers)
-    line_numbers <- line_number[line_order]
+    line_numbers <- line_numbers[line_order]
     result <- .Call("r_get_line", as.character(filename), 
         as.integer(line_numbers)-1)
     result <- result[order(seq_along(line_numbers)[line_order])]
@@ -46,6 +46,6 @@ sample_lines <- function(filename, n, nlines = NULL) {
         stop("n is negative; you can't sample a negative number of lines")
     if (n < 1) n <- round(n * nlines)
     lines <- sample(nlines, n, replace=FALSE)
-    return(read_lines(filename, lines))
+    return(get_lines(filename, lines))
 }
 

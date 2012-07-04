@@ -56,6 +56,7 @@
     the columns. Do not change this of bad things will happen.}
     \item{\code{column_widths}:}{Object of class \code{"integer"}. Contains the 
     width of the columns for fixed width files.}
+    \item{\code{options}:}{List with arguments used when opening the file.}
   }
 }
 \section{Methods}{

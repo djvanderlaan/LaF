@@ -1,4 +1,5 @@
 \name{determine_nlines}
+\alias{determine_nlines}
 \title{
   Determine number of lines in a text file
 }

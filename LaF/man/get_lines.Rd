@@ -1,4 +1,5 @@
 \name{get_lines}
+\alias{get_lines}
 \title{
   Read in specified lines from a text file
 }

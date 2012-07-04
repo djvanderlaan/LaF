@@ -27,7 +27,7 @@ laf <- laf_open_csv(filename="tmp.csv",
 test_that(
     "write_dm and read_dm work",
     {
-        write_dm(laf, filename="tmp.yaml")
+        write_dm(laf, modelfile="tmp.yaml")
         model <- read_dm("tmp.yaml")
         laf2 <- laf_open(model)
         testdata <- laf2[]

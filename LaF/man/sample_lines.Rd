@@ -1,4 +1,5 @@
-\name{get_lines}
+\name{sample_lines}
+\alias{sample_lines}
 \title{
   Read in random lines from a text file
 }

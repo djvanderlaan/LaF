@@ -1,4 +1,5 @@
 \name{data_model}
+\alias{data_model}
 \alias{read_dm}
 \alias{write_dm}
 \title{
@@ -11,11 +12,11 @@
   be done using \code{\link{laf_open}}.
 }
 \usage{
-  read_dm(filename, ...)
-  write_dm(model, filename)
+  read_dm(modelfile, ...)
+  write_dm(model, modelfile)
 }
 \arguments{
-  \item{filename}{character containing the filename of the file the model is to
+  \item{modelfile}{character containing the filename of the file the model is to
   be written to/read from.}
   \item{model}{a data model or an object of type \code{\linkS4class{laf}}. See
   details for more information.}
