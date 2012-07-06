@@ -79,3 +79,36 @@ test_that("detect_dm_csv works", {
     expect_that(is.na(testdata[6,3]), is_true())
 })
 
+lines <- c(
+  " 1M 1.45Rotterdam ",
+  " 2F12.00Amsterdam ",
+  " 3  .22 Berlin    ",
+  "  M22   Paris     ",
+  " 4F12345London    ",
+  " 5M     Copenhagen",
+  " 6M-12.1          ",
+  " 7F   -1Oslo      ")
+ 
+data <- data.frame(
+      id=c(1,2,3,NA,4,5,6,7),
+      gender=c("M", "F", "", "M", "F", "M", "M", "F"),
+      x=c(1.45, 12, 0.22, 22, 12345, NA, -12.1, -1),
+      city=c("Rotterdam", "Amsterdam", "Berlin", "Paris", 
+          "London", "Copenhagen", "", "Oslo"),
+      stringsAsFactors=FALSE
+    )
+
+test_that("read_dm_blaise works", {
+    writeLines(lines, con="tmp.fwf", sep="\n")
+    writeLines(c( "DATAMODEL test", "FIELDS", " id {comment} : INTEGER[2]", " gender : STRING[1]", " x : REAL[5] {comment}", " city : STRING[10]", "ENDMODEL"), con="tmp.bla")
+    model <- read_dm_blaise("tmp.bla", datafilename="tmp.fwf")
+    laf <- laf_open(model)
+    testdata <- laf[]
+    expect_that(testdata[,1], equals(data[,1]))
+    expect_that(as.character(testdata[,2]), equals(as.character(data[,2])))
+    expect_that(testdata[,3], equals(data[,3]))
+    expect_that(testdata[,4], equals(data[,4]))
+    expect_that(is.na(testdata[4,1]), is_true())
+    expect_that(is.na(testdata[6,3]), is_true())
+})
+
