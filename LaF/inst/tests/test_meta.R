@@ -100,7 +100,7 @@ data <- data.frame(
 
 test_that("read_dm_blaise works", {
     writeLines(lines, con="tmp.fwf", sep="\n")
-    writeLines(c( "DATAMODEL test", "FIELDS", " id {comment} : INTEGER[2]", " gender : STRING[1]", " x : REAL[5] {comment}", " city : STRING[10]", "ENDMODEL"), con="tmp.bla")
+    writeLines(c( "DATAMODEL test", "FIELDS", " id \"label\" : INTEGER[2]", " gender : STRING[1]", " x : REAL[5] {comment}", " city : STRING[10]", "ENDMODEL"), con="tmp.bla")
     model <- read_dm_blaise("tmp.bla", datafilename="tmp.fwf")
     laf <- laf_open(model)
     testdata <- laf[]

@@ -54,7 +54,7 @@ writeLines(c(
     "  x      : REAL[5] {comment}", 
     "  city   : STRING[10]", 
     "ENDMODEL"), con="tmp.bla")
-model <- read_dm_blaise("tmp.bla", datafilename="tmp.fwf")
+model <- read_dm_blaise("tmp.bla", datafilename="tmp.dat")
 laf <- laf_open(model)
 }
 
