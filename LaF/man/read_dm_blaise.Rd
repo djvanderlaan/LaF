@@ -1,0 +1,60 @@
+\name{read_dm_blaise}
+\alias{read_dm_blaise}
+\title{
+  Read in Blaise data models
+}
+\description{
+  Read in Blaise data models 
+}
+\usage{
+  read_dm_blaise(filename, datafilename)
+}
+\arguments{
+  \item{filename}{The filename of the file containing the data model.}
+  \item{datafilename}{The filename of the data file to which the data model
+  belongs.}
+}
+\details{
+  The function reads the data model from file and returns a list that can be
+  used by \code{\link{laf_open}} to open the file for reading. Only a subset of
+  the most common features found in Blaise files are supported. If part of the
+  data model can not be parsed a warning is given.
+}
+\value{
+  Returns a data model (which is a list containing all the relevant information
+  to open a file using \code{\link{laf_open}}. When the file contains more than
+  one data model a list of data models is returned and a warning issued. 
+}
+\author{
+  D.J. van der Laan \email{djvanderlaan@unrealizedtime.nl}
+}
+\seealso{
+  See \code{\link{write_dm}} to write the data model to file.  The data models
+  can be used to open a file using \code{\link{laf_open}}.
+}
+\examples{
+# Generate test data
+lines <- c(
+    " 1M 1.45Rotterdam ",
+    " 2F12.00Amsterdam ",
+    " 3  .22 Berlin    ",
+    "  M22   Paris     ",
+    " 4F12345London    ",
+    " 5M     Copenhagen",
+    " 6M-12.1          ",
+    " 7F   -1Oslo      ")
+writeLines(lines, con="tmp.dat")
+
+# Create a file containing the data model
+writeLines(c( 
+    "DATAMODEL test", 
+    "FIELDS", 
+    "  id     : INTEGER[2]", 
+    "  gender : STRING[1]", 
+    "  x      : REAL[5] {comment}", 
+    "  city   : STRING[10]", 
+    "ENDMODEL"), con="tmp.bla")
+model <- read_dm_blaise("tmp.bla", datafilename="tmp.fwf")
+laf <- laf_open(model)
+}
+
