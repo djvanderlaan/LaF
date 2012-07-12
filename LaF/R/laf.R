@@ -27,6 +27,7 @@ setClass(
         column_names = "character",
         column_types = "integer",
         column_widths = "integer",
+        levels = "list",
         options = "list"
     )
 )
@@ -175,11 +176,12 @@ setMethod(
             }
         } 
         # convert factor columns to factor columns
-        for (i in 1:ncol(df)) {
-          if (x@column_types[columns[i]] == 2) {
-            levels(df[[i]]) <- levels(x[[columns[i]]])
-            class(df[[i]]) <- "factor"
-          }
+        for (i in seq_along(df)) {
+            levels <- levels(x[[columns[i]]])
+            if (nrow(levels) > 0) {
+                df[[i]] <- factor(df[[i]], levels=levels$levels,
+                    labels=levels$labels)
+            }
         }
         return(df)
     }
@@ -221,10 +223,11 @@ setMethod(
             }
         } 
         # convert factor columns to factor columns
-        for (i in 1:ncol(df)) {
-            if (x@column_types[columns[i]] == 2) {
-                levels(df[[i]]) <- levels(x[[columns[i]]])
-                class(df[[i]]) <- "factor"
+        for (i in seq_along(df)) {
+            levels <- levels(x[[columns[i]]])
+            if (nrow(levels) > 0) {
+                df[[i]] <- factor(df[[i]], levels=levels$levels,
+                    labels=levels$labels)
             }
         }
         return(df)
@@ -253,11 +256,12 @@ setMethod(
             lines_read <- .Call("laf_next_block", as.integer(x@file_id), 
                 as.integer(nrows), as.integer(columns-1), df)
             # convert factor columns to factor columns
-            for (i in 1:ncol(df)) {
-              if (x@column_types[columns[i]] == 2) {
-                levels(df[[i]]) <- levels(x[[columns[i]]])
-                class(df[[i]]) <- "factor"
-              }
+            for (i in seq_along(df)) {
+                levels <- levels(x[[columns[i]]])
+                if (nrow(levels) > 0) {
+                    df[[i]] <- factor(df[[i]], levels=levels$levels,
+                        labels=levels$labels)
+                }
             }
             # apply function
             result     <- fun(df[min(lines_read,1):lines_read, , drop=FALSE], 
@@ -326,6 +330,19 @@ setMethod(
         return(levels)
     }
 )
+
+# =============================================================================
+# Change the levels of the columns of the data.set
+# 
+setMethod(
+    f = "levels<-",
+    signature = "laf",
+    definition = function(x, value) {
+        x@levels <- value
+        return(x)
+    }
+)
+
 
 # =============================================================================
 # Close file

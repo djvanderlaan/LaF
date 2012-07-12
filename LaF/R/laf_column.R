@@ -76,6 +76,7 @@ setMethod(
             column_names = x@column_names,
             column_widths = x@column_widths,
             column = as.integer(column),
+            levels = x@levels,
             options = x@options
         )
         return(result)
@@ -148,15 +149,34 @@ setMethod(
 
 # =============================================================================
 # Return the levels of the colum
-# 
+#
 setMethod(
     f = "levels",
     signature = "laf_column",
     definition = function(x) {
-        levels <- .Call("laf_levels", as.integer(x@file_id), 
-                as.integer(x@column-1))
-        levels <- levels$labels[order(levels$levels)]
+        column_name <- x@column_names[x@column]
+        levels <- x@levels[[column_name]]
+        if (is.null(levels) || !nrow(levels)) {
+            levels <- .Call("laf_levels", as.integer(x@file_id), 
+                    as.integer(x@column-1))
+            levels <- data.frame(
+                levels = levels$levels[order(levels$levels)],
+                labels = levels$labels[order(levels$levels)])
+        }
         return(levels)
     }
 )
+
+# =============================================================================
+# Change the levels of the column
+# 
+setMethod(
+    f = "levels<-",
+    signature = "laf_column",
+    definition = function(x, value) {
+        x@levels[[x@column_names[x@column]]] <- value
+        return(x)
+    }
+)
+
 
