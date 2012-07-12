@@ -9,6 +9,7 @@
 \alias{current_line,laf-method}
 \alias{goto,laf,numeric-method}
 \alias{levels,laf-method}
+\alias{levels<-,laf-method}
 \alias{names<-,laf-method}
 \alias{names,laf-method}
 \alias{ncol,laf-method}
@@ -73,10 +74,15 @@
     is the first line the next call to \code{next_block} will return.}
     \item{goto}{\code{signature(x = "laf", i = "numeric")}: go to a specific
     line in the file.}
-    \item{levels}{\code{signature(x = "laf")}: Return a list of character 
-    vectors containing the levels of each of the columns. Empty vectors are
-    returned for non-categorical columns. Please note that the levels are only
-    filled completely for a column when the column had been read completely once.}
+    \item{levels<-}{\code{signature(x = "laf")}: Set the levels of a laf
+    object. Not only the levels of a categorical column can be set, but those
+    of any column.}
+    \item{levels}{\code{signature(x = "laf")}: Return a list of data.frames with
+    the levels and the corresponding labels of each of the columns. Empty
+    data.frames are returned for non-categorical columns or column for which the
+    levels have not been set. Please note that the levels of categorical column
+    (when not set) are only filled completely for a column when the column had
+    been read completely once.}
     \item{names<-}{\code{signature(x = "laf")}: Set the names of the columns.}
     \item{names}{\code{signature(x = "laf")}: Get the names of the columns. }
     \item{ncol}{\code{signature(x = "laf")}: Get the number of columns.}

@@ -4,6 +4,7 @@
 \alias{laf_column-class}
 \alias{[,laf_column-method}
 \alias{levels,laf_column-method}
+\alias{levels<-,laf_column-method}
 \alias{next_block,laf_column-method}
 \alias{read_lines,laf_column-method}
 \alias{show,laf_column-method}
@@ -35,8 +36,11 @@
   \describe{
     \item{[}{\code{signature(x = "laf_column")}: a \code{laf_column} can be
     indexed as an ordinary vector. }
+    \item{levels<-}{\code{signature(x = "laf_column")}: set the levels of a laf
+    column. }
     \item{levels}{\code{signature(x = "laf_column")}: return the levels of the
-    column. An empty vector is returned for non-categorical columns.}
+    column. A data.frame with the levels and correcsponding labels. An empty
+    data.frame is returned for non-categorical columns.}
     \item{next_block}{\code{signature(x = "laf_column")}: read the next block of
     lines from the column. Returns a vector.}
     \item{read_lines}{\code{signature(x = "laf_column")}: reads the specified
