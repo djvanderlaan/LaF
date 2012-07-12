@@ -338,7 +338,11 @@ setMethod(
     f = "levels<-",
     signature = "laf",
     definition = function(x, value) {
-        x@levels <- value
+        old_levels <- levels(x)
+        for (i in names(value)) {
+          if (!identical(old_levels[[i]], value[[i]]))
+              x@levels[[i]] <- value[[i]]
+        }
         return(x)
     }
 )
