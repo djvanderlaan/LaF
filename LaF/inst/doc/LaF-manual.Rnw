@@ -219,6 +219,10 @@ alldata <- dat[ , ]
 @
 
 
+\subsection{Opening using data models}
+
+As of version 0.5 ...
+
 
 \section{Blockwise processing}
 \label{sec:blockwise} 
