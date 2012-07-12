@@ -75,7 +75,8 @@ setMethod(
             column_types = x@column_types,
             column_names = x@column_names,
             column_widths = x@column_widths,
-            column = as.integer(column)
+            column = as.integer(column),
+            options = x@options
         )
         return(result)
     }
