@@ -88,6 +88,11 @@ LaF currently supports the following column types
   \item[string] Character fields such as postcodes, identification numbers. 
 \end{description}
 
+As of version 0.5 of \texttt{LaF} it is also possible to set levels of non
+categorical columns using the \texttt{levels} method. For more information see
+paragraph~\ref{sec:levels}.
+
+
 \subsection{Fixed width files}
 \label{sec:fixedwidth}
 In fixed width files columns are defined by character positions in the files.
@@ -196,6 +201,10 @@ This function accepts the following arguments:
   data. This can be used, for example, to skip the header as headers are not
   supported: the user is required to specify the types and names of the columns.
 \end{description}
+As of version 0.5 of the \texttt{LaF} package, there is also the
+\texttt{detect\_dm\_csv} routine, which can automatically detect column types.
+See paragraph~\ref{sec:datamodels} for more information on how to use data
+models to open files.
 
 Suppose the following data is stored in the file `file.csv' in the current
 working directory (showing only the first five lines):
@@ -220,9 +229,31 @@ alldata <- dat[ , ]
 
 
 \subsection{Opening using data models}
+\label{sec:datamodels}
 
-As of version 0.5 ...
-
+As of version 0.5 \texttt{LaF} has the ability to store all of the arguments
+needed by \texttt{laf\_open\_fwf} and \texttt{laf\_open\_csv} in so called data
+models. These data models can be written to and read from files using the
+functions \texttt{write\_dm} and \texttt{read\_dm} respectively.
+\texttt{write\_dm} accepts either a data model or a \texttt{laf} object as its
+input. To write the data model of the data set from the previous section to file:
+<<echo=TRUE,results=hide>>=
+write_dm(dat, "model.yaml")
+@
+The data model is written in the well documented and readable YAML format:
+<<echo=FALSE>>=
+lines <- readLines("model.yaml")
+cat(paste(lines,collapse="\n"), "\n")
+@
+The format probably speaks for itself. It is also probable to manually write
+these files and read them using \texttt{read\_dm}. To open a file using a data
+model the function \texttt{laf\_open} can be used:
+<<echo=TRUE, results=hide>>=
+dat <- laf_open(read_dm("model.yaml"))
+@
+Data models can also be generated from CSV-files and Blaise data models using
+the routines \texttt{detect\_dm\_csv} and \texttt{read\_dm\_blaise}. See the
+documentation of these routines for more information.
 
 \section{Blockwise processing}
 \label{sec:blockwise} 
@@ -374,6 +405,29 @@ or
 <<echo=TRUE>>=
 result <- dat[dat[ , "age"] > 65, ]
 @
+
+\section{Setting levels of columns}
+\label{sec:levels}
+
+It is possible to set the levels of categorical and non-categorical columns.
+Since the file is read only, it is not possible to renumber the columns as would
+happen if we would change a column in a \texttt{data.frame} to \texttt{factor}.
+Therefore, we need to specify both the levels and the corresponding labels as a
+\texttt{data.frame}. For example, to change the `age' column to a factor:
+<<echo=TRUE>>=
+levels(dat)[["age"]] <- data.frame(levels=0:100, labels=paste(0:100, "years"))
+dat$age[1:10]
+@
+These levels are also written to file when writing a data model to file using
+\texttt{write\_dm} and read in by \texttt{read\_dm}. You can therefore also
+specify the levels of a column in the data model.
+<<echo=FALSE>>=
+write_dm(dat, "model.yaml")
+lines <- readLines("model.yaml")
+cat(paste(c(lines[1:29], "..."),collapse="\n"), "\n")
+@
+
+
 
 \section{Calculating column statistics}
 \label{sec:stats}
