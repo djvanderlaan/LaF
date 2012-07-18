@@ -104,6 +104,7 @@ write_dm <- function(model, modelfile) {
             }
             model$columns[[name]] <- col
         }
+        names(model$columns) <- NULL
     }
     # write model to file in yaml format
     writeLines(as.yaml(model, column.major=F), con=modelfile)
