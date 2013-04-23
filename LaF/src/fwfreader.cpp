@@ -58,7 +58,8 @@ bool FWFReader::next_line() {
 bool FWFReader::goto_line(unsigned int line) {
   // TODO: check if line is valid?? Depends on how seekg works
   stream_.clear();
-  stream_.seekg(line*linesize_, std::ios::beg);
+  std::ios::pos_type pos = static_cast<std::ios::pos_type>(line) * linesize_;
+  stream_.seekg(pos, std::ios::beg);
   next_block();
   current_line_ = line;
   return next_line();
@@ -138,7 +139,7 @@ unsigned int FWFReader::determine_linesize(const std::string& filename) {
 unsigned int FWFReader::determine_nlines() {
   stream_.clear();
   stream_.seekg(0, std::ios::end);
-  unsigned int nbytes = stream_.tellg();
+  std::ios::pos_type nbytes = stream_.tellg();
   reset();
   return nbytes/linesize_;
 }
