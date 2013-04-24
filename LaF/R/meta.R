@@ -1,4 +1,4 @@
-# Copyright 2012 Jan van der Laan
+# Copyright 2012, 2013 Jan van der Laan
 #
 # This file is part of LaF.
 #
@@ -13,7 +13,6 @@
 #
 # You should have received a copy of the GNU General Public License along with
 # LaF.  If not, see <http://www.gnu.org/licenses/>.
-
 
 detect_dm_csv <- function(filename, sep=",", dec=".", header=FALSE, 
         nrows=1000, nlines=NULL, sample=FALSE, factor_fraction=0.4, ...) {
@@ -33,9 +32,16 @@ detect_dm_csv <- function(filename, sep=",", dec=".", header=FALSE,
             } else {
                 type <- "categorical"
             }
+        } else if (identical(type, "numeric")) {
+            type <- "double"
+        } else if (identical(type, "character")) {
+            type <- "string"
+        } else if (identical(type, "integer")) {
+        } else {
+            warning("Unsupported type '", type, 
+                "'; using default type 'string'")
+            type <- "string"
         }
-        if (identical(type, "numeric"))   type <- "double"
-        if (identical(type, "character")) type <- "string"
         return(type)
     })
     return(list(

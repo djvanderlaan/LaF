@@ -1,4 +1,4 @@
-# Copyright 2011 Jan van der Laan
+# Copyright 2011, 2013 Jan van der Laan
 #
 # This file is part of LaF.
 #
@@ -247,7 +247,7 @@ setMethod(
         result <- NULL
         begin(x)
         while (TRUE) {
-            df     <- next_block(laf, columns = columns, nrows = nrows);
+            df     <- next_block(x, columns = columns, nrows = nrows);
             result <- fun(df, result, ...)
             if (allow_interupt) {
                 stop <- result[[1]]

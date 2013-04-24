@@ -79,6 +79,14 @@ test_that("detect_dm_csv works", {
     expect_that(is.na(testdata[6,3]), is_true())
 })
 
+test_that("detect_dm_csv handles empty columns correctly (regression test issue #1)", {
+    lines <- c("1;;A", "2;;A", "3;;B", "4;;B")
+    writeLines(lines, "test.csv")
+    expect_warning(dm <- detect_dm_csv("test.csv", sep=";"))
+    codes <- LaF:::.laf_to_typecode(dm$columns$type)
+    expect_that(codes, is_a("integer"))
+})
+
 lines <- c(
   " 1M 1.45Rotterdam ",
   " 2F12.00Amsterdam ",
