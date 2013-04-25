@@ -1,6 +1,18 @@
 
 LaF version 0.5
 ===============================================================================
+* Added ability to use data models for opening files. These contain a 
+  description of the column names and column types etc. The data models can be
+  saved to and read from YAML-files.  For CSV files the data models can also be
+  automatically detected. Blaise data models are also supported. (see laf_open,
+  write_dm, read_dm, read_dm_blaise, detect_dm_csv)
+* The ability to set the levels of columns.  When reading these columns are
+  automatically converted to factors. 
+* Some routines were added to read specific or random lines from a text file
+  (see get_lines, sample_lines) and to determine the number of lines in a text
+  file (see determine_nlines).
+* Fixed bug with nrows, which could return the wrong number of lines when the
+  size of the file exceeded 2 Gb. 
 
 LaF version 0.4
 ===============================================================================
