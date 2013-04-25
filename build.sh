@@ -24,7 +24,7 @@ R CMD build $package
 # Check last package in directory. 
 export sourcepackage=`ls LaF*.tar.gz | tail -n 1`
 echo "Testing package $sourcepackage ..."
-R CMD check $sourcepackage
+R CMD check --as-cran $sourcepackage
 
 rm -f *.tar
 
