@@ -18,6 +18,22 @@
 # Class definition of laf_column
 # Methods are defined below
 #
+
+#' @include laf.R
+
+#' Column of a Large File Object
+#' 
+#' Representation of a column in a Large File object. This class itself is a
+#' subclass of the class \code{laf}. In principle all methods that can be used
+#' with a \code{laf} object can also be used with a \code{laf_column} object
+#' except the the \code{column} or \code{columns} arguments of these methods are
+#' not needed. 
+#' 
+#' @section Objects from the Class:
+#' Object of this class are usually created by using the \code{$} operator on
+#' \code{laf} objects. 
+#'
+#' @export
 setClass(
     Class = "laf_column",
     contains = "laf",
@@ -157,7 +173,7 @@ setMethod(
         column_name <- x@column_names[x@column]
         levels <- x@levels[[column_name]]
         if (is.null(levels) || !nrow(levels)) {
-            levels <- .Call("laf_levels", as.integer(x@file_id), 
+            levels <- .Call("laf_levels", PACKAGE="LaF", as.integer(x@file_id), 
                     as.integer(x@column-1))
             levels <- data.frame(
                 levels = levels$levels[order(levels$levels)],

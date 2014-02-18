@@ -1,4 +1,4 @@
-# Copyright 2011-2012 Jan van der Laan
+# Copyright 2011-2012, 2014 Jan van der Laan
 #
 # This file is part of LaF.
 #
@@ -15,9 +15,24 @@
 # LaF.  If not, see <http://www.gnu.org/licenses/>.
 
 
-# =============================================================================
-# New generic: sum over columns
-#
+#' Calculate simple statistics of column
+#'
+#' Methods for calculating simple statistics of columns of a file: mean, sum,
+#' standard deviation, range (min and max), and number of missing values. 
+#'
+#' @param x an object of type laf or laf_column.
+#' @param columns a numeric vector with the columns for which the statistics
+#'     should be calculated.
+#' @param na.rm whether or not to ignore missing values. By default missing
+#'     values are ignored.
+#' @param useNA method with which to treat missing values: ifany adds a field
+#'     containing the number of missing values if there are any; always will always
+#'     add a field with the number of missing values even when there are none; none
+#'     will never add a field containing the number of missing values.
+#' @param ... Currently ignored.
+#'
+#' @rdname stats
+#' @export
 setGeneric(
     name = "colsum",
     def = function(x, ...) {
@@ -25,7 +40,8 @@ setGeneric(
     }
 )
 
-# Implementation for laf
+#' @rdname stats
+#' @export
 setMethod(
     f = "colsum",
     signature = "laf",
@@ -40,7 +56,8 @@ setMethod(
             stop("na.rm should be a logical vector")
         na.rm <- na.rm[1]
         # compute
-        result <- .Call("colsum", as.integer(x@file_id), as.integer(columns-1))
+        result <- .Call("colsum", PACKAGE="LaF", as.integer(x@file_id), 
+          as.integer(columns-1))
         # contruct end result
         result <- sapply(result, function(a) {
             r <- a$sum
@@ -52,7 +69,8 @@ setMethod(
     }
 )
 
-# Implementation for laf_column
+#' @rdname stats
+#' @export
 setMethod(
     f = "colsum",
     signature = "laf_column",
@@ -62,9 +80,8 @@ setMethod(
     }
 )
 
-# =============================================================================
-# New generic: Mean of columns
-#
+#' @rdname stats
+#' @export
 setGeneric(
     name = "colmean",
     def = function(x, ...) {
@@ -72,7 +89,8 @@ setGeneric(
     }
 )
 
-# Implementation for laf
+#' @rdname stats
+#' @export
 setMethod(
     f = "colmean",
     signature = "laf",
@@ -87,7 +105,8 @@ setMethod(
             stop("na.rm should be a logical vector")
         na.rm <- na.rm[1]
         # compute
-        result <- .Call("colsum", as.integer(x@file_id), as.integer(columns-1))
+        result <- .Call("colsum", PACKAGE="LaF", as.integer(x@file_id), 
+          as.integer(columns-1))
         # contruct end result
         result <- sapply(result, function(a) {
             r <- a$sum/a$n
@@ -99,7 +118,8 @@ setMethod(
     }
 )
 
-# Implementation for laf_column
+#' @rdname stats
+#' @export
 setMethod(
     f = "colmean",
     signature = "laf_column",
@@ -109,9 +129,8 @@ setMethod(
     }
 )
 
-# =============================================================================
-# New generic: frequency table of columns
-#
+#' @rdname stats
+#' @export
 setGeneric(
     name = "colfreq",
     def = function(x, ...) {
@@ -119,7 +138,8 @@ setGeneric(
     }
 )
 
-# Implementation for laf
+#' @rdname stats
+#' @export
 setMethod(
     f = "colfreq",
     signature = "laf",
@@ -134,7 +154,8 @@ setMethod(
             stop("useNA should be a character vector")
         useNA <- useNA[1]
         # perform calculation
-        result <- .Call("colfreq", as.integer(x@file_id), as.integer(columns-1))
+        result <- .Call("colfreq", PACKAGE="LaF", as.integer(x@file_id), 
+          as.integer(columns-1))
         # contruct end result
         for (i in seq_along(result)) {
             r <- result[[i]]$count
@@ -159,7 +180,8 @@ setMethod(
     }
 )
 
-# Implementation for laf_column
+#' @rdname stats
+#' @export
 setMethod(
     f = "colfreq",
     signature = "laf_column",
@@ -169,11 +191,8 @@ setMethod(
     }
 )
 
-
-
-# =============================================================================
-# New generic: range of columns
-#
+#' @rdname stats
+#' @export
 setGeneric(
     name = "colrange",
     def = function(x, ...) {
@@ -181,7 +200,8 @@ setGeneric(
     }
 )
 
-# Implementation for laf
+#' @rdname stats
+#' @export
 setMethod(
     f = "colrange",
     signature = "laf",
@@ -196,7 +216,8 @@ setMethod(
             stop("na.rm should be a logical vector")
         na.rm <- na.rm[1]
         # compute
-        result <- .Call("colrange", as.integer(x@file_id), as.integer(columns-1))
+        result <- .Call("colrange", PACKAGE="LaF", as.integer(x@file_id), 
+          as.integer(columns-1))
         # contruct end result
         result <- sapply(result, function(a) {
             r <- c(min=a$min, max=a$max)
@@ -208,7 +229,8 @@ setMethod(
     }
 )
 
-# Implementation for laf_column
+#' @rdname stats
+#' @export
 setMethod(
     f = "colrange",
     signature = "laf_column",
@@ -218,9 +240,8 @@ setMethod(
     }
 )
 
-# =============================================================================
-# New generic: nmissing in columns
-#
+#' @rdname stats
+#' @export
 setGeneric(
     name = "colnmissing",
     def = function(x, ...) {
@@ -228,7 +249,8 @@ setGeneric(
     }
 )
 
-# Implementation for laf
+#' @rdname stats
+#' @export
 setMethod(
     f = "colnmissing",
     signature = "laf",
@@ -243,7 +265,8 @@ setMethod(
             stop("na.rm should be a logical vector")
         na.rm <- na.rm[1]
         # compute
-        result <- .Call("colnmissing", as.integer(x@file_id), as.integer(columns-1))
+        result <- .Call("colnmissing", PACKAGE="LaF", as.integer(x@file_id), 
+          as.integer(columns-1))
         # contruct end result
         result <- sapply(result, function(a) {
             return(a$missing)
@@ -253,7 +276,8 @@ setMethod(
     }
 )
 
-# Implementation for laf_column
+#' @rdname stats
+#' @export
 setMethod(
     f = "colnmissing",
     signature = "laf_column",

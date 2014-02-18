@@ -1,0 +1,22 @@
+\docType{methods}
+\name{current_line}
+\alias{current_line}
+\alias{current_line,laf-method}
+\title{Get the current line in the file}
+\usage{
+current_line(x)
+
+\S4method{current_line}{laf}(x)
+}
+\arguments{
+  \item{x}{an object the supports the \code{current_line}
+  method, such as an \code{laf} object.
+
+  Returns the next line that will be read by
+  \code{\link{next_block}}. The current line can be set by
+  the method \code{\link{goto}}.}
+}
+\description{
+Get the current line in the file
+}
+

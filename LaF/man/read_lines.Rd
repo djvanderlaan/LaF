@@ -1,0 +1,34 @@
+\docType{methods}
+\name{read_lines}
+\alias{read_lines}
+\alias{read_lines,laf-method}
+\title{Read lines from the file}
+\usage{
+read_lines(x, ...)
+
+\S4method{read_lines}{laf}(x, rows, columns = 1:ncol(x), ...)
+}
+\arguments{
+  \item{x}{an object the supports the \code{read_lines}
+  method, such as an \code{laf} object.}
+
+  \item{...}{passed on to other methods.}
+
+  \item{rows}{a numeric vector with the rows that should be
+  read from the file.}
+
+  \item{columns}{an integer vector with the columns that
+  should be read in.}
+}
+\description{
+Reads the specified lines and columns from the data file.
+}
+\details{
+Note that when scanning through the complete file
+next_block is much faster. Also note that random file
+access can be slow (and is always much slower than
+sequential file access), especially for certain file types
+such as comma separated. Reading is generally faster when
+the lines that should be read are sorted.
+}
+

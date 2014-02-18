@@ -1,37 +1,30 @@
 \name{laf_open}
 \alias{laf_open}
-\title{
-  Create a connection to a file using a data model.
-}
-\description{
-  Uses a data model to create a connection to a file. The data model contains
-  all the information needed to open the file (column types, column widths,
-  etc.). 
-}
+\title{Create a connection to a file using a data model.}
 \usage{
-  laf_open(model, ...)
+laf_open(model, ...)
 }
 \arguments{
-  \item{model}{A \link{data_model}{data model}.}
-  \item{...}{Additional arguments can be used to overwrite the values specified
-  by the data model.}
-}
-\details{
-  Depending on the field `type' \code{laf_open} uses \code{\link{laf_open_csv}}
-  and \code{\link{laf_open_fwf}} to open the file. The data model should contain
-  all information needed by these routines to open the file.
+  \item{model}{a \link{read_dm}{data model}.}
+
+  \item{...}{additional arguments can be used to overwrite
+  the values specified by the data model.}
 }
 \value{
-  Object of type \code{\linkS4class{laf}}. Values can be extracted from this
-  object using indexing, and methods such as \code{\link{read_lines}},
-  \code{\link{next_block}}. 
+Object of type \code{\linkS4class{laf}}. Values can be
+extracted from this object using indexing, and methods such
+as \code{\link{read_lines}}, \code{\link{next_block}}.
 }
-\author{
-  D.J. van der Laan \email{djvanderlaan@unrealizedtime.nl}
+\description{
+Uses a data model to create a connection to a file. The
+data model contains all the information needed to open the
+file (column types, column widths, etc.).
 }
-\seealso{
-  See \code{\link{read_dm}} and \code{\link{detect_dm_csv}} for ways of creating
-  data models. 
+\details{
+Depending on the field `type' \code{laf_open} uses
+\code{\link{laf_open_csv}} and \code{\link{laf_open_fwf}}
+to open the file. The data model should contain all
+information needed by these routines to open the file.
 }
 \examples{
 # Generate test data
@@ -61,6 +54,9 @@ write.table(testdata, file="tmp2.csv", row.names=FALSE, col.names=FALSE, sep=','
 # Read data model and open seconde file, demonstrating the use of the optional
 # arguments to laf_open
 laf2 <- laf_open(read_dm("tmp.yaml"), filename="tmp2.csv")
-
+}
+\seealso{
+See \code{\link{read_dm}} and \code{\link{detect_dm_csv}}
+for ways of creating data models.
 }
 

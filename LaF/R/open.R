@@ -1,4 +1,4 @@
-# Copyright 2011-2012 Jan van der Laan
+# Copyright 2011-2012, 2014 Jan van der Laan
 #
 # This file is part of LaF.
 #
@@ -14,9 +14,70 @@
 # You should have received a copy of the GNU General Public License along with
 # LaF.  If not, see <http://www.gnu.org/licenses/>.
 
-# =============================================================================
-# Create a connection to a comma seperated value (CSV) file.
-#
+#' Create a connection to a comma seperated value (CSV) file.
+#'
+#' A connection to the file filename is created. Column types have to be
+#' specified. These are not determined automatically as for example read.csv
+#' does.  This has been done to increase speed. 
+#'
+#' After the connection is created data can be extracted using indexing (as in a
+#' normal data.frame) or methods such as \code{\link{read_lines}} and 
+#' \code{\link{next_block}} can be used to read in blocks. For processing the 
+#' file in blocks the convenience function \code{\link{process_blocks}} can be 
+#' used. 
+#'
+#' @param filename character containing the filename of the CSV-file
+#' @param column_types character vector containing the types of data in each of
+#'   the columns. Valid types are: double, integer, categorical and string.
+#' @param column_names optional character vector containing the names of the
+#'   columns.
+#' @param sep optional character specifying the field seperator used in the
+#'   file.
+#' @param dec optional character specifying the decimal mark.
+#' @param trim optional logical specifying whether or not whitespace at the end
+#'   of factor levels or character strings should be trimmed.
+#' @param skip optional numeric specifying the number of lines at the begining 
+#'   of the file that should be skipped.
+#'
+#' @details
+#' The CSV-file should not contain headers. Use the \code{skip} option to skip 
+#' any headers.
+#'
+#' @return
+#' Object of type \code{\linkS4class{laf}}. Values can be extracted from this
+#' object using indexing, and methods such as \code{\link{read_lines}},
+#' \code{\link{next_block}}. 
+#'
+#' @seealso
+#' See \code{\link{read.csv}} for conventional access of CSV files. And 
+#' \code{\link{detect_dm_csv}} to automatically determine the column types. 
+#'
+#' @examples
+#' # Generate test data
+#' ntest <- 10
+#' column_types <- c("integer", "integer", "double", "string")
+#' testdata <- data.frame(
+#'     a = 1:ntest,
+#'     b = sample(1:2, ntest, replace=TRUE),
+#'     c = round(runif(ntest), 13),
+#'     d = sample(c("jan", "pier", "tjores", "corneel"), ntest, replace=TRUE)
+#'     )
+#' # Write test data to csv file
+#' write.table(testdata, file="tmp.csv", row.names=FALSE, col.names=FALSE, sep=',')
+#' 
+#' # Create LaF-object
+#' laf <- laf_open_csv("tmp.csv", column_types=column_types)
+#' 
+#' # Read from file using indexing
+#' first_column <- laf[ , 1]
+#' first_row    <- laf[1, ]
+#' 
+#' # Read from file using blockwise operators
+#' begin(laf)
+#' first_block <- next_block(laf, nrows=2)
+#' second_block <- next_block(laf, nrows=2)
+#'
+#' @export
 laf_open_csv <-function(filename, column_types, 
         column_names = paste("V", seq_len(length(column_types)), sep=""),
         sep=",", dec='.', trim=FALSE, skip=0) {
@@ -55,7 +116,8 @@ laf_open_csv <-function(filename, column_types,
         stop("skip should be of type numeric")
     skip <- as.integer(skip[1])
     # open file
-    p <- .Call("laf_open_csv", filename, types, sep, dec, trim, skip)
+    p <- .Call("laf_open_csv", PACKAGE="LaF", filename, types, sep, dec, 
+      trim, skip)
     # create laf-object
     result <- new(Class="laf", 
         file_id = as.integer(p),
@@ -73,9 +135,36 @@ laf_open_csv <-function(filename, column_types,
     return(result)
 }
 
-# =============================================================================
-# Create a connection to a fixed width file.
-#
+#' Create a connection to a fixed width file.
+#'
+#' A connection to the file filename is created. Column types have to be 
+#' specified. These are not determined automatically as for example 
+#' read.fwf does. This has been done to increase speed. 
+#'
+#' After the connection is created data can be extracted using indexing (as in a
+#' normal data.frame) or methods such as read_lines and next_block can be used 
+#' to read in blocks. For processing the file in blocks the (faster) convenience
+#' function process_blocks can be used. 
+#'
+#' @param filename character containing the filename of the CSV-file.
+#' @param column_types character vector containing the types of data in each of 
+#'   the columns. Valid types are: double, integer, categorical and string.
+#' @param column_widths numeric vector containing the width in number of character
+#'   of each of the columns.
+#' @param column_names optional character vector containing the names of the 
+#'   columns.
+#' @param dec optional character specifying the decimal mark.
+#' @param trim optional logical specifying whether or not whitespace at the end
+#'   of factor levels or character strings should be trimmed.
+#'
+#' @return
+#' Object of type \code{\linkS4class{laf}}. Values can be extracted from this object 
+#' using indexing, and methods such as \code{\link{read_lines}}, \code{\link{next_block}}. 
+#'
+#' @seealso
+#' See \code{\link{read.fwf}} for conventional access of fixed width files. 
+#'
+#' @export
 laf_open_fwf <-function(filename, column_types, column_widths,
         column_names = paste("V", seq_len(length(column_types)), sep=""),
         dec = ".", trim=TRUE) {
@@ -110,7 +199,8 @@ laf_open_fwf <-function(filename, column_types, column_widths,
         stop("trim should be of type logical")
     trim <- trim[1]
     # open file
-    p <- .Call("laf_open_fwf", filename, types, column_widths, dec, trim)
+    p <- .Call("laf_open_fwf", PACKAGE="LaF", filename, types, column_widths, 
+      dec, trim)
     # create laf-object
     result <- new(Class="laf", 
         file_id = as.integer(p),

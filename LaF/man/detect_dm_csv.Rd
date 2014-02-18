@@ -1,56 +1,66 @@
 \name{detect_dm_csv}
 \alias{detect_dm_csv}
-\title{
-  Automatically detect data models for CSV-files
-}
-\description{
-  Automatically detect data models for CSV-files.  Opening of files using the
-  data models can be done using \code{\link{laf_open}}.
-}
+\title{Automatically detect data models for CSV-files}
 \usage{
-  detect_dm_csv(filename, sep=",", dec=".", header=FALSE, nrows=1000, 
-    nlines=NULL, sample=FALSE, factor_fraction=0.4, ...) 
+detect_dm_csv(filename, sep = ",", dec = ".", header = FALSE,
+  nrows = 1000, nlines = NULL, sample = FALSE, factor_fraction = 0.4,
+  ...)
 }
 \arguments{
-  \item{filename}{character containing the filename of the csv-file.}
-  \item{sep}{character vector containing the separator used in the file.}
+  \item{filename}{character containing the filename of the
+  csv-file.}
+
+  \item{sep}{character vector containing the separator used
+  in the file.}
+
   \item{dec}{the character used for decimal points.}
-  \item{header}{does the first line in the file contain the column names.}
-  \item{nrows}{the number of lines that should be read in to detect the column
-  types. The more lines the more likely that the correct types are detected.}
-  \item{nlines}{(only needed when the sample option is used) the expected number
-  of lines in the file. If not specified the number of lines in the file is
-  first calculated.}
-  \item{sample}{by default the first \code{nrows} lines are read in for
-  determining the column types. When sample is used random lines from the file
-  are used. This is more robust, but takes longer.}
-  \item{factor_fraction}{the fraction of unique string in a column below which
-  the column is converted to a factor/categorical. For more information see
-  details.}
-  \item{...}{additional arguments are passed on to \code{\link{read.table}}.
-  However, be carefull with using these as some of these arguments are not
-  supported by \code{\link{laf_open_csv}}.}
-}
-\details{
-  The argument \code{factor_fraction} determines the fraction of unique strings
-  below which the column is converted to factor/categorical. If all column need
-  to be converted to character a value larger than one can be used. A value
-  smaller than zero will ensure that all columns will be converted to
-  categorical. Note that LaF stores the levels of a categorical in memory.
-  Therefore, for categorical columns with a very large number of (almost) unique
-  levels can cause memory problems. 
+
+  \item{header}{does the first line in the file contain the
+  column names.}
+
+  \item{nrows}{the number of lines that should be read in
+  to detect the column types. The more lines the more
+  likely that the correct types are detected.}
+
+  \item{nlines}{(only needed when the sample option is
+  used) the expected number of lines in the file. If not
+  specified the number of lines in the file is first
+  calculated.}
+
+  \item{sample}{by default the first \code{nrows} lines are
+  read in for determining the column types. When sample is
+  used random lines from the file are used. This is more
+  robust, but takes longer.}
+
+  \item{factor_fraction}{the fraction of unique string in a
+  column below which the column is converted to a
+  factor/categorical. For more information see details.}
+
+  \item{...}{additional arguments are passed on to
+  \code{\link{read.table}}.  However, be carefull with
+  using these as some of these arguments are not supported
+  by \code{\link{laf_open_csv}}.}
 }
 \value{
-  \code{read_dm} returns a data model which can be used by
-  \code{\link{laf_open}}. The data model can be written to file using
-  \code{\link{write_dm}}.
+\code{read_dm} returns a data model which can be used by
+\code{\link{laf_open}}. The data model can be written to
+file using \code{\link{write_dm}}.
 }
-\author{
-  D.J. van der Laan \email{djvanderlaan@unrealizedtime.nl}
+\description{
+Automatically detect data models for CSV-files.  Opening of
+files using the data models can be done using
+\code{\link{laf_open}}.
 }
-\seealso{
-  See \code{\link{write_dm}} to write the data model to file.  The data models
-  can be used to open a file using \code{\link{laf_open}}.
+\details{
+The argument \code{factor_fraction} determines the fraction
+of unique strings below which the column is converted to
+factor/categorical. If all column need to be converted to
+character a value larger than one can be used. A value
+smaller than zero will ensure that all columns will be
+converted to categorical. Note that LaF stores the levels
+of a categorical in memory. Therefore, for categorical
+columns with a very large number of (almost) unique levels
+can cause memory problems.
 }
 \examples{
 # Generate test data
@@ -70,6 +80,10 @@ model <- detect_dm_csv("tmp.csv", header=TRUE)
 
 # Create LaF-object
 laf <- laf_open(model)
-
+}
+\seealso{
+See \code{\link{write_dm}} to write the data model to file.
+The data models can be used to open a file using
+\code{\link{laf_open}}.
 }
 

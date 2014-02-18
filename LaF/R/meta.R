@@ -14,6 +14,69 @@
 # You should have received a copy of the GNU General Public License along with
 # LaF.  If not, see <http://www.gnu.org/licenses/>.
 
+
+#' Automatically detect data models for CSV-files
+#' 
+#' Automatically detect data models for CSV-files.  Opening of files using the
+#' data models can be done using \code{\link{laf_open}}.
+#' 
+#' @param filename character containing the filename of the csv-file.
+#' @param sep character vector containing the separator used in the file.
+#' @param dec the character used for decimal points.
+#' @param header does the first line in the file contain the column names.
+#' @param nrows the number of lines that should be read in to detect the column
+#'   types. The more lines the more likely that the correct types are detected.
+#' @param nlines (only needed when the sample option is used) the expected number
+#'   of lines in the file. If not specified the number of lines in the file is
+#'   first calculated.
+#' @param sample by default the first \code{nrows} lines are read in for
+#'   determining the column types. When sample is used random lines from the file
+#'   are used. This is more robust, but takes longer.
+#' @param factor_fraction the fraction of unique string in a column below which
+#'   the column is converted to a factor/categorical. For more information see
+#'   details.
+#' @param ... additional arguments are passed on to \code{\link{read.table}}.
+#'   However, be carefull with using these as some of these arguments are not
+#'   supported by \code{\link{laf_open_csv}}.
+#'
+#' @details
+#' The argument \code{factor_fraction} determines the fraction of unique strings
+#' below which the column is converted to factor/categorical. If all column need
+#' to be converted to character a value larger than one can be used. A value
+#' smaller than zero will ensure that all columns will be converted to
+#' categorical. Note that LaF stores the levels of a categorical in memory.
+#' Therefore, for categorical columns with a very large number of (almost) unique
+#' levels can cause memory problems. 
+#' 
+#' @return
+#' \code{read_dm} returns a data model which can be used by
+#' \code{\link{laf_open}}. The data model can be written to file using
+#' \code{\link{write_dm}}.
+#' 
+#' @seealso
+#' See \code{\link{write_dm}} to write the data model to file.  The data models
+#' can be used to open a file using \code{\link{laf_open}}.
+#' 
+#' @examples
+#' # Generate test data
+#' ntest <- 10
+#' column_types <- c("integer", "integer", "double", "string")
+#' testdata <- data.frame(
+#'     a = 1:ntest,
+#'     b = sample(1:2, ntest, replace=TRUE),
+#'     c = round(runif(ntest), 13),
+#'     d = sample(c("jan", "pier", "tjores", "corneel"), ntest, replace=TRUE)
+#'     )
+#' # Write test data to csv file
+#' write.table(testdata, file="tmp.csv", row.names=FALSE, col.names=TRUE, sep=',')
+#' 
+#' # Detect data model
+#' model <- detect_dm_csv("tmp.csv", header=TRUE)
+#' 
+#' # Create LaF-object
+#' laf <- laf_open(model)
+#'
+#' @export
 detect_dm_csv <- function(filename, sep=",", dec=".", header=FALSE, 
         nrows=1000, nlines=NULL, sample=FALSE, factor_fraction=0.4, ...) {
     if (sample) {
@@ -54,6 +117,83 @@ detect_dm_csv <- function(filename, sep=",", dec=".", header=FALSE,
     ))
 }
 
+
+#' Read and write data models for LaF
+#' 
+#' Using these routines data models can be written and read. These data models
+#' can be used to create LaF object without the need to specify all arguments
+#' (column names, column types etc.). Opening of files using the data models can
+#' be done using \code{\link{laf_open}}.
+#'
+#' @param modelfile character containing the filename of the file the model is to
+#'   be written to/read from.
+#' @param model a data model or an object of type \code{\linkS4class{laf}}. See
+#'   details for more information.
+#' @param ... additional arguments are added to the data model or, when they are
+#'   also present in the file are used to overwrite the values specified in the
+#'   file.
+#' 
+#' @details
+#' A data model is a list containing information which open routine should be
+#' used (e.g. \code{\link{laf_open_csv}} or \code{\link{laf_open_fwf}}), and the
+#' arguments needed for these routines. Required elements are `type', which can
+#' (currently) be `csv', or `fwf', and `columns', which should be a
+#' \code{data.frame} containing at least the columns `name' and `type', and for
+#' fwf `width'. These columns correspond to the arguments \code{column_names},
+#' \code{column_types} and \code{column_widths} respectively. Other arguments of
+#' the \code{laf_open_*} routines can be specified as additional elements of the
+#' list. 
+#'
+#' \code{write_dm} can also be used to write a data model that is created
+#' from an object of type \code{\linkS4class{laf}}. This is probably one of the
+#' easiest ways to create a data model.
+#'
+#' The data model is stored in a text file in YAML format which is a format in
+#' which data structures can be stored in a readable and editable format. 
+#'
+#' @return
+#' \code{read_dm} returns a data model which can be used by
+#' \code{\link{laf_open}}. 
+#'
+#' @seealso
+#' See \code{\link{detect_dm_csv}} for a routine which can automatically
+#' create a data model from a CSV-file. The data models can be used to open a
+#' file using \code{\link{laf_open}}.
+#' 
+#' @examples
+#' # Generate test data
+#' ntest <- 10
+#' column_types <- c("integer", "integer", "double", "string")
+#' testdata <- data.frame(
+#'     a = 1:ntest,
+#'     b = sample(1:2, ntest, replace=TRUE),
+#'     c = round(runif(ntest), 13),
+#'     d = sample(c("jan", "pier", "tjores", "corneel"), ntest, replace=TRUE)
+#'     )
+#' # Write test data to csv file
+#' write.table(testdata, file="tmp.csv", row.names=FALSE, col.names=FALSE, sep=',')
+#' 
+#' # Create LaF-object
+#' laf <- laf_open_csv("tmp.csv", column_types=column_types)
+#' 
+#' # Write data model to stdout() (screen)
+#' write_dm(laf, stdout())
+#' 
+#' # Write data model to file
+#' write_dm(laf, "tmp.yaml")
+#' 
+#' # Read data model and open file
+#' laf2 <- laf_open(read_dm("tmp.yaml"))
+#' 
+#' # Write test data to second csv file
+#' write.table(testdata, file="tmp2.csv", row.names=FALSE, col.names=FALSE, sep=',')
+#' 
+#' # Read data model and open seconde file, demonstrating the use of the optional
+#' # arguments to read_dm
+#' laf2 <- laf_open(read_dm("tmp.yaml", filename="tmp2.csv"))
+#' 
+#' @rdname datamodels
+#' @export
 read_dm <- function(modelfile, ...) {
     if (!require("yaml")) 
         stop("The library yaml is required to read and write data models.")
@@ -86,6 +226,8 @@ read_dm <- function(modelfile, ...) {
     return(model)
 }
 
+#' @rdname datamodels
+#' @export
 write_dm <- function(model, modelfile) {
     if (!require("yaml")) 
         stop("The library yaml is required to read and write data models.")
@@ -116,6 +258,61 @@ write_dm <- function(model, modelfile) {
     writeLines(as.yaml(model, column.major=F), con=modelfile)
 }
 
+#' Create a connection to a file using a data model.
+#' 
+#' Uses a data model to create a connection to a file. The data model contains
+#' all the information needed to open the file (column types, column widths,
+#' etc.). 
+#' 
+#' @param model a \link{read_dm}{data model}.
+#' @param ... additional arguments can be used to overwrite the values specified
+#'   by the data model.
+#' 
+#' @details
+#' Depending on the field `type' \code{laf_open} uses \code{\link{laf_open_csv}}
+#' and \code{\link{laf_open_fwf}} to open the file. The data model should contain
+#' all information needed by these routines to open the file.
+#' 
+#' @return
+#' Object of type \code{\linkS4class{laf}}. Values can be extracted from this
+#' object using indexing, and methods such as \code{\link{read_lines}},
+#' \code{\link{next_block}}. 
+#'
+#' @seealso
+#' See \code{\link{read_dm}} and \code{\link{detect_dm_csv}} for ways of creating
+#' data models. 
+#'
+#'
+#' @examples
+#' # Generate test data
+#' ntest <- 10
+#' column_types <- c("integer", "integer", "double", "string")
+#' testdata <- data.frame(
+#'     a = 1:ntest,
+#'     b = sample(1:2, ntest, replace=TRUE),
+#'     c = round(runif(ntest), 13),
+#'     d = sample(c("jan", "pier", "tjores", "corneel"), ntest, replace=TRUE)
+#'     )
+#' # Write test data to csv file
+#' write.table(testdata, file="tmp.csv", row.names=FALSE, col.names=FALSE, sep=',')
+#' 
+#' # Create LaF-object
+#' laf <- laf_open_csv("tmp.csv", column_types=column_types)
+#' 
+#' # Write data model to file
+#' write_dm(laf, "tmp.yaml")
+#' 
+#' # Read data model and open file
+#' laf <- laf_open(read_dm("tmp.yaml"))
+#' 
+#' # Write test data to second csv file
+#' write.table(testdata, file="tmp2.csv", row.names=FALSE, col.names=FALSE, sep=',')
+#' 
+#' # Read data model and open seconde file, demonstrating the use of the optional
+#' # arguments to laf_open
+#' laf2 <- laf_open(read_dm("tmp.yaml"), filename="tmp2.csv")
+#'
+#' @export
 laf_open <- function(model, ...) {
     model[names(list(...))] <- list(...)
     model$column_names  <- model$columns$name

@@ -1,0 +1,27 @@
+\docType{methods}
+\name{goto}
+\alias{goto}
+\alias{goto,laf,numeric-method}
+\title{Go to specified line in the file}
+\usage{
+goto(x, i, ...)
+
+\S4method{goto}{laf,numeric}(x, i, ...)
+}
+\arguments{
+  \item{x}{an object the supports the \code{goto} method,
+  such as an \code{laf} object.}
+
+  \item{i}{the line number .}
+
+  \item{...}{additional parameters passed to other
+  methods.}
+}
+\description{
+Sets the current line to the line number specified. The
+next call to \code{\link{next_block}} will return the data
+on the specified line in the first row. The number of the
+current line can be obtained using
+\code{\link{current_line}}.
+}
+

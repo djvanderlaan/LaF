@@ -1,4 +1,4 @@
-# Copyright 2011, 2013 Jan van der Laan
+# Copyright 2011, 2013, 2014 Jan van der Laan
 #
 # This file is part of LaF.
 #
@@ -14,10 +14,29 @@
 # You should have received a copy of the GNU General Public License along with
 # LaF.  If not, see <http://www.gnu.org/licenses/>.
 
-# =============================================================================
-# Class definition of laf-object
-# Methods are defined below
-#
+#' @include generics.R
+
+#' Large File object
+#'
+#' A Large File object. This is a reference to a dataset on disk. The data
+#' itself is not read into memory (yet). This can be done by the methods for
+#' blockwise processing or by indexing the object as a data.frame. The code has
+#' been optimised for fast access.
+#'
+#' @section Objects from the Class:
+#' Objects can be created by opening a file using one of the methods 
+#' \code{\link{laf_open_csv}} or \code{\link{laf_open_fwf}}. These create a 
+#' reference to either a CSV file or a fixed width file. The data in these
+#' files can either be accessed using blockwise operations using the methods
+#' \code{begin}, \code{next_block} and \code{goto}. Or by indexing the laf 
+#' object as you would a data.frame. In the following example a CSV file
+#' is opened and its first column (of type integer) is read into memory:
+#' \preformatted{
+#'    laf <- laf_open_csv("file.csv", column_types=c("integer", "double"))
+#'    data <- laf[ , 1]
+#'  }
+#' 
+#' @export
 setClass(
     Class = "laf",
     representation = representation(
@@ -36,11 +55,14 @@ setClass(
 # =============================================================================
 # Return to the beginning of the file
 #
+
+#' @rdname begin
+#' @export
 setMethod(
     f = "begin",
     signature = "laf",
     definition = function(x, ...) {
-        .Call("laf_reset", as.integer(x@file_id))
+        .Call("laf_reset", PACKAGE="LaF", as.integer(x@file_id))
         return(invisible(NULL))
     }
 )
@@ -48,11 +70,15 @@ setMethod(
 # =============================================================================
 # Go to a specific line of the file
 #
+
+#' @rdname goto
+#' @export
 setMethod(
     f = "goto",
     signature = c("laf", "numeric"),
     definition = function(x, i, ...) {
-        .Call("laf_goto_line", as.integer(x@file_id), as.integer(i))
+        .Call("laf_goto_line", PACKAGE="LaF", as.integer(x@file_id), 
+          as.integer(i))
         return(invisible(NULL))
     }
 )
@@ -60,30 +86,34 @@ setMethod(
 # =============================================================================
 # Get the position in the file
 #
+
+#' @rdname current_line
+#' @export
 setMethod(
     f = "current_line",
     signature = "laf",
     definition = function(x) {
-        result <- .Call("laf_current_line", as.integer(x@file_id))
+        result <- .Call("laf_current_line", PACKAGE="LaF", 
+          as.integer(x@file_id))
         return(result)
     }
 )
 
-# =============================================================================
-# Get the number of lines in the file
-#
+#' Get the number of rows in a Large File object
+#' @rdname nrow
+#' @export
 setMethod(
     f = "nrow",
     signature = "laf",
     definition = function(x) {
-        nrow <- .Call("laf_nrow", as.integer(x@file_id))
+        nrow <- .Call("laf_nrow", PACKAGE="LaF", as.integer(x@file_id))
         return(nrow)
     }
 )
 
-# =============================================================================
-# Get the number of columns in the file
-#
+#' Get the number of columns in a Large File object
+#' @rdname ncol
+#' @export
 setMethod(
     f = "ncol",
     signature = "laf",
@@ -92,9 +122,9 @@ setMethod(
     }
 )
 
-# =============================================================================
-# Get the names of the columns in the file
-#
+#' Get the names of the columns in a Large File object
+#' @rdname names
+#' @export
 setMethod(
     f = "names",
     signature = "laf",
@@ -106,6 +136,9 @@ setMethod(
 # =============================================================================
 # Set the names of the columns in the file
 #
+
+#' @rdname names
+#' @export
 setMethod(
     f = "names<-",
     signature = "laf",
@@ -119,9 +152,9 @@ setMethod(
     }
 )
 
-# =============================================================================
-# Print the laf object
-#
+#' Print the Large File object to screen
+#' @rdname show
+#' @export
 setMethod(
     f = "show",
     signature = "laf",
@@ -144,9 +177,10 @@ setMethod(
     }
 )
 
-# =============================================================================
-# Reads the next block of lines from the file connection
-#
+#' @param columns an integer vector with the columns that should be read in.
+#' @param nrows the (maximum) number of rows to read in one block
+#' @rdname next_block
+#' @export
 setMethod(
     f = "next_block",
     signature = "laf",
@@ -166,8 +200,8 @@ setMethod(
         names(df)  <- x@column_names[columns]
         df         <- as.data.frame(df, stringsAsFactors=FALSE)
         # read
-        lines_read <- .Call("laf_next_block", as.integer(x@file_id), 
-            as.integer(nrows), as.integer(columns-1), df)
+        lines_read <- .Call("laf_next_block", PACKAGE="LaF", 
+          as.integer(x@file_id), as.integer(nrows), as.integer(columns-1), df)
         if (lines_read < nrows) {
             if (lines_read == 0) {
                 df <- df[FALSE, , drop=FALSE]
@@ -187,9 +221,11 @@ setMethod(
     }
 )
 
-# =============================================================================
-# Reads data from the file connection
-#
+#' @param rows a numeric vector with the rows that should be read from the
+#'   file. 
+#' @param columns an integer vector with the columns that should be read in.
+#' @rdname read_lines
+#' @export
 setMethod(
     f = "read_lines",
     signature = "laf",
@@ -211,8 +247,8 @@ setMethod(
         names(df)  <- x@column_names[columns]
         df         <- as.data.frame(df, stringsAsFactors=FALSE)
         # read
-        lines_read <- .Call("laf_read_lines", as.integer(x@file_id), 
-            as.integer(rows), as.integer(columns-1), df)
+        lines_read <- .Call("laf_read_lines", PACKAGE="LaF", 
+          as.integer(x@file_id), as.integer(rows), as.integer(columns-1), df)
         if (lines_read < length(rows)) {
             warning("Number of rows read is smaller than the ",
                 "number of rows specified.")
@@ -234,9 +270,16 @@ setMethod(
     }
 )
 
-# =============================================================================
-# Blockwise processing of blocks
-#
+#' @param columns an integer vector with the columns that should be read in.
+#' @param nrows the (maximum) number of rows to read in one block
+#' @param allow_interupt when TRUE the function \code{fun} is expected to 
+#'   return a list. The second element is the result of the function. The first
+#'   element should be a logical value indication whether \code{process_blocks}
+#'   should continue (FALSE) or stop (TRUE). When interupted the function is 
+#'   not called a last time with an empty \code{data.frame} to finalize the 
+#'   result.
+#' @rdname process_blocks
+#' @export
 setMethod(
     f = "process_blocks",
     signature = "laf",
@@ -261,9 +304,6 @@ setMethod(
     }
 )
 
-# =============================================================================
-# Extract elements from the data file
-#
 setMethod(
     f = "[",
     signature = "laf",
@@ -300,9 +340,9 @@ setMethod(
     }
 )
 
-# =============================================================================
-# Return the levels of the columns of the data.set
-# 
+#' Get and change the levels of the column in a Large File object 
+#' @rdname levels
+#' @export
 setMethod(
     f = "levels",
     signature = "laf",
@@ -316,9 +356,8 @@ setMethod(
     }
 )
 
-# =============================================================================
-# Change the levels of the columns of the data.set
-# 
+#' @rdname levels
+#' @export
 setMethod(
     f = "levels<-",
     signature = "laf",
@@ -333,14 +372,14 @@ setMethod(
 )
 
 
-# =============================================================================
-# Close file
-#
+#' Close the connection to the Large File
+#' @rdname close
+#' @export
 setMethod(
     f = "close",
     signature = "laf",
     definition = function(con, ...) {
-        .Call("laf_close", as.integer(con@file_id))
+        .Call("laf_close", PACKAGE="LaF", as.integer(con@file_id))
         return(invisible(NULL))
     }
 )

@@ -1,4 +1,4 @@
-# Copyright 2012 Jan van der Laan
+# Copyright 2012, 2014 Jan van der Laan
 #
 # This file is part of LaF.
 #
@@ -14,12 +14,61 @@
 # You should have received a copy of the GNU General Public License along with
 # LaF.  If not, see <http://www.gnu.org/licenses/>.
 
+#' Determine number of lines in a text file
+#'
+#' @param filename character containing the filename of the file of which the
+#'   lines are to be counted.
+#'
+#' @details
+#' The routine counts the number of line endings. If the last line does not
+#' end in a line ending, but does contain character, this line is also counted.
+#'
+#' The file size is not limited by the amount of memory in the computer. 
+#'
+#' @return
+#' Returns the number of lines in the file.
+#'
+#' @seealso
+#' See \code{\link{readLines}} to read in all lines a text file;
+#' \code{\link{get_lines}} and \code{\link{sample_lines}} can be used to read in
+#' spcified, or random lines.
+#'
+#' @examples
+#' # Generate file
+#' writeLines(letters[1:20], con="tmp.csv")
+#'
+#' # Count the lines
+#' determine_nlines("tmp.csv")
+#'
+#' @export
 determine_nlines <- function(filename) {
     if (!is.character(filename)) stop("filename should be a character vector")
-    result <- .Call("nlines", as.character(filename))
+    result <- .Call("nlines", PACKAGE="LaF", as.character(filename))
     return(result)
 }
 
+#' Read in specified lines from a text file
+#'
+#' @param filename character containing the filename of the file from which the
+#'   lines should be read.
+#' @param line_numbers A vector containing the lines that should be read.
+#'
+#' @details
+#' Line numbers larger than the number of lines in the file are ignored. Missing
+#' values are returned for these.
+#'
+#' @return
+#' Returns a character vector with the specified lines.
+#'
+#' @seealso
+#' See \code{\link{readLines}} to read in all lines a text file;
+#' \code{\link{sample_lines}} can be used to read in random lines.
+#'
+#' @examples
+#' writeLines(letters[1:20], con="tmp.csv")
+#' get_lines("tmp.csv", c(1, 10))
+#'
+#' @export
 get_lines <- function(filename, line_numbers) {
     if (!is.character(filename)) 
         stop("filename should be a character vector")
@@ -27,12 +76,40 @@ get_lines <- function(filename, line_numbers) {
         stop("line_numbers should be a numeric vector")
     line_order  <- order(line_numbers)
     line_numbers <- line_numbers[line_order]
-    result <- .Call("r_get_line", as.character(filename), 
+    result <- .Call("r_get_line", PACKAGE="LaF", as.character(filename), 
         as.integer(line_numbers)-1)
     result <- result[order(seq_along(line_numbers)[line_order])]
     return(result)
 }
 
+#' Read in random lines from a text file
+#'
+#' @param filename character containing the filename of the file from which the
+#'   lines should be read.
+#' @param n The number of lines that should be sampled from the file.
+#' @param nlines The total number of lines in the file. If not specified or
+#'   \code{NULL} the number of lines is first determined using
+#'   \code{\link{determine_nlines}}.
+#'
+#' @details
+#' When \code{nlines} is not specified, the total number of lines is first
+#' determined. This can take quite some time. Therefore, specifying the number of
+#' lines can cause a significant speed up. It can also be used to sample lines
+#' from the first \code{nlines} line by specifying a value for \code{nlines} that
+#' is smaller than the number of lines in the file.
+#'
+#' @return
+#' Returns a character vector with the sampled lines.
+#'
+#' @seealso
+#' See \code{\link{readLines}} to read in all lines a text file;
+#' \code{\link{get_lines}} can be used to read in specified lines.
+#'
+#' @examples
+#' writeLines(letters[1:20], con="tmp.csv")
+#' sample_lines("tmp.csv", 10)
+#'
+#' @export
 sample_lines <- function(filename, n, nlines = NULL) {
     if (!is.character(filename)) stop("filename should be a character vector")
     if (!is.numeric(n)) stop("n should be a number")

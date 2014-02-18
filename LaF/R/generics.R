@@ -1,4 +1,4 @@
-# Copyright 2011 Jan van der Laan
+# Copyright 2011, 2014 Jan van der Laan
 #
 # This file is part of LaF.
 #
@@ -15,9 +15,18 @@
 # LaF.  If not, see <http://www.gnu.org/licenses/>.
 
 
-# =============================================================================
-# New generic: go to the beginning of the file
-#
+#' Go to the beginning of the file
+#' 
+#' Sets the filepointer to the beginning of the file. The next call to 
+#' \code{\link{next_block}} returns the first lines of the file. This method is 
+#' usually used in combination with \code{\link{next_block}}.
+#'
+#' @param x an object the supports the \code{begin} method, such as an
+#'   \code{laf} object.
+#' @param ... passed to other methods.
+#' 
+#' @rdname begin
+#' @export
 setGeneric(
     name = "begin",
     def = function(x, ...) {
@@ -25,9 +34,20 @@ setGeneric(
     }
 )
 
-# =============================================================================
-# New generic: go to the specified line in the file
+#' Go to specified line in the file
+#'
+#' Sets the current line to the line number specified. The next call to 
+#' \code{\link{next_block}} will return the data on the specified line in the 
+#' first row. The number of the current line can be obtained using 
+#' \code{\link{current_line}}.
+#'
+#' @param x an object the supports the \code{goto} method, such as an \code{laf}
+#'   object.
+#' @param i the line number .
+#' @param ... additional parameters passed to other methods.
 #
+#' @rdname goto
+#' @export
 setGeneric(
     name = "goto",
     def = function(x, i, ...) {
@@ -35,9 +55,16 @@ setGeneric(
     }
 )
 
-# =============================================================================
-# New generic: get the current line in the file
-#
+#' Get the current line in the file
+#'
+#' @param x an object the supports the \code{current_line} method, such as an
+#'   \code{laf} object.
+#'
+#' Returns the next line that will be read by \code{\link{next_block}}. The
+#' current line can be set by the method \code{\link{goto}}.
+#'
+#' @rdname current_line
+#' @export
 setGeneric(
     name = "current_line",
     def = function(x) {
@@ -45,9 +72,20 @@ setGeneric(
     }
 )
 
-# =============================================================================
-# New generic: read the next block of data from the file
-#
+#' Read the next block of data from a file.
+#'
+#' @param x an object the supports the \code{next_block} method, such as an
+#'   \code{laf} object.
+#' @param ... passed to other methods.
+#'
+#' Reads the next block of lines from a file. The method returns a
+#' \code{data.frame}. The first line in the \code{data.frame} is the line
+#' corresponding to the current line in the file. When the end of the file is
+#' reached a \code{data.frame} with zero rows is returned. This can be used to
+#' check whether the end of the file is reached. 
+#'
+#' @rdname next_block
+#' @export
 setGeneric(
     name = "next_block",
     def = function(x, ...) {
@@ -55,9 +93,25 @@ setGeneric(
     }
 )
 
-# =============================================================================
-# New generic: blockwise processing of the file
-#
+#' Blockwise processing of file
+#'
+#' Reads the specified file block by block and feeds each block to the 
+#' specified function.
+#'
+#' @param x an object the supports the \code{process_blocks} method, such as an
+#'   \code{laf} object.
+#' @param fun a function to apply to each block (see details).
+#' @param ... additional parameters are passed on to \code{fun}.
+#'
+#' @details
+#' The function should accept as the first argument the next block of data. When
+#' the end of the file is reached this is an empty (zero row) \code{data.frame}.
+#' As the second argument the function should accept the output of the previous
+#' call to the function. The first time the function is callen the second
+#' argument has the value \code{NULL}.
+#'
+#' @rdname process_blocks
+#' @export
 setGeneric(
     name = "process_blocks",
     def = function(x, fun, ...) {
@@ -65,9 +119,23 @@ setGeneric(
     }
 )
 
-# =============================================================================
-# New generic: read lines from the file
-#
+#' Read lines from the file
+#' 
+#' Reads the specified lines and columns from the data file. 
+#'
+#' @param x an object the supports the \code{read_lines} method, such as an
+#'   \code{laf} object.
+#' @param ... passed on to other methods.
+#'
+#' @details
+#' Note that when scanning through the complete file next_block is much faster. 
+#' Also note that random file access can be slow (and is always much slower 
+#' than sequential file access), especially for certain file types such as 
+#' comma separated. Reading is generally faster when the lines that should be
+#' read are sorted. 
+#'
+#' @rdname read_lines
+#' @export
 setGeneric(
     name = "read_lines",
     def = function(x, ...) {
