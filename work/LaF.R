@@ -1,3 +1,4 @@
+library(Rcpp)
 
 r_files <- list.files("R/", pattern="*.R")
 r_files <- file.path("R", r_files)
