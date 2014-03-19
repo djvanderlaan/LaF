@@ -57,6 +57,7 @@ setClass(
 #
 
 #' @rdname begin
+#' @useDynLib LaF
 #' @export
 setMethod(
     f = "begin",
@@ -72,6 +73,7 @@ setMethod(
 #
 
 #' @rdname goto
+#' @useDynLib LaF
 #' @export
 setMethod(
     f = "goto",
@@ -88,6 +90,7 @@ setMethod(
 #
 
 #' @rdname current_line
+#' @useDynLib LaF
 #' @export
 setMethod(
     f = "current_line",
@@ -101,6 +104,7 @@ setMethod(
 
 #' Get the number of rows in a Large File object
 #' @rdname nrow
+#' @useDynLib LaF
 #' @export
 setMethod(
     f = "nrow",
@@ -180,6 +184,7 @@ setMethod(
 #' @param columns an integer vector with the columns that should be read in.
 #' @param nrows the (maximum) number of rows to read in one block
 #' @rdname next_block
+#' @useDynLib LaF
 #' @export
 setMethod(
     f = "next_block",
@@ -225,6 +230,7 @@ setMethod(
 #'   file. 
 #' @param columns an integer vector with the columns that should be read in.
 #' @rdname read_lines
+#' @useDynLib LaF
 #' @export
 setMethod(
     f = "read_lines",
@@ -374,6 +380,7 @@ setMethod(
 
 #' Close the connection to the Large File
 #' @rdname close
+#' @useDynLib LaF
 #' @export
 setMethod(
     f = "close",

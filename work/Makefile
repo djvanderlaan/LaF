@@ -12,7 +12,8 @@ LIBS     += `Rscript -e "Rcpp:::LdFlags()"`
 CXXFLAGS += `Rscript -e "Rcpp:::CxxFlags()"`
 
 # R
-LIBS     +=  -lR 
+#LIBS     +=  -lR 
+LIBS      = -L/usr/lib/R/lib -lR
 CXXFLAGS += -I/usr/share/R/include -fPIC
 
 CXXFLAGSLINKER = -shared -s -static-libgcc

@@ -16,13 +16,12 @@ Description: The LaF package provides methods for fast access to large ASCII
 URL: https://github.com/djvanderlaan/LaF
 License: GPL-3
 LazyLoad: yes
-Depends:
-    Rcpp (>= 0.9.0),
-    methods
+Depends: methods
 Suggests:
     testthat,
     yaml
 LinkingTo: Rcpp
+Imports: Rcpp (>= 0.9.0)
 Collate:
     'generics.R'
     'laf.R'
