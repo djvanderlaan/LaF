@@ -1,9 +1,15 @@
 \docType{methods}
-\name{levels,laf-method}
+\name{levels,laf_column-method}
 \alias{levels,laf-method}
+\alias{levels,laf_column-method}
 \alias{levels<-,laf-method}
+\alias{levels<-,laf_column-method}
 \title{Get and change the levels of the column in a Large File object}
 \usage{
+\S4method{levels}{laf_column}(x)
+
+\S4method{levels}{laf_column}(x) <- value
+
 \S4method{levels}{laf}(x)
 
 \S4method{levels}{laf}(x) <- value

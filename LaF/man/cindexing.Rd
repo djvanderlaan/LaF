@@ -1,0 +1,29 @@
+\docType{methods}
+\name{[[,laf-method}
+\alias{$,laf-method}
+\alias{[[,laf-method}
+\title{Select a column from a LaF object}
+\usage{
+\S4method{[[}{laf}(x, i)
+
+\S4method{$}{laf}(x, name)
+}
+\arguments{
+  \item{x}{an object of type \code{laf}}
+
+  \item{i}{index of column to select. This should be a
+  numeric or character vector.}
+
+  \item{name}{the name of the column to select.}
+}
+\value{
+Returns an object of type \code{laf_column}. This object
+behaves almost the same as an \code{laf} object except that
+is it no longer necessary (or possible) to specify which
+column should be used for functions that require this.
+}
+\description{
+Selecting columns from an \code{laf} object works as it
+does for a \code{data.frame}.
+}
+

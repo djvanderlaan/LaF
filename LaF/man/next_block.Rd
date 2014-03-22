@@ -2,9 +2,12 @@
 \name{next_block}
 \alias{next_block}
 \alias{next_block,laf-method}
+\alias{next_block,laf_column-method}
 \title{Read the next block of data from a file.}
 \usage{
 next_block(x, ...)
+
+\S4method{next_block}{laf_column}(x, nrows = 5000, ...)
 
 \S4method{next_block}{laf}(x, columns = 1:ncol(x), nrows = 5000, ...)
 }

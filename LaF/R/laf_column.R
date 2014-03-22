@@ -14,11 +14,6 @@
 # You should have received a copy of the GNU General Public License along with
 # LaF.  If not, see <http://www.gnu.org/licenses/>.
 
-# =============================================================================
-# Class definition of laf_column
-# Methods are defined below
-#
-
 #' @include laf.R
 
 #' Column of a Large File Object
@@ -42,9 +37,10 @@ setClass(
     )
 )
 
-# =============================================================================
-# Print the laf_column object
-#
+#' Print a column of a Large File object to screen
+#' @param object the object to print to screen.
+#' @rdname show
+#' @export
 setMethod(
     f = "show", 
     signature = "laf_column", 
@@ -67,9 +63,23 @@ setMethod(
     }
 )
 
-# =============================================================================
-# Get a column in the data file.
-#
+#' Select a column from a LaF object
+#' 
+#' Selecting columns from an \code{laf} object works as it does for a 
+#' \code{data.frame}.
+#' 
+#' @param x an object of type \code{laf}
+#' @param i index of column to select. This should be a numeric or character
+#'   vector. 
+#'
+#' @return
+#' Returns an object of type \code{laf_column}. This object behaves almost the
+#' same as an \code{laf} object except that is it no longer necessary 
+#' (or possible) to specify which column should be used for functions that 
+#' require this. 
+#' 
+#' @rdname cindexing
+#' @export
 setMethod(
     f = "[[",
     signature = "laf",
@@ -99,9 +109,10 @@ setMethod(
     }
 )
 
-# =============================================================================
-# Get a reference object to a column in the data file.
-# 
+#' @param name the name of the column to select.
+#'
+#' @rdname cindexing
+#' @export
 setMethod(
     f = "$",
     signature = "laf",
@@ -110,9 +121,8 @@ setMethod(
     }
 )
 
-# =============================================================================
-# Reads the next block of lines from the file connection
-#
+#' @rdname next_block
+#' @export
 setMethod(
     f = "next_block",
     signature = "laf_column",
@@ -122,9 +132,8 @@ setMethod(
     }
 )
 
-# =============================================================================
-# Reads the specified lines from the column in the data file. 
-#
+#' @rdname read_lines
+#' @export
 setMethod(
     f = "read_lines",
     signature = "laf_column",
@@ -134,9 +143,6 @@ setMethod(
     }
 )
 
-# =============================================================================
-# Extract elements from the data file
-#
 setMethod(
     f = "[",
     signature = "laf_column",
@@ -163,9 +169,8 @@ setMethod(
     }
 )
 
-# =============================================================================
-# Return the levels of the colum
-#
+#' @rdname levels
+#' @export
 setMethod(
     f = "levels",
     signature = "laf_column",
@@ -183,9 +188,8 @@ setMethod(
     }
 )
 
-# =============================================================================
-# Change the levels of the column
-# 
+#' @rdname levels
+#' @export
 setMethod(
     f = "levels<-",
     signature = "laf_column",

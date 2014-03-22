@@ -2,9 +2,12 @@
 \name{read_lines}
 \alias{read_lines}
 \alias{read_lines,laf-method}
+\alias{read_lines,laf_column-method}
 \title{Read lines from the file}
 \usage{
 read_lines(x, ...)
+
+\S4method{read_lines}{laf_column}(x, rows, columns = 1:ncol(x), ...)
 
 \S4method{read_lines}{laf}(x, rows, columns = 1:ncol(x), ...)
 }

@@ -36,6 +36,7 @@
 #'    data <- laf[ , 1]
 #'  }
 #' 
+#' @importFrom Rcpp evalCpp
 #' @export
 setClass(
     Class = "laf",
