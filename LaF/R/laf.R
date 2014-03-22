@@ -15,6 +15,9 @@
 # LaF.  If not, see <http://www.gnu.org/licenses/>.
 
 #' @include generics.R
+#' @import methods
+#' @importFrom Rcpp evalCpp
+{}
 
 #' Large File object
 #'
@@ -36,7 +39,6 @@
 #'    data <- laf[ , 1]
 #'  }
 #' 
-#' @importFrom Rcpp evalCpp
 #' @export
 setClass(
     Class = "laf",
@@ -311,6 +313,22 @@ setMethod(
     }
 )
 
+#' Read records from a large file object into R
+#'
+#' When a connection is opened to a \code{"\link[=laf-class]{laf}"} object; this
+#' object can then be indexed roughly as one would a \code{data.frame}. 
+#'
+#' @param x an object of type \code{"\link[=laf-class]{laf}"} or
+#'   \code{"\link[=laf_column-class]{laf_column}"}. 
+#' @param i an logical or numeric vector with indices. The rows which should be
+#'   selected. 
+#' @param j a numeric vector with the columns to select. 
+#' @param drop a logical indicating whether or not to convert the result to a
+#'   vector when only one column is selected. As in when indexing a
+#'   \code{data.frame}.
+#'
+#' @rdname indexing
+#' @export
 setMethod(
     f = "[",
     signature = "laf",

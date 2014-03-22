@@ -15,6 +15,7 @@
 # LaF.  If not, see <http://www.gnu.org/licenses/>.
 
 #' @include laf.R
+{}
 
 #' Column of a Large File Object
 #' 
@@ -143,6 +144,9 @@ setMethod(
     }
 )
 
+
+#' @rdname indexing
+#' @export
 setMethod(
     f = "[",
     signature = "laf_column",
