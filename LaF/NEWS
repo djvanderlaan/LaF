@@ -1,4 +1,10 @@
 
+
+LaF version 0.6
+===============================================================================
+* Internal changes: switched documentation to roxygen; changes to namespace and
+  description files to pass tests.
+
 LaF version 0.5
 ===============================================================================
 * Added ability to use data models for opening files. These contain a 
