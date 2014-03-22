@@ -1,6 +1,6 @@
 
 
-LaF version 0.6
+LaF version 0.7
 ===============================================================================
 * Internal changes: switched documentation to roxygen; changes to namespace and
   description files to pass tests.
