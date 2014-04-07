@@ -34,7 +34,10 @@ class DoubleColumn : public Column {
       return get_value();
     }
     int get_int() const {
-      return get_value();
+      double value = get_value();
+      if (value > INT_MAX || value < INT_MIN || value == NA_INTEGER)
+        return NA_INTEGER;
+      return value;
     }
 
     virtual void assign() {

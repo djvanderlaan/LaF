@@ -183,7 +183,7 @@ class NMissing {
     NMissing() : missing_(0) {};
 
     void update(Column* column) {
-      int value = column->get_int();
+      int value = column->get_double();
       if (isna(value)) missing_++;
     }
 
