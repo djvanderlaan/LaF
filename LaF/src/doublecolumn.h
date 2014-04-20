@@ -35,7 +35,7 @@ class DoubleColumn : public Column {
     }
     int get_int() const {
       double value = get_value();
-      if (value > INT_MAX || value < INT_MIN || ISNAN(value))
+      if (ISNAN(value) || value > INT_MAX || value < INT_MIN)
         return NA_INTEGER;
       return value;
     }
