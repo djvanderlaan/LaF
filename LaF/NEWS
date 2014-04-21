@@ -1,4 +1,9 @@
 
+LaF version 0.6.1
+===============================================================================
+* Minor update. Fixes bug in the C++ code. This bug only affected colfreq and
+  colnmissing one some platforms when there are missing values in the numeric
+  columns. 
 
 LaF version 0.6
 ===============================================================================
