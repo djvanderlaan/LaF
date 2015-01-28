@@ -29,7 +29,7 @@ CSVReader::CSVReader(const std::string& filename, int sep, unsigned int skip, un
   line_size_ = 1024;
   line_ = new char[line_size_];
   file_.open(get_filename().c_str(), std::ios::in|std::ios::binary);
-  if (file_.fail()) throw std::runtime_error("Failed to open file");
+  if (file_.fail()) throw std::runtime_error("Failed to open file '" + filename + "'.");
   reset();
   buffer_ = new char[buffer_size_];
   ncolumns_ = determine_ncolumns(get_filename());

@@ -20,12 +20,14 @@ LaF.  If not, see <http://www.gnu.org/licenses/>.
 #include <cassert>
 #include <cstring>
 #include <cassert>
+#include <stdexcept>
 
 FWFReader::FWFReader(const std::string& filename, unsigned int buffersize, unsigned int nlines) :
   filename_(filename), stream_(filename_.c_str(), std::ios_base::in|std::ios::binary), linesize_(determine_linesize(filename)),
   buffersize_(linesize_*buffersize), nlines_(nlines), buffer_(new char[buffersize_]), chars_in_buffer_(0),
   current_index_(0), current_char_(0), line_(new char[linesize_])
 {
+  if (stream_.fail()) throw std::runtime_error("Failed to open file '" + filename + "'.");
   line_[linesize_-1] = 0;
   line_[0] = 0;
   if (nlines == 0) nlines_ = determine_nlines();

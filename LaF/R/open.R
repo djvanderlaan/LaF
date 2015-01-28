@@ -171,7 +171,7 @@ laf_open_fwf <-function(filename, column_types, column_widths,
     # check filename
     if (!is.character(filename))
         stop("filename should be of type character.")
-    filename <- as.character(filename[1])
+    filename <- path.expand(as.character(filename[1]))
     if (!.file_readable(filename))
 	stop("Can not access file '", filename, "'.")
     # check column_types

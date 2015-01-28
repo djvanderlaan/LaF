@@ -195,9 +195,9 @@ detect_dm_csv <- function(filename, sep=",", dec=".", header=FALSE,
 #' @rdname datamodels
 #' @export
 read_dm <- function(modelfile, ...) {
-    if (!require("yaml")) 
+    if (!requireNamespace("yaml")) 
         stop("The library yaml is required to read and write data models.")
-    model <- yaml.load_file(modelfile)
+    model <- yaml::yaml.load_file(modelfile)
     # columns are stored rowwise in file convert to column wise
     columns <- data.frame()
     levels  <- list()
@@ -229,7 +229,7 @@ read_dm <- function(modelfile, ...) {
 #' @rdname datamodels
 #' @export
 write_dm <- function(model, modelfile) {
-    if (!require("yaml")) 
+    if (!requireNamespace("yaml")) 
         stop("The library yaml is required to read and write data models.")
     # if model is a laf object, build data model from laf object
     if (inherits(model, "laf")) {
@@ -255,7 +255,7 @@ write_dm <- function(model, modelfile) {
         names(model$columns) <- NULL
     }
     # write model to file in yaml format
-    writeLines(as.yaml(model, column.major=F), con=modelfile)
+    writeLines(yaml::as.yaml(model, column.major=F), con=modelfile)
 }
 
 #' Create a connection to a file using a data model.

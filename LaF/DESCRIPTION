@@ -1,11 +1,11 @@
 Package: LaF
 Type: Package
 Title: Fast access to large ASCII files
-Version: 0.6.1
-Date: 2014-04-21
+Version: 0.6.2
+Date: 2015-01-28
 Author: Jan van der Laan
 Maintainer: Jan van der Laan <djvanderlaan@unrealizedtime.nl>
-Description: Methods for fast access to large ASCII files.  Currently the 
+Description: Methods for fast access to large ASCII files.  Currently the
     following file formats are supported: comma separated format (csv) and fixed
     width format. It is assumed that the files are too large to fit into memory,
     although the package can also be used to efficiently access files that do
