@@ -1,4 +1,8 @@
 
+LaF version 0.6.2
+===============================================================================
+* Minor update. Fixes error with '~' in the path name.
+
 LaF version 0.6.1
 ===============================================================================
 * Minor update. Fixes bug in the C++ code. This bug only affected colfreq and
