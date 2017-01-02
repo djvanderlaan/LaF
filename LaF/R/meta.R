@@ -80,7 +80,7 @@
 detect_dm_csv <- function(filename, sep=",", dec=".", header=FALSE, 
         nrows=1000, nlines=NULL, sample=FALSE, factor_fraction=0.4, ...) {
     if (sample) {
-        lines <- sample_lines(filename, n=nrow, nlines=nlines)
+        lines <- sample_lines(filename, n=nrows, nlines=nlines)
         con <- textConnection(lines)
     } else con <- file(filename, "rt")
     data  <- read.table(con, nrows=nrows, sep=sep, dec=dec, header=header, ...)

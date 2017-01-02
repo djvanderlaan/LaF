@@ -87,6 +87,14 @@ test_that("detect_dm_csv handles empty columns correctly (regression test issue 
     expect_that(codes, is_a("integer"))
 })
 
+
+test_that("detect_dm_csv handles sample argument correctly (regression test issue #10)", {
+    lines <- c("1;1.2;A", "2;1.2;A", "3;-1.20;B", "4;1;B")
+    writeLines(lines, "test.csv")
+    expect_silent(dm <- detect_dm_csv("test.csv", sep=";", sample = TRUE))
+})
+
+
 lines <- c(
   " 1M 1.45Rotterdam ",
   " 2F12.00Amsterdam ",

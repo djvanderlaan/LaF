@@ -122,7 +122,7 @@ sample_lines <- function(filename, n, nlines = NULL) {
     if (n < 0) 
         stop("n is negative; you can't sample a negative number of lines")
     if (n < 1) n <- round(n * nlines)
-    lines <- sample(nlines, n, replace=FALSE)
+    lines <- sample(nlines, min(n, nlines), replace=FALSE)
     return(get_lines(filename, lines))
 }
 
