@@ -106,6 +106,7 @@ setMethod(
 )
 
 #' Get the number of rows in a Large File object
+#' @param x a \code{"\link[=laf-class]{laf}"} object. 
 #' @rdname nrow
 #' @useDynLib LaF
 #' @export
@@ -119,6 +120,7 @@ setMethod(
 )
 
 #' Get the number of columns in a Large File object
+#' @param x a \code{"\link[=laf-class]{laf}"} object. 
 #' @rdname ncol
 #' @export
 setMethod(
@@ -129,7 +131,9 @@ setMethod(
     }
 )
 
-#' Get the names of the columns in a Large File object
+#' Get and set the names of the columns in a Large File object
+#' @param x a \code{"\link[=laf-class]{laf}"} object. 
+#' @param value a character vector with the new column names 
 #' @rdname names
 #' @export
 setMethod(
@@ -139,10 +143,6 @@ setMethod(
         return(x@column_names)
     }
 )
-
-# =============================================================================
-# Set the names of the columns in the file
-#
 
 #' @rdname names
 #' @export
@@ -366,6 +366,8 @@ setMethod(
 )
 
 #' Get and change the levels of the column in a Large File object 
+#' @param x a \code{"\link[=laf-class]{laf}"} object. 
+#' @param value a list with the levels for each column. 
 #' @rdname levels
 #' @export
 setMethod(
@@ -398,6 +400,8 @@ setMethod(
 
 
 #' Close the connection to the Large File
+#' @param con a \code{"\link[=laf-class]{laf}"} object that can be closed.
+#' @param ... unused.
 #' @rdname close
 #' @useDynLib LaF
 #' @export

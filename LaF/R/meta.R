@@ -76,6 +76,7 @@
 #' # Create LaF-object
 #' laf <- laf_open(model)
 #'
+#' @importFrom utils read.table 
 #' @export
 detect_dm_csv <- function(filename, sep=",", dec=".", header=FALSE, 
         nrows=1000, nlines=NULL, sample=FALSE, factor_fraction=0.4, ...) {
