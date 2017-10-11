@@ -2,21 +2,21 @@
 % Please edit documentation in R/stats.R
 \docType{methods}
 \name{colsum}
-\alias{colfreq}
-\alias{colfreq,laf-method}
-\alias{colfreq,laf_column-method}
-\alias{colmean}
-\alias{colmean,laf-method}
-\alias{colmean,laf_column-method}
-\alias{colnmissing}
-\alias{colnmissing,laf-method}
-\alias{colnmissing,laf_column-method}
-\alias{colrange}
-\alias{colrange,laf-method}
-\alias{colrange,laf_column-method}
 \alias{colsum}
 \alias{colsum,laf-method}
 \alias{colsum,laf_column-method}
+\alias{colmean}
+\alias{colmean,laf-method}
+\alias{colmean,laf_column-method}
+\alias{colfreq}
+\alias{colfreq,laf-method}
+\alias{colfreq,laf_column-method}
+\alias{colrange}
+\alias{colrange,laf-method}
+\alias{colrange,laf_column-method}
+\alias{colnmissing}
+\alias{colnmissing,laf-method}
+\alias{colnmissing,laf_column-method}
 \title{Calculate simple statistics of column}
 \usage{
 colsum(x, ...)
@@ -69,4 +69,3 @@ will never add a field containing the number of missing values.}
 Methods for calculating simple statistics of columns of a file: mean, sum,
 standard deviation, range (min and max), and number of missing values.
 }
-

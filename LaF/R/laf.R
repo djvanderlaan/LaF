@@ -287,30 +287,49 @@ setMethod(
 #'   should continue (FALSE) or stop (TRUE). When interupted the function is 
 #'   not called a last time with an empty \code{data.frame} to finalize the 
 #'   result.
+#' @param progress show a progress bar. Note that this triggers a calculation
+#'   of the number of lines in the file which for CSV files can take some time. 
+#'   When numeric \code{code} is used as the style of the progress bar (see
+#'   \code{\link[utils]{txtProgressBar}}). 
 #' @rdname process_blocks
 #' @export
 setMethod(
-    f = "process_blocks",
-    signature = "laf",
-    definition = function(x, fun, columns = 1:ncol(x), nrows = 5000, 
-            allow_interupt = FALSE, ...) {
-        if (!all(columns %in% 1:ncol(x)))
-            stop("column out of range.")
-        result <- NULL
-        begin(x)
-        while (TRUE) {
-            df     <- next_block(x, columns = columns, nrows = nrows);
-            result <- fun(df, result, ...)
-            if (allow_interupt) {
-                stop <- result[[1]]
-                result <- result[[2]]
-                if (stop) break;
-            }
-
-            if (nrow(df) == 0) break
-        }
-        return(result)
+  f = "process_blocks",
+  signature = "laf",
+  definition = function(x, fun, columns = 1:ncol(x), nrows = 5000, 
+        allow_interupt = FALSE, progress = FALSE, ...) {
+    if (!all(columns %in% 1:ncol(x)))
+      stop("column out of range.")
+    
+    if (progress) {
+      nmax <- nrow(x)  
+      nprocessed <- 0
+      style <- if (is.numeric(progress)) progress else 3
+      pb <- txtProgressBar(max = nmax, style = style)
     }
+  
+    result <- NULL
+    begin(x)
+    while (TRUE) {
+      df     <- next_block(x, columns = columns, nrows = nrows);
+      result <- fun(df, result, ...)
+      
+      if (progress) { 
+        nprocessed <- nprocessed + nrow(df)
+        setTxtProgressBar(pb, nprocessed)
+      }
+      
+      if (allow_interupt) {
+        stop <- result[[1]]
+        result <- result[[2]]
+        if (stop) break;
+      }
+
+      if (nrow(df) == 0) break
+    }
+    if (progress) close(pb)
+    return(result)
+  }
 )
 
 #' Read records from a large file object into R

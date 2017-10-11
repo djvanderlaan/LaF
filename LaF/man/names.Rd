@@ -18,4 +18,3 @@
 \description{
 Get and set the names of the columns in a Large File object
 }
-

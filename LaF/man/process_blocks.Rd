@@ -9,7 +9,7 @@
 process_blocks(x, fun, ...)
 
 \S4method{process_blocks}{laf}(x, fun, columns = 1:ncol(x), nrows = 5000,
-  allow_interupt = FALSE, ...)
+  allow_interupt = FALSE, progress = FALSE, ...)
 }
 \arguments{
 \item{x}{an object the supports the \code{process_blocks} method, such as an
@@ -29,6 +29,11 @@ element should be a logical value indication whether \code{process_blocks}
 should continue (FALSE) or stop (TRUE). When interupted the function is 
 not called a last time with an empty \code{data.frame} to finalize the 
 result.}
+
+\item{progress}{show a progress bar. Note that this triggers a calculation
+of the number of lines in the file which for CSV files can take some time. 
+When numeric \code{code} is used as the style of the progress bar (see
+\code{\link[utils]{txtProgressBar}}).}
 }
 \description{
 Reads the specified file block by block and feeds each block to the 
@@ -41,4 +46,3 @@ As the second argument the function should accept the output of the previous
 call to the function. The first time the function is callen the second
 argument has the value \code{NULL}.
 }
-

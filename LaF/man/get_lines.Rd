@@ -31,4 +31,3 @@ get_lines("tmp.csv", c(1, 10))
 See \code{\link{readLines}} to read in all lines a text file;
 \code{\link{sample_lines}} can be used to read in random lines.
 }
-

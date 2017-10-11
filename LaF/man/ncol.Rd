@@ -13,4 +13,3 @@
 \description{
 Get the number of columns in a Large File object
 }
-

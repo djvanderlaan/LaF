@@ -42,4 +42,3 @@ function process_blocks can be used.
 \seealso{
 See \code{\link{read.fwf}} for conventional access of fixed width files.
 }
-

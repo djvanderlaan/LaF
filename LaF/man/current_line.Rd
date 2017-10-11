@@ -20,4 +20,3 @@ current line can be set by the method \code{\link{goto}}.}
 \description{
 Get the current line in the file
 }
-
