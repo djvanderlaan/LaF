@@ -26,7 +26,7 @@ class Column
 {
   public:
     Column(const Reader* reader, unsigned int column);
-    ~Column();
+    virtual ~Column();
 
     virtual double get_double() const = 0; 
     virtual int get_int() const = 0; 

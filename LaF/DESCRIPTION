@@ -1,8 +1,8 @@
 Package: LaF
 Type: Package
 Title: Fast Access to Large ASCII Files
-Version: 0.6.3
-Date: 2017-01-02
+Version: 0.6.4
+Date: 2017-10-11
 Author: Jan van der Laan
 Maintainer: Jan van der Laan <djvanderlaan@unrealizedtime.nl>
 Description: Methods for fast access to large ASCII files.  Currently the
@@ -24,7 +24,7 @@ Suggests:
 LinkingTo: Rcpp
 Imports:
     Rcpp (>= 0.11.1)
-Collate:
+Collate: 
     'generics.R'
     'laf.R'
     'laf_column.R'

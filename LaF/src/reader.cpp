@@ -17,12 +17,12 @@ LaF.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "reader.h" 
 
-Reader::Reader() :
-  decimal_seperator_('.'), trim_(false)
-{
+Reader::Reader() : decimal_seperator_('.'), trim_(false) {
 }
 
 Reader::~Reader() {
+  for (std::vector<Column*>::iterator p = columns_.begin(); p != columns_.end(); ++p) 
+    delete *p;
 }
 
 const DoubleColumn* Reader::add_double_column() {
