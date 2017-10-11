@@ -305,7 +305,7 @@ setMethod(
       nmax <- nrow(x)  
       nprocessed <- 0
       style <- if (is.numeric(progress)) progress else 3
-      pb <- txtProgressBar(max = nmax, style = style)
+      pb <- utils::txtProgressBar(max = nmax, style = style)
     }
   
     result <- NULL
@@ -316,7 +316,7 @@ setMethod(
       
       if (progress) { 
         nprocessed <- nprocessed + nrow(df)
-        setTxtProgressBar(pb, nprocessed)
+        utils::setTxtProgressBar(pb, nprocessed)
       }
       
       if (allow_interupt) {

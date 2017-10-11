@@ -15,10 +15,11 @@ You should have received a copy of the GNU General Public License along with
 LaF.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <Rcpp.h>
+#include "LaF.h"
 #include <fstream>
 #include <string>
 #include <vector>
+
 
 RcppExport SEXP nlines(SEXP r_filename) {
 BEGIN_RCPP

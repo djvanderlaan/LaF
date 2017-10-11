@@ -17,7 +17,8 @@ URL: https://github.com/djvanderlaan/LaF
 License: GPL-3
 LazyLoad: yes
 Depends:
-    methods
+    methods,
+    utils
 Suggests:
     testthat,
     yaml

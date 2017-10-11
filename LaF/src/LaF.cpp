@@ -15,10 +15,7 @@ You should have received a copy of the GNU General Public License along with
 LaF.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "csvreader.h"
-#include "fwfreader.h"
-#include "readermanager.h"
-#include <Rcpp.h>
+#include "LaF.h"
 
 RcppExport SEXP laf_open_csv(SEXP r_filename, SEXP r_types, SEXP r_sep, 
     SEXP r_dec, SEXP r_trim, SEXP r_skip) {
