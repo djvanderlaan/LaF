@@ -14,7 +14,7 @@
 # You should have received a copy of the GNU General Public License along with
 # LaF.  If not, see <http://www.gnu.org/licenses/>.
 
-#' Create a connection to a comma seperated value (CSV) file.
+#' Create a connection to a comma separated value (CSV) file.
 #'
 #' A connection to the file filename is created. Column types have to be
 #' specified. These are not determined automatically as for example read.csv
@@ -31,12 +31,12 @@
 #'   the columns. Valid types are: double, integer, categorical and string.
 #' @param column_names optional character vector containing the names of the
 #'   columns.
-#' @param sep optional character specifying the field seperator used in the
+#' @param sep optional character specifying the field separator used in the
 #'   file.
 #' @param dec optional character specifying the decimal mark.
-#' @param trim optional logical specifying whether or not whitespace at the end
+#' @param trim optional logical specifying whether or not white space at the end
 #'   of factor levels or character strings should be trimmed.
-#' @param skip optional numeric specifying the number of lines at the begining 
+#' @param skip optional numeric specifying the number of lines at the beginning 
 #'   of the file that should be skipped.
 #'
 #' @details

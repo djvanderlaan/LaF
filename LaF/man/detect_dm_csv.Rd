@@ -33,7 +33,7 @@ the column is converted to a factor/categorical. For more information see
 details.}
 
 \item{...}{additional arguments are passed on to \code{\link{read.table}}.
-However, be carefull with using these as some of these arguments are not
+However, be careful with using these as some of these arguments are not
 supported by \code{\link{laf_open_csv}}.}
 }
 \value{

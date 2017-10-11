@@ -17,7 +17,7 @@
 
 #' Go to the beginning of the file
 #' 
-#' Sets the filepointer to the beginning of the file. The next call to 
+#' Sets the file pointer to the beginning of the file. The next call to 
 #' \code{\link{next_block}} returns the first lines of the file. This method is 
 #' usually used in combination with \code{\link{next_block}}.
 #'
@@ -107,7 +107,7 @@ setGeneric(
 #' The function should accept as the first argument the next block of data. When
 #' the end of the file is reached this is an empty (zero row) \code{data.frame}.
 #' As the second argument the function should accept the output of the previous
-#' call to the function. The first time the function is callen the second
+#' call to the function. The first time the function is called the second
 #' argument has the value \code{NULL}.
 #'
 #' @rdname process_blocks

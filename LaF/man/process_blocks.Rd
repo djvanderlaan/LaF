@@ -26,7 +26,7 @@ process_blocks(x, fun, ...)
 \item{allow_interupt}{when TRUE the function \code{fun} is expected to 
 return a list. The second element is the result of the function. The first
 element should be a logical value indication whether \code{process_blocks}
-should continue (FALSE) or stop (TRUE). When interupted the function is 
+should continue (FALSE) or stop (TRUE). When interrupted the function is 
 not called a last time with an empty \code{data.frame} to finalize the 
 result.}
 
@@ -43,6 +43,6 @@ specified function.
 The function should accept as the first argument the next block of data. When
 the end of the file is reached this is an empty (zero row) \code{data.frame}.
 As the second argument the function should accept the output of the previous
-call to the function. The first time the function is callen the second
+call to the function. The first time the function is called the second
 argument has the value \code{NULL}.
 }

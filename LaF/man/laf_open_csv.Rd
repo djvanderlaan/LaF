@@ -2,7 +2,7 @@
 % Please edit documentation in R/open.R
 \name{laf_open_csv}
 \alias{laf_open_csv}
-\title{Create a connection to a comma seperated value (CSV) file.}
+\title{Create a connection to a comma separated value (CSV) file.}
 \usage{
 laf_open_csv(filename, column_types, column_names = paste("V",
   seq_len(length(column_types)), sep = ""), sep = ",", dec = ".",
@@ -17,15 +17,15 @@ the columns. Valid types are: double, integer, categorical and string.}
 \item{column_names}{optional character vector containing the names of the
 columns.}
 
-\item{sep}{optional character specifying the field seperator used in the
+\item{sep}{optional character specifying the field separator used in the
 file.}
 
 \item{dec}{optional character specifying the decimal mark.}
 
-\item{trim}{optional logical specifying whether or not whitespace at the end
+\item{trim}{optional logical specifying whether or not white space at the end
 of factor levels or character strings should be trimmed.}
 
-\item{skip}{optional numeric specifying the number of lines at the begining 
+\item{skip}{optional numeric specifying the number of lines at the beginning 
 of the file that should be skipped.}
 }
 \value{

@@ -25,9 +25,9 @@
 #'     should be calculated.
 #' @param na.rm whether or not to ignore missing values. By default missing
 #'     values are ignored.
-#' @param useNA method with which to treat missing values: ifany adds a field
-#'     containing the number of missing values if there are any; always will always
-#'     add a field with the number of missing values even when there are none; none
+#' @param useNA method with which to treat missing values: "ifany" adds a field
+#'     containing the number of missing values if there are any; "always" will always
+#'     add a field with the number of missing values even when there are none; "none"
 #'     will never add a field containing the number of missing values.
 #' @param ... Currently ignored.
 #'

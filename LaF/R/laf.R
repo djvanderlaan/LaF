@@ -284,7 +284,7 @@ setMethod(
 #' @param allow_interupt when TRUE the function \code{fun} is expected to 
 #'   return a list. The second element is the result of the function. The first
 #'   element should be a logical value indication whether \code{process_blocks}
-#'   should continue (FALSE) or stop (TRUE). When interupted the function is 
+#'   should continue (FALSE) or stop (TRUE). When interrupted the function is 
 #'   not called a last time with an empty \code{data.frame} to finalize the 
 #'   result.
 #' @param progress show a progress bar. Note that this triggers a calculation
