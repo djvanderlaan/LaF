@@ -1,4 +1,6 @@
 ^.*\.o$
 ^.*\.so$
 cran-comments.md
+README.md
+Makefile
 
