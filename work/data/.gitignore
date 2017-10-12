@@ -1,7 +1,0 @@
-# Data and binary files in this directory
-*.csv
-*.dat
-generate_csv
-generate_fwf
-
-
