@@ -21,8 +21,9 @@ LaF.  If not, see <http://www.gnu.org/licenses/>.
 #include <stdexcept>
 #include <sstream>
 
-DoubleColumn::DoubleColumn(const Reader* reader, unsigned int column) :
-  Column(reader, column), decimal_seperator_('.')
+DoubleColumn::DoubleColumn(const Reader* reader, unsigned int column,
+    bool ignore_failed_conversion) :
+  Column(reader, column, ignore_failed_conversion), decimal_seperator_('.')
 { }
 
 DoubleColumn::~DoubleColumn() {
@@ -43,6 +44,7 @@ double DoubleColumn::get_value() const {
     if (length == 0 || all_chars_equal(buffer, length, ' ')) return NA_REAL;
     return strtodouble(buffer, length, decimal_seperator_);
   } catch(const std::exception& e) {
+    if (ignore_failed_conversion_) return NA_REAL;
     std::ostringstream message;
     message << "Conversion to double failed; line=" << reader_->get_current_line()-1
       << "; column=" << column_ 

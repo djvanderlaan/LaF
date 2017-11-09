@@ -18,7 +18,7 @@ LaF.  If not, see <http://www.gnu.org/licenses/>.
 #include "LaF.h"
 
 RcppExport SEXP laf_open_csv(SEXP r_filename, SEXP r_types, SEXP r_sep, 
-    SEXP r_dec, SEXP r_trim, SEXP r_skip) {
+    SEXP r_dec, SEXP r_trim, SEXP r_skip, SEXP r_ignore_failed_conversion) {
 BEGIN_RCPP
   Rcpp::CharacterVector filenamev(r_filename);
   Rcpp::IntegerVector types(r_types);
@@ -31,10 +31,13 @@ BEGIN_RCPP
   bool trim = static_cast<bool>(trimv[0]);
   Rcpp::IntegerVector skipv(r_skip);
   unsigned int skip = static_cast<unsigned int>(skipv[0]);
+  Rcpp::LogicalVector ignore_failed_conversionv(r_ignore_failed_conversion);
+  bool ignore_failed_conversion = static_cast<bool>(ignore_failed_conversionv[0]);
   Rcpp::IntegerVector p = Rcpp::IntegerVector::create(1);
   CSVReader* reader = new CSVReader(filename, sep, skip);
   reader->set_decimal_seperator(dec);
   reader->set_trim(trim);
+  reader->set_ignore_failed_conversion(ignore_failed_conversion);
   for (int i = 0; i < types.size(); ++i) {
     if (types[i] == 0) {
       reader->add_double_column();
@@ -52,7 +55,7 @@ END_RCPP
 }
 
 RcppExport SEXP laf_open_fwf(SEXP r_filename, SEXP r_types, SEXP r_widths, 
-    SEXP r_dec, SEXP r_trim) {
+    SEXP r_dec, SEXP r_trim, SEXP r_ignore_failed_conversion) {
 BEGIN_RCPP
   Rcpp::CharacterVector filenamev(r_filename);
   Rcpp::IntegerVector types(r_types);
@@ -62,10 +65,13 @@ BEGIN_RCPP
   char dec = static_cast<char>(decv[0][0]);
   Rcpp::LogicalVector trimv(r_trim);
   bool trim = static_cast<bool>(trimv[0]);
+  Rcpp::LogicalVector ignore_failed_conversionv(r_ignore_failed_conversion);
+  bool ignore_failed_conversion = static_cast<bool>(ignore_failed_conversionv[0]);
   Rcpp::IntegerVector p = Rcpp::IntegerVector::create(1);
   FWFReader* reader = new FWFReader(filename);
   reader->set_decimal_seperator(dec);
   reader->set_trim(trim);
+  reader->set_ignore_failed_conversion(ignore_failed_conversion);
   for (int i = 0; i < types.size(); ++i) {
     if (types[i] == 0) {
       reader->add_double_column(widths[i]);

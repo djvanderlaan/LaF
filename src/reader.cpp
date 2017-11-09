@@ -17,7 +17,8 @@ LaF.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "reader.h" 
 
-Reader::Reader() : decimal_seperator_('.'), trim_(false) {
+Reader::Reader() : decimal_seperator_('.'), trim_(false), 
+  ignore_failed_conversion_(false) {
 }
 
 Reader::~Reader() {
@@ -26,14 +27,16 @@ Reader::~Reader() {
 }
 
 const DoubleColumn* Reader::add_double_column() {
-  DoubleColumn* column = new DoubleColumn(this, columns_.size());
+  DoubleColumn* column = new DoubleColumn(this, columns_.size(), 
+    ignore_failed_conversion_);
   column->set_decimal_seperator(decimal_seperator_);
   columns_.push_back(column);
   return column;
 }
 
 const IntColumn* Reader::add_int_column() {
-  IntColumn* column = new IntColumn(this, columns_.size());
+  IntColumn* column = new IntColumn(this, columns_.size(),
+    ignore_failed_conversion_);
   columns_.push_back(column);
   return column;
 }
@@ -73,4 +76,12 @@ void Reader::set_trim(bool trim) {
 
 bool Reader::get_trim() const {
   return trim_;
+}
+
+void Reader::set_ignore_failed_conversion(bool ignore) {
+  ignore_failed_conversion_ = ignore;
+}
+
+bool Reader::get_ignore_failed_conversion() const {
+  return ignore_failed_conversion_;
 }

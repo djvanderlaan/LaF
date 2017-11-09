@@ -54,10 +54,14 @@ class Reader {
     void set_trim(bool trim);
     bool get_trim() const; 
 
+    void set_ignore_failed_conversion(bool ignore);
+    bool get_ignore_failed_conversion() const; 
+    
   private:
     std::vector<Column*> columns_;
     char decimal_seperator_;
     bool trim_;
+    bool ignore_failed_conversion_;
 };
 
 #endif

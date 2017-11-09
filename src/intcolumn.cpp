@@ -19,8 +19,9 @@ LaF.  If not, see <http://www.gnu.org/licenses/>.
 #include "reader.h"
 #include "conversion.h"
 
-IntColumn::IntColumn(const Reader* reader, unsigned int column) :
-  Column(reader, column)
+IntColumn::IntColumn(const Reader* reader, unsigned int column,
+    bool ignore_failed_conversion) :
+  Column(reader, column, ignore_failed_conversion)
 { }
 
 IntColumn::~IntColumn() {
@@ -33,6 +34,7 @@ int IntColumn::get_value() const {
     if (length == 0 || all_chars_equal(buffer, length, ' ')) return NA_INTEGER;
     return strtoint(buffer, length);
   } catch(const std::exception& e) {
+    if (ignore_failed_conversion_) return NA_INTEGER;
     std::ostringstream message;
     message << "Conversion to int failed; line=" << reader_->get_current_line()-1
       << "; column=" << column_ 

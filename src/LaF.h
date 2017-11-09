@@ -21,8 +21,10 @@ LaF.  If not, see <http://www.gnu.org/licenses/>.
 #include <Rcpp.h>
   
 extern "C" {
-  SEXP laf_open_csv(SEXP r_filename, SEXP r_types, SEXP r_sep, SEXP r_dec, SEXP r_trim, SEXP r_skip);
-  SEXP laf_open_fwf(SEXP r_filename, SEXP r_types, SEXP r_widths, SEXP r_dec, SEXP r_trim);
+  SEXP laf_open_csv(SEXP r_filename, SEXP r_types, SEXP r_sep, SEXP r_dec, 
+    SEXP r_trim, SEXP r_skip, SEXP r_ignore_failed_conversion);
+  SEXP laf_open_fwf(SEXP r_filename, SEXP r_types, SEXP r_widths, SEXP r_dec,
+    SEXP r_trim, SEXP r_ignore_failed_conversion);
   SEXP laf_close(SEXP p);
   SEXP laf_reset(SEXP p);
   SEXP laf_goto_line(SEXP p, SEXP r_line);

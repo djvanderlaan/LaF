@@ -38,6 +38,8 @@
 #'   of factor levels or character strings should be trimmed.
 #' @param skip optional numeric specifying the number of lines at the beginning 
 #'   of the file that should be skipped.
+#' @param ignore_failed_conversion ignore (set to \code{NA}) fields that could 
+#'   not be converted. 
 #'
 #' @details
 #' The CSV-file should not contain headers. Use the \code{skip} option to skip 
@@ -80,7 +82,8 @@
 #' @export
 laf_open_csv <-function(filename, column_types, 
         column_names = paste("V", seq_len(length(column_types)), sep=""),
-        sep=",", dec='.', trim=FALSE, skip=0) {
+        sep = ",", dec = '.', trim = FALSE, skip = 0, 
+        ignore_failed_conversion = FALSE) {
     # check filename
     if (!is.character(filename))
         stop("filename should be of type character.")
@@ -115,9 +118,13 @@ laf_open_csv <-function(filename, column_types,
     if (!is.numeric(skip))
         stop("skip should be of type numeric")
     skip <- as.integer(skip[1])
+    # check ignore_failed_conversion
+    if (!is.logical(ignore_failed_conversion))
+        stop("ignore_failed_conversion should be of type logical")
+    ignore_failed_conversion <- ignore_failed_conversion[1]
     # open file
     p <- .Call("laf_open_csv", PACKAGE="LaF", filename, types, sep, dec, 
-      trim, skip)
+      trim, skip, ignore_failed_conversion)
     # create laf-object
     result <- new(Class="laf", 
         file_id = as.integer(p),
@@ -156,6 +163,13 @@ laf_open_csv <-function(filename, column_types,
 #' @param dec optional character specifying the decimal mark.
 #' @param trim optional logical specifying whether or not whitespace at the end
 #'   of factor levels or character strings should be trimmed.
+#' @param ignore_failed_conversion ignore (set to \code{NA}) fields that could 
+#'   not be converted. 
+#'   
+#' @details 
+#' Only use \code{ignore_failed_conversion } when you are sure that the column
+#' specification is correct. Otherwise, this option can hide an incorrect 
+#' specification. 
 #'
 #' @return
 #' Object of type \code{\linkS4class{laf}}. Values can be extracted from this object 
@@ -167,7 +181,7 @@ laf_open_csv <-function(filename, column_types,
 #' @export
 laf_open_fwf <-function(filename, column_types, column_widths,
         column_names = paste("V", seq_len(length(column_types)), sep=""),
-        dec = ".", trim=TRUE) {
+        dec = ".", trim = TRUE, ignore_failed_conversion = FALSE) {
     # check filename
     if (!is.character(filename))
         stop("filename should be of type character.")
@@ -198,9 +212,13 @@ laf_open_fwf <-function(filename, column_types, column_widths,
     if (!is.logical(trim))
         stop("trim should be of type logical")
     trim <- trim[1]
+    # check ignore_failed_conversion
+    if (!is.logical(ignore_failed_conversion))
+        stop("ignore_failed_conversion should be of type logical")
+    ignore_failed_conversion <- ignore_failed_conversion[1]
     # open file
     p <- .Call("laf_open_fwf", PACKAGE="LaF", filename, types, column_widths, 
-      dec, trim)
+      dec, trim, ignore_failed_conversion)
     # create laf-object
     result <- new(Class="laf", 
         file_id = as.integer(p),

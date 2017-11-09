@@ -17,8 +17,10 @@ LaF.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "column.h"
 
-Column::Column(const Reader* reader, unsigned int column) :
-  reader_(reader), column_(column)
+Column::Column(const Reader* reader, unsigned int column, 
+    bool ignore_failed_conversion) :
+  reader_(reader), column_(column), 
+  ignore_failed_conversion_(ignore_failed_conversion)
 {
 }
 

@@ -22,7 +22,8 @@ LaF.  If not, see <http://www.gnu.org/licenses/>.
 
 class IntColumn : public Column {
   public:
-    IntColumn(const Reader* reader, unsigned int column);
+    IntColumn(const Reader* reader, unsigned int column, 
+      bool ignore_failed_conversion = false);
     ~IntColumn();
 
     double get_double() const {

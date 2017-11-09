@@ -22,7 +22,8 @@ LaF.  If not, see <http://www.gnu.org/licenses/>.
 
 class DoubleColumn : public Column {
   public:
-    DoubleColumn(const Reader* reader, unsigned int column);
+    DoubleColumn(const Reader* reader, unsigned int column,
+      bool ignore_failed_conversion = false);
     ~DoubleColumn();
 
     void set_decimal_seperator(char seperator);

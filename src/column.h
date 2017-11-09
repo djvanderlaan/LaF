@@ -25,7 +25,8 @@ class Reader;
 class Column 
 {
   public:
-    Column(const Reader* reader, unsigned int column);
+    Column(const Reader* reader, unsigned int column, 
+      bool ignore_failed_conversion = false);
     virtual ~Column();
 
     virtual double get_double() const = 0; 
@@ -38,6 +39,7 @@ class Column
   protected:
     const Reader* reader_;
     unsigned int column_;
+    bool ignore_failed_conversion_;
 };
 
 #endif

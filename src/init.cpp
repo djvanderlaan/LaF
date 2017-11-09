@@ -7,8 +7,8 @@
 extern "C" {
 
   static const R_CallMethodDef r_calldef[] = {
-     CALLDEF(laf_open_csv, 6),
-     CALLDEF(laf_open_fwf, 5),
+     CALLDEF(laf_open_csv, 7),
+     CALLDEF(laf_open_fwf, 6),
      CALLDEF(laf_close, 1),
      CALLDEF(laf_reset, 1),
      CALLDEF(laf_goto_line, 2),
