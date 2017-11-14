@@ -30,14 +30,15 @@ col2trimmed <- c(
   "",
   "Oslo")
 
-writeLines(lines, con="tmp.fwf", sep="\n")
+tmpfwf <- tempfile()
+writeLines(lines, con=tmpfwf, sep="\n")
  
 context("Test trimming of strings")
 
 test_that(
     "the trim=TRUE option works",
     {
-        laf <- laf_open_fwf(filename="tmp.fwf", 
+        laf <- laf_open_fwf(filename=tmpfwf, 
             column_types=c("categorical", "string"),
             column_widths=c(2,10), trim=TRUE
             )
@@ -48,7 +49,7 @@ test_that(
 test_that(
     "the trim=FALSE option works",
     {
-        laf <- laf_open_fwf(filename="tmp.fwf", 
+        laf <- laf_open_fwf(filename=tmpfwf, 
             column_types=c("categorical", "string"),
             column_widths=c(2,10), trim=FALSE
             )
@@ -57,5 +58,5 @@ test_that(
     })
 
 
-#unlink("tmp.fwf")
+file.remove(tmpfwf)
 

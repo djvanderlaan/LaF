@@ -17,11 +17,12 @@ data <- data.frame(
       stringsAsFactors=FALSE
     )
 
-writeLines(lines, con="tmp.csv", sep="\n")
+tmpcsv <- tempfile()
+writeLines(lines, con=tmpcsv, sep="\n")
 
 context("Test changing of levels")
 
-laf <- laf_open_csv(filename="tmp.csv", 
+laf <- laf_open_csv(filename=tmpcsv, 
     column_types=c("integer", "categorical", "double", "string"))
 
 test_that(
@@ -39,29 +40,30 @@ test_that(
         expect_that(c[], equals(data$id))
     })
 
-test_that(
-    "write_dm and read_dm work with levels",
-    {
-        levels(laf)[["V1"]] <- data.frame(levels=1:10, labels=paste0("C", 1:10)) 
-        write_dm(laf, modelfile="tmp.yaml")
-        model <- read_dm("tmp.yaml")
-        laf2 <- laf_open(model)
-        expect_that(laf[], equals(laf2[]))
-    })
+test_that("write_dm and read_dm work with levels", {
+  tmpyaml <- tempfile()
+  levels(laf)[["V1"]] <- data.frame(levels=1:10, labels=paste0("C", 1:10)) 
+  write_dm(laf, modelfile=tmpyaml)
+  model <- read_dm(tmpyaml)
+  laf2 <- laf_open(model)
+  expect_that(laf[], equals(laf2[]))
+  file.remove(tmpyaml)
+})
 
-test_that(
-    "levels work with process_blocks (regression test issue 2",
-    {
-        lines <- c("1;1;A", "2;1;A", "3;1;B", "4;2;B")
-        writeLines(lines, "tmp.csv")
-        dm <- detect_dm_csv("tmp.csv", sep=";")
-        laf <- laf_open(dm)
-        levels(laf)[[2]] <- data.frame(levels=1:2, labels=c("een", "twee"))
-        test <- process_blocks(laf, nrow=2, function(d, r) { 
-            if (is.null(r)) r <- FALSE
-            r <- r || any(unlist(is.na(d)))
-        })
-        expect_false(test)
+file.remove(tmpcsv)
 
-    })
+test_that("levels work with process_blocks (regression test issue 2", {
+  tmpcsv <- tempfile()
+  lines <- c("1;1;A", "2;1;A", "3;1;B", "4;2;B")
+  writeLines(lines, tmpcsv)
+  dm <- detect_dm_csv(tmpcsv, sep=";")
+  laf <- laf_open(dm)
+  levels(laf)[[2]] <- data.frame(levels=1:2, labels=c("een", "twee"))
+  test <- process_blocks(laf, nrow=2, function(d, r) { 
+      if (is.null(r)) r <- FALSE
+      r <- r || any(unlist(is.na(d)))
+  })
+  expect_false(test)
+  file.remove(tmpcsv)
+})
 

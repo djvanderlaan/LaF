@@ -18,8 +18,9 @@ data <- data.frame(
       stringsAsFactors=FALSE
     )
 
-writeLines(lines, con="tmp.csv", sep="\n")
-laf <- laf_open_csv(filename="tmp.csv", 
+tmpcsv <- tempfile()
+writeLines(lines, con=tmpcsv, sep="\n")
+laf <- laf_open_csv(filename=tmpcsv, 
     column_types=c("integer", "categorical", "double", "string"))
 
 context("Test calculation of column statistics")
@@ -88,5 +89,5 @@ test_that(
     })
 
 
-#unlink("tmp.csv")
+file.remove(tmpcsv)
 
