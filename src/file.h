@@ -1,5 +1,5 @@
 /*
-Copyright 2011 Jan van der Laan
+Copyright 2011-2017 Jan van der Laan
 
 This file is part of LaF.
 
@@ -21,5 +21,6 @@ LaF.  If not, see <http://www.gnu.org/licenses/>.
 #include <string>
 
 int determine_linebreak(const std::string& filename);
+bool has_bom(const std::string& filename);
 
 #endif

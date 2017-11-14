@@ -1,5 +1,5 @@
 /*
-Copyright 2011 Jan van der Laan
+Copyright 2011-2017 Jan van der Laan
 
 This file is part of LaF.
 
@@ -31,7 +31,20 @@ int determine_linebreak(const std::string& filename) {
       }
       return 3;
     }
-
   }
   return 0;
 }
+
+bool has_bom(const std::string& filename) {
+  std::ifstream stream(filename.c_str(), std::ios_base::in|std::ios::binary);
+  if (stream.fail()) throw std::runtime_error("Failed to open file '" + filename + "'.");
+  char c;
+  stream.get(c);
+  if (c != (char)239) return false;
+  stream.get(c);
+  if (c != (char)187) return false;
+  stream.get(c);
+  if (c != (char)191) return false;
+  return true;
+}
+

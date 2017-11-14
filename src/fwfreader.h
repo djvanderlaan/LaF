@@ -1,5 +1,5 @@
 /*
-Copyright 2011 Jan van der Laan
+Copyright 2011-2017 Jan van der Laan
 
 This file is part of LaF.
 
@@ -58,6 +58,7 @@ class FWFReader : public Reader
   private:
     std::string filename_;
     std::ifstream stream_;
+    std::ios::pos_type offset_ = 0;
     
     unsigned int linesize_;
     unsigned int buffersize_;

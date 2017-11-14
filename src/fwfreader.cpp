@@ -1,5 +1,5 @@
 /*
-Copyright 2011 Jan van der Laan
+Copyright 2011-2017 Jan van der Laan
 
 This file is part of LaF.
 
@@ -16,6 +16,7 @@ LaF.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include "fwfreader.h"
+#include "file.h"
 #include "conversion.h"
 #include <cassert>
 #include <cstring>
@@ -23,11 +24,18 @@ LaF.  If not, see <http://www.gnu.org/licenses/>.
 #include <stdexcept>
 
 FWFReader::FWFReader(const std::string& filename, unsigned int buffersize, unsigned int nlines) :
-  filename_(filename), stream_(filename_.c_str(), std::ios_base::in|std::ios::binary), linesize_(determine_linesize(filename)),
-  buffersize_(linesize_*buffersize), nlines_(nlines), buffer_(new char[buffersize_]), chars_in_buffer_(0),
+  filename_(filename), stream_(filename_.c_str(), std::ios_base::in|std::ios::binary), 
+  offset_(0), linesize_(0), buffersize_(0), nlines_(nlines), buffer_(0), chars_in_buffer_(0),
   current_index_(0), current_char_(0), line_(new char[linesize_])
 {
   if (stream_.fail()) throw std::runtime_error("Failed to open file '" + filename + "'.");
+  // init buffers
+  offset_ = has_bom(filename) ? 3 : 0;
+  linesize_ = determine_linesize(filename);
+  buffersize_ = linesize_*buffersize;
+  buffer_ = new char[buffersize_];
+  // init first line
+  line_ = new char[linesize_];
   line_[linesize_-1] = 0;
   line_[0] = 0;
   if (nlines == 0) nlines_ = determine_nlines();
@@ -42,7 +50,7 @@ FWFReader::~FWFReader() {
 
 void FWFReader::reset() {
   stream_.clear();
-  stream_.seekg(0, std::ios::beg);
+  stream_.seekg(offset_, std::ios::beg);
   current_line_ = 0;
   next_block();
 }
@@ -61,7 +69,7 @@ bool FWFReader::goto_line(unsigned int line) {
   // TODO: check if line is valid?? Depends on how seekg works
   stream_.clear();
   std::ios::pos_type pos = static_cast<std::ios::pos_type>(line) * linesize_;
-  stream_.seekg(pos, std::ios::beg);
+  stream_.seekg(offset_ + pos, std::ios::beg);
   next_block();
   current_line_ = line;
   return next_line();
@@ -128,6 +136,7 @@ void FWFReader::next_block() {
 
 unsigned int FWFReader::determine_linesize(const std::string& filename) {
   std::ifstream stream(filename.c_str(), std::ios_base::in|std::ios::binary);
+  stream.seekg(offset_, std::ios::beg);
   char c;
   unsigned int linesize = 0;
   while (stream.get(c)) {
@@ -143,6 +152,6 @@ unsigned int FWFReader::determine_nlines() {
   stream_.seekg(0, std::ios::end);
   std::ios::pos_type nbytes = stream_.tellg();
   reset();
-  return nbytes/linesize_;
+  return (nbytes - offset_)/linesize_;
 }
 

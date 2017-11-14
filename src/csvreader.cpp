@@ -18,6 +18,7 @@ LaF.  If not, see <http://www.gnu.org/licenses/>.
 #include "csvreader.h" 
 #include "conversion.h"
 #include "column.h"
+#include "file.h"
 #include <cstring>
 #include <stdexcept>
 
@@ -165,6 +166,10 @@ const std::string& CSVReader::get_filename() const {
 unsigned int CSVReader::determine_offset(const std::string& filename, unsigned int skip) {
   std::ifstream input(filename.c_str(), std::ios::in|std::ios::binary);
   unsigned int offset = 0;
+  if (has_bom(filename)) {
+    offset = 3;
+    input.seekg(3, std::ios::end);
+  }
   while (skip > 0) {
     int c = input.get();
     offset++;
