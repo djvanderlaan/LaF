@@ -17,11 +17,12 @@ data <- data.frame(
       stringsAsFactors=FALSE
     )
 
-writeLines(lines, con="tmp.csv", sep="\n")
+fn_tmpcsv <- tempfile(fileext="csv")
+writeLines(lines, con=fn_tmpcsv, sep="\n")
 
 context("Test reading and writing of data models")
 
-laf <- laf_open_csv(filename="tmp.csv", 
+laf <- laf_open_csv(filename=fn_tmpcsv, 
     column_types=c("integer", "categorical", "double", "string"))
 
 test_that(
@@ -42,7 +43,7 @@ test_that(
 
         datamodel <- paste(
             "type: csv",
-            "filename: tmp.csv",
+            paste0("filename: ", fn_tmpcsv),
             "columns:",
             "- {name: V1, type: integer}",
             "- {name: V2, type: categorical}",
@@ -66,7 +67,7 @@ test_that(
     })
 
 test_that("detect_dm_csv works", {
-    model <- detect_dm_csv("tmp.csv", header=FALSE, factor_fraction=0.8)
+    model <- detect_dm_csv(fn_tmpcsv, header=FALSE, factor_fraction=0.8)
     laf <- laf_open(model)
     testdata <- laf[]
     expect_that(testdata[,1], equals(data[,1]))
@@ -81,10 +82,12 @@ test_that("detect_dm_csv works", {
 
 test_that("detect_dm_csv handles empty columns correctly (regression test issue #1)", {
     lines <- c("1;;A", "2;;A", "3;;B", "4;;B")
-    writeLines(lines, "test.csv")
-    expect_warning(dm <- detect_dm_csv("test.csv", sep=";"))
+    fn <- tempfile(fileext="csv")
+    writeLines(lines, fn)
+    expect_warning(dm <- detect_dm_csv(fn, sep=";"))
     codes <- LaF:::.laf_to_typecode(dm$columns$type)
     expect_that(codes, is_a("integer"))
+    file.remove(fn)
 })
 
 
@@ -128,3 +131,5 @@ test_that("read_dm_blaise works", {
     expect_that(is.na(testdata[6,3]), is_true())
 })
 
+
+file.remove(fn_tmpcsv)
