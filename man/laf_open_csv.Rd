@@ -6,7 +6,7 @@
 \usage{
 laf_open_csv(filename, column_types, column_names = paste("V",
   seq_len(length(column_types)), sep = ""), sep = ",", dec = ".",
-  trim = FALSE, skip = 0)
+  trim = FALSE, skip = 0, ignore_failed_conversion = FALSE)
 }
 \arguments{
 \item{filename}{character containing the filename of the CSV-file}
@@ -27,6 +27,9 @@ of factor levels or character strings should be trimmed.}
 
 \item{skip}{optional numeric specifying the number of lines at the beginning 
 of the file that should be skipped.}
+
+\item{ignore_failed_conversion}{ignore (set to \code{NA}) fields that could 
+not be converted.}
 }
 \value{
 Object of type \code{\linkS4class{laf}}. Values can be extracted from this
@@ -79,3 +82,4 @@ second_block <- next_block(laf, nrows=2)
 See \code{\link{read.csv}} for conventional access of CSV files. And 
 \code{\link{detect_dm_csv}} to automatically determine the column types.
 }
+

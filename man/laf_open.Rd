@@ -61,3 +61,4 @@ laf2 <- laf_open(read_dm("tmp.yaml"), filename="tmp2.csv")
 See \code{\link{read_dm}} and \code{\link{detect_dm_csv}} for ways of creating
 data models.
 }
+

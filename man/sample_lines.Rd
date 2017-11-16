@@ -38,3 +38,4 @@ sample_lines("tmp.csv", 10)
 See \code{\link{readLines}} to read in all lines a text file;
 \code{\link{get_lines}} can be used to read in specified lines.
 }
+
