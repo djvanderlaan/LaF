@@ -24,4 +24,3 @@ Sets the current line to the line number specified. The next call to
 first row. The number of the current line can be obtained using 
 \code{\link{current_line}}.
 }
-

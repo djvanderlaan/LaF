@@ -3,8 +3,8 @@
 \docType{methods}
 \name{levels,laf-method}
 \alias{levels,laf-method}
-\alias{levels,laf_column-method}
 \alias{levels<-,laf-method}
+\alias{levels,laf_column-method}
 \alias{levels<-,laf_column-method}
 \title{Get and change the levels of the column in a Large File object}
 \usage{
@@ -24,4 +24,3 @@
 \description{
 Get and change the levels of the column in a Large File object
 }
-

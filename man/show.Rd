@@ -18,4 +18,3 @@ Print the Large File object to screen
 
 Print a column of a Large File object to screen
 }
-

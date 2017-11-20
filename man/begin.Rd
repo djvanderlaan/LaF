@@ -21,4 +21,3 @@ Sets the file pointer to the beginning of the file. The next call to
 \code{\link{next_block}} returns the first lines of the file. This method is 
 usually used in combination with \code{\link{next_block}}.
 }
-

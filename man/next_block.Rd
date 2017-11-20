@@ -32,4 +32,3 @@ check whether the end of the file is reached.}
 \description{
 Read the next block of data from a file.
 }
-

@@ -78,4 +78,3 @@ laf <- laf_open(model)
 See \code{\link{write_dm}} to write the data model to file.  The data models
 can be used to open a file using \code{\link{laf_open}}.
 }
-

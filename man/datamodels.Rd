@@ -86,4 +86,3 @@ See \code{\link{detect_dm_csv}} for a routine which can automatically
 create a data model from a CSV-file. The data models can be used to open a
 file using \code{\link{laf_open}}.
 }
-
