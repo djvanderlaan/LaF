@@ -5,7 +5,8 @@
 \title{Create a connection to a fixed width file.}
 \usage{
 laf_open_fwf(filename, column_types, column_widths, column_names = paste("V",
-  seq_len(length(column_types)), sep = ""), dec = ".", trim = TRUE)
+  seq_len(length(column_types)), sep = ""), dec = ".", trim = TRUE,
+  ignore_failed_conversion = FALSE)
 }
 \arguments{
 \item{filename}{character containing the filename of the CSV-file.}
@@ -23,6 +24,9 @@ columns.}
 
 \item{trim}{optional logical specifying whether or not whitespace at the end
 of factor levels or character strings should be trimmed.}
+
+\item{ignore_failed_conversion}{ignore (set to \code{NA}) fields that could 
+not be converted.}
 }
 \value{
 Object of type \code{\linkS4class{laf}}. Values can be extracted from this object 
@@ -38,6 +42,11 @@ After the connection is created data can be extracted using indexing (as in a
 normal data.frame) or methods such as read_lines and next_block can be used 
 to read in blocks. For processing the file in blocks the (faster) convenience
 function process_blocks can be used.
+
+
+Only use \code{ignore_failed_conversion } when you are sure that the column
+specification is correct. Otherwise, this option can hide an incorrect 
+specification.
 }
 \seealso{
 See \code{\link{read.fwf}} for conventional access of fixed width files.
