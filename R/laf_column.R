@@ -149,7 +149,7 @@ setMethod(
 #' @export
 setMethod(
     f = "[",
-    signature = "laf_column",
+    signature = c("laf_column", "ANY"),
     definition = function(x, i, j, drop) {
         # process and check i
         if (missing(i)) {
