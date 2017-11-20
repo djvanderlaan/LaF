@@ -1,4 +1,10 @@
 
+LaF version 0.8
+===============================================================================
+* Detects and ignores byte-order-mark
+* Added option to ignore (set NA) fields that could not be converted; 
+  previously this generated an error.
+
 LaF version 0.7
 ===============================================================================
 * Fixed memory leak

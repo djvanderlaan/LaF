@@ -2,8 +2,8 @@
 % Please edit documentation in R/laf_column.R
 \docType{methods}
 \name{[[,laf-method}
-\alias{[[,laf-method}
 \alias{$,laf-method}
+\alias{[[,laf-method}
 \title{Select a column from a LaF object}
 \usage{
 \S4method{[[}{laf}(x, i)
@@ -28,3 +28,4 @@ require this.
 Selecting columns from an \code{laf} object works as it does for a 
 \code{data.frame}.
 }
+

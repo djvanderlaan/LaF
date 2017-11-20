@@ -51,3 +51,4 @@ specification.
 \seealso{
 See \code{\link{read.fwf}} for conventional access of fixed width files.
 }
+

@@ -46,3 +46,4 @@ As the second argument the function should accept the output of the previous
 call to the function. The first time the function is called the second
 argument has the value \code{NULL}.
 }
+

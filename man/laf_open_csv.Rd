@@ -82,3 +82,4 @@ second_block <- next_block(laf, nrows=2)
 See \code{\link{read.csv}} for conventional access of CSV files. And 
 \code{\link{detect_dm_csv}} to automatically determine the column types.
 }
+

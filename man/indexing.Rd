@@ -27,3 +27,4 @@ vector when only one column is selected. As in when indexing a
 When a connection is opened to a \code{"\link[=laf-class]{laf}"} object; this
 object can then be indexed roughly as one would a \code{data.frame}.
 }
+
