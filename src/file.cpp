@@ -17,6 +17,7 @@ LaF.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "file.h"
 #include <fstream>
+#include <stdexcept>
 
 int determine_linebreak(const std::string& filename) {
   std::fstream file(filename.c_str(), std::ios_base::in|std::ios_base::binary);

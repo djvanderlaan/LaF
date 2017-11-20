@@ -6,14 +6,18 @@ dta <- data.frame(
   bar = c(2.2, 3.3, 4.4, 9.9)
 )
 
+bom <- raw(3)
+bom[1] <- as.raw(239)
+bom[2] <- as.raw(187)
+bom[3] <- as.raw(191)
+
 test_that("DOM detection works for fixed width", {
 
   lines <- " 12.2\n 23.3\n 34.4\n109.9"
   fn <- tempfile()
 
-  con <- file(fn, "wt", encoding="UTF-8")
-  # No BOM writeChar("\ufeff", con, eos = NULL)
-  writeChar(lines, con, eos="\n")
+  con <- file(fn, "wb")
+  writeLines(lines, con, sep="\n")
   close(con)
 
   con <- laf_open_fwf(fn,
@@ -27,9 +31,9 @@ test_that("DOM detection works for fixed width", {
   expect_equal(nrow(con), nrow(dta))
   close(con)
   
-  con <- file(fn, "wt", encoding="UTF-8")
-  writeChar("\ufeff", con, eos = NULL)
-  writeChar(lines, con, eos="\n")
+  con <- file(fn, "wb")
+  writeBin(bom, con)
+  writeLines(lines, con, sep="\n")
   close(con)
 
   con <- laf_open_fwf(fn,
@@ -51,9 +55,8 @@ test_that("DOM detection works for CSV", {
   lines <- "1,2.2\n2,3.3\n3,4.4\n10,9.9"
   fn <- tempfile()
 
-  con <- file(fn, "wt", encoding="UTF-8")
-  # No BOM writeChar("\ufeff", con, eos = NULL)
-  writeChar(lines, con, eos="\n")
+  con <- file(fn, "wb")
+  writeLines(lines, con, sep="\n")
   close(con)
 
   con <- laf_open_csv(fn,
@@ -66,9 +69,9 @@ test_that("DOM detection works for CSV", {
   expect_equal(nrow(con), nrow(dta))
   close(con)
   
-  con <- file(fn, "wt", encoding="UTF-8")
-  writeChar("\ufeff", con, eos = NULL)
-  writeChar(lines, con, eos="\n")
+  con <- file(fn, "wb")
+  writeBin(bom, con)
+  writeLines(lines, con, sep="\n")
   close(con)
 
   con <- laf_open_csv(fn,
