@@ -265,9 +265,12 @@ write_dm <- function(model, modelfile) {
 #' all the information needed to open the file (column types, column widths,
 #' etc.). 
 #' 
-#' @param model a \link{read_dm}{data model}.
+#' @param model a {data model}, such as one returned by \link{read_dm} or
+#'   \link{detect_dm_csv}.
 #' @param ... additional arguments can be used to overwrite the values specified
-#'   by the data model.
+#'   by the data model. These are listed in the argument documentation for
+#'   \code{\link{laf_open_csv}} and \code{\link{laf_open_fwf}}, e.g.
+#'   see \code{ignore_failed_conversion}.
 #' 
 #' @details
 #' Depending on the field `type' \code{laf_open} uses \code{\link{laf_open_csv}}
