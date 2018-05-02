@@ -90,6 +90,9 @@ get_lines <- function(filename, line_numbers) {
 #' @param nlines The total number of lines in the file. If not specified or
 #'   \code{NULL} the number of lines is first determined using
 #'   \code{\link{determine_nlines}}.
+#' @param header a logical value indicating whether the file contains the names of the variables as its first line. If missing, the value is determined from the file format: header is set to TRUE if and only if the first row contains one fewer field than the number of columns.
+#' @param skip integer: the number of lines of the data file to skip before beginning to read data.
+#' @param replace should sampling be with replacement?
 #'
 #' @details
 #' When \code{nlines} is not specified, the total number of lines is first
@@ -110,7 +113,7 @@ get_lines <- function(filename, line_numbers) {
 #' sample_lines("tmp.csv", 10)
 #'
 #' @export
-sample_lines <- function(filename, n, nlines = NULL) {
+sample_lines <- function(filename, n, nlines = NULL,header=TRUE,skip=0,replace=FALSE) {
     if (!is.character(filename)) stop("filename should be a character vector")
     if (!is.numeric(n)) stop("n should be a number")
     if (!is.null(nlines) && !is.numeric(nlines))
@@ -122,7 +125,7 @@ sample_lines <- function(filename, n, nlines = NULL) {
     if (n < 0) 
         stop("n is negative; you can't sample a negative number of lines")
     if (n < 1) n <- round(n * nlines)
-    lines <- sample(nlines, min(n, nlines), replace=FALSE)
-    return(get_lines(filename, lines))
+    lines <- sample((1+header+skip):nlines, min(n, nlines-header-skip), replace = replace)
+    get_lines(filename, lines)
 }
 

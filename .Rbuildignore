@@ -4,3 +4,5 @@ cran-comments.md
 README.md
 Makefile
 
+^.*\.Rproj$
+^\.Rproj\.user$
