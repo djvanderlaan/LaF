@@ -5,8 +5,8 @@
 \title{Automatically detect data models for CSV-files}
 \usage{
 detect_dm_csv(filename, sep = ",", dec = ".", header = FALSE,
-  nrows = 1000, nlines = NULL, sample = FALSE, factor_fraction = 0.4,
-  ...)
+  nrows = 1000, nlines = NULL, sample = FALSE,
+  factor_fraction = 0.4, ...)
 }
 \arguments{
 \item{filename}{character containing the filename of the csv-file.}

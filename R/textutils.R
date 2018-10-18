@@ -43,7 +43,8 @@
 #' @export
 determine_nlines <- function(filename) {
     if (!is.character(filename)) stop("filename should be a character vector")
-    result <- .Call("nlines", PACKAGE="LaF", as.character(filename))
+    filename <- path.expand(filename)
+    result <- .Call("nlines", PACKAGE="LaF", filename)
     return(result)
 }
 
@@ -72,11 +73,12 @@ determine_nlines <- function(filename) {
 get_lines <- function(filename, line_numbers) {
     if (!is.character(filename)) 
         stop("filename should be a character vector")
+    filename <- path.expand(filename)
     if (!is.numeric(line_numbers))
         stop("line_numbers should be a numeric vector")
     line_order  <- order(line_numbers)
     line_numbers <- line_numbers[line_order]
-    result <- .Call("r_get_line", PACKAGE="LaF", as.character(filename), 
+    result <- .Call("r_get_line", PACKAGE="LaF", filename, 
         as.integer(line_numbers)-1)
     result <- result[order(seq_along(line_numbers)[line_order])]
     return(result)
@@ -112,6 +114,7 @@ get_lines <- function(filename, line_numbers) {
 #' @export
 sample_lines <- function(filename, n, nlines = NULL) {
     if (!is.character(filename)) stop("filename should be a character vector")
+    filename <- path.expand(filename)
     if (!is.numeric(n)) stop("n should be a number")
     if (!is.null(nlines) && !is.numeric(nlines))
         stop("nlines should be a number")

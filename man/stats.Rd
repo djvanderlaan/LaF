@@ -33,7 +33,8 @@ colmean(x, ...)
 
 colfreq(x, ...)
 
-\S4method{colfreq}{laf}(x, columns, useNA = c("ifany", "always", "no"), ...)
+\S4method{colfreq}{laf}(x, columns, useNA = c("ifany", "always", "no"),
+  ...)
 
 \S4method{colfreq}{laf_column}(x, na.rm = TRUE, ...)
 

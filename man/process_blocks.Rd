@@ -8,8 +8,8 @@
 \usage{
 process_blocks(x, fun, ...)
 
-\S4method{process_blocks}{laf}(x, fun, columns = 1:ncol(x), nrows = 5000,
-  allow_interupt = FALSE, progress = FALSE, ...)
+\S4method{process_blocks}{laf}(x, fun, columns = 1:ncol(x),
+  nrows = 5000, allow_interupt = FALSE, progress = FALSE, ...)
 }
 \arguments{
 \item{x}{an object the supports the \code{process_blocks} method, such as an

@@ -7,10 +7,13 @@
 laf_open(model, ...)
 }
 \arguments{
-\item{model}{a \link{read_dm}{data model}.}
+\item{model}{a {data model}, such as one returned by \link{read_dm} or
+\link{detect_dm_csv}.}
 
 \item{...}{additional arguments can be used to overwrite the values specified
-by the data model.}
+by the data model. These are listed in the argument documentation for
+\code{\link{laf_open_csv}} and \code{\link{laf_open_fwf}}, e.g.
+see \code{ignore_failed_conversion}.}
 }
 \value{
 Object of type \code{\linkS4class{laf}}. Values can be extracted from this
