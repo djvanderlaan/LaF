@@ -2,3 +2,4 @@
 *.so
 *.swp
 *.swo
+.Rproj.user
