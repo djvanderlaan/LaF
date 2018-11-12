@@ -6,13 +6,14 @@
 using namespace Rcpp;
 
 // csv_read_cpp
-List csv_read_cpp(std::string filename);
-RcppExport SEXP _laf2_csv_read_cpp(SEXP filenameSEXP) {
+List csv_read_cpp(std::string filename, std::string column_types);
+RcppExport SEXP _laf2_csv_read_cpp(SEXP filenameSEXP, SEXP column_typesSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< std::string >::type filename(filenameSEXP);
-    rcpp_result_gen = Rcpp::wrap(csv_read_cpp(filename));
+    Rcpp::traits::input_parameter< std::string >::type column_types(column_typesSEXP);
+    rcpp_result_gen = Rcpp::wrap(csv_read_cpp(filename, column_types));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -73,7 +74,7 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_laf2_csv_read_cpp", (DL_FUNC) &_laf2_csv_read_cpp, 1},
+    {"_laf2_csv_read_cpp", (DL_FUNC) &_laf2_csv_read_cpp, 2},
     {"_laf2_csv_nrow_cpp", (DL_FUNC) &_laf2_csv_nrow_cpp, 1},
     {"_laf2_test_dynamicarray", (DL_FUNC) &_laf2_test_dynamicarray, 1},
     {"_laf2_test_dynamicarray2r", (DL_FUNC) &_laf2_test_dynamicarray2r, 1},

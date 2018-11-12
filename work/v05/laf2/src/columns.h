@@ -3,14 +3,19 @@
 
 #include "conversion.h"
 #include <cstdlib>
+#include <Rcpp.h>
 
 class Column {
   public:
+    virtual ~Column() {};
     virtual void start_reading() = 0;
     virtual bool parse(char* str, std::size_t len) = 0;
     virtual void finished_reading() = 0;
+
+    virtual SEXP sexp() const { return R_NilValue;}
 };
 
+/*
 class IntColumn: public Column {
   public:
     IntColumn() {}
@@ -18,7 +23,7 @@ class IntColumn: public Column {
     void start_reading() {};
 
     bool parse(char* str, std::size_t len) {
-      bool err; 
+      bool err;
       sum_ += atoif(str, len, &err);
     };
 
@@ -37,7 +42,7 @@ class DoubleColumn: public Column {
     void start_reading() {};
 
     bool parse(char* str, std::size_t len) {
-      bool err; 
+      bool err;
       sum_ += f_atod(str, len, &err);
     };
 
@@ -78,7 +83,6 @@ class PrintColumn: public Column {
 
   private:
 };
-
-
+*/
 
 #endif
