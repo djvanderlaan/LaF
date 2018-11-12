@@ -14,8 +14,9 @@ class CSVReader {
     enum State {NEWREC, INREC, INRECQ, ENDREC};
     enum QuoteType {NONE, DOUBLE, BACKSLASH, BOTH};
 
-    CSVReader(const std::string& filename, T& event_handler) :  read_buffer_(filename), 
-      state_(NEWREC), quote_(BOTH), event_handler_(event_handler) {
+    CSVReader(const std::string& filename, T& event_handler, std::fstream::pos_type skip = 0) :  
+        read_buffer_(filename, skip),  state_(NEWREC), quote_(BOTH), 
+        event_handler_(event_handler) {
     }
 
     void quote_type(QuoteType quote) { quote_ = quote;};
@@ -35,7 +36,10 @@ class CSVReader {
     }
  
   protected:
-    // State handlers for parser
+    // ===== STATE HANDLERS
+    
+    // Read until a new record starts; either by a opening quote or by 
+    // (unquoted) data. 
     void state_newrec(char c) {
       switch (c) {
         case '"':
@@ -53,6 +57,8 @@ class CSVReader {
       }
     }
 
+    // Inside a unquoted record; record is closed by either a ',' or an end of
+    // line.
     void state_inrec(char c) {
       switch (c) {
         case '\n':
@@ -69,6 +75,7 @@ class CSVReader {
       }
     }
 
+    // Inside a quoted record; record is closed by a closing quote. 
     void state_inrecq(char c) {
       if (c == '"') {
         if (quote_ == DOUBLE || quote_ == BOTH) {
@@ -93,6 +100,8 @@ class CSVReader {
       buffer_[buffer_pos_++] = c;
     }
 
+    // A quoted record has been closed. This should either lead to a new record
+    // or a new line. 
     void state_endrec(char c) {
       switch (c) {
         case '\n':

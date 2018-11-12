@@ -4,13 +4,14 @@
 #include <fstream>
 #include <array>
 
-const size_t max_buffer_size = 1E5;
+const size_t max_buffer_size = 1E6;
 
 class Buffer {
   public:
-    Buffer(const std::string& filename) : filename_(filename), 
+    Buffer(const std::string& filename, std::fstream::pos_type skip = 0) : filename_(filename), 
         file_(filename, std::ios::in|std::ios::binary), buffer_size_(0), 
         pos_(0) {
+      if (skip) file_.seekg(skip);
     }
 
     ~Buffer() {}
