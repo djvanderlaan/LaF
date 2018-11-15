@@ -1,7 +1,7 @@
 #ifndef csvreader_h
 #define csvreader_h
 
-#include "buffer.h"
+#include "buffer2.h"
 
 #include <array>
 #include <cstdlib>
