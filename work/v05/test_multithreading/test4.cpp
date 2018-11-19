@@ -15,6 +15,7 @@ class Buffer {
       slices_[1].buffer = buffer_.data() + 10;
       slices_[1].size   = 0;
       std::cout << "Locking slice: 1" << std::endl;
+      slices_[0].mutex.lock();
       slices_[1].mutex.lock();
       std::cout << "Locked slice 1" << std::endl;
       // Start thread that fills slices
@@ -23,12 +24,13 @@ class Buffer {
     }
 
     ~Buffer() {
+      std::cout << "Joining threads" << std::endl;
       if (read_thread_.joinable()) read_thread_.join();
     }
 
     int next() {
       // When end of buffer slice reached; go to next
-      if (pos_ > slices_[current_slice_].size) {
+      if (pos_ >= slices_[current_slice_].size) {
         std::size_t next_slice = (current_slice_ + 1) % 2;
         std::cout << "Locking next slice: " << next_slice << std::endl;
         slices_[next_slice].mutex.lock();
@@ -39,6 +41,7 @@ class Buffer {
         pos_ = 0;
         if (slices_[current_slice_].size == 0) return 0;
       }
+      std::cout << "Returning value at " << pos_ << std::endl;
       return slices_[current_slice_].buffer[pos_++];
     }
 
@@ -58,13 +61,18 @@ class Buffer {
     void fill_buffer() {
       int val = 1;
       std::size_t current_slice = 0;
+      bool first = true;
       // lock current slice
       while (true) {
         // TODO: use lock guard ipv manual lock
-        slices_[current_slice].mutex.lock();
+        if (!first) slices_[current_slice].mutex.lock();
+        first = false;
         slices_[current_slice].size = 0;
         // check if finished
-        if (val >= max_val_) return;
+        if (val >= max_val_) {
+          slices_[current_slice].mutex.unlock();
+          return;
+        }
         // fill slice
         for (std::size_t i = 0; i < 10 && val <= max_val_; ++i, ++val) {
           slices_[current_slice].buffer[i] = val;
@@ -82,7 +90,7 @@ class Buffer {
 };
 
 int main(int argc, char* argv[]) {
-  Buffer buffer(99);
+  Buffer buffer(1);
 
   while (int c = buffer.next()) {
     std::cout << c << std::endl;
