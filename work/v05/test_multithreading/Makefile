@@ -1,4 +1,7 @@
 
+test5: test5.cpp buffer3.h
+	g++ -o test5 -pthread -O3 test5.cpp
+
 test4: test4.cpp
 	g++ -o test4 -pthread -O3 test4.cpp
 

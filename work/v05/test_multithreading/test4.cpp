@@ -69,7 +69,7 @@ class Buffer {
         first = false;
         slices_[current_slice].size = 0;
         // check if finished
-        if (val >= max_val_) {
+        if (val > max_val_) {
           slices_[current_slice].mutex.unlock();
           return;
         }
