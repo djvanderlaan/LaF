@@ -35,7 +35,7 @@ Why ASCII? Why not use a binary format like \texttt{ff} and similar packages do?
 True, binary storage allows for much faster access since the conversion from
 ASCII to binary format is not needed and data can often be stored much more
 compact. The main reason is portability. Almost every program designed for data
-precessing can read ASCII files. And even if one wants to use a package like
+processing can read ASCII files. And even if one wants to use a package like
 \texttt{ff}, the source files are often ASCII files and first need to be
 converted to \texttt{ff} format. \texttt{LaF} can also speed up this last
 process. 
