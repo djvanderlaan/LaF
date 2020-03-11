@@ -28,25 +28,28 @@ laf <- laf_open_csv(filename=tmpcsv,
 test_that(
     "setting levels works",
     {
-        levels(laf)[["V1"]] <- data.frame(levels=1:10, labels=paste0("C", 1:10)) 
-        expect_that(is.data.frame(levels(laf)[["V1"]]), is_true())
-        expect_that(nrow(levels(laf)[["V1"]]), equals(10))
+        levels(laf)[["V1"]] <- data.frame(levels=1:10, labels=paste0("C", 1:10), 
+          stringsAsFactors = FALSE) 
+        expect_true(is.data.frame(levels(laf)[["V1"]]))
+        expect_equal(nrow(levels(laf)[["V1"]]), 10)
         data$id <- factor(data$id, levels=1:10, labels=paste0("C", 1:10))
-        expect_that(laf$V1[], equals(data$id))
+        expect_equal(laf$V1[], data$id)
 
         levels(data$id) <- paste0("D", 1:10)
         c <- laf$V1
-        levels(c) <- data.frame(levels=1:10, labels=paste0("D", 1:10))
-        expect_that(c[], equals(data$id))
+        levels(c) <- data.frame(levels=1:10, labels=paste0("D", 1:10), 
+          stringsAsFactors = FALSE)
+        expect_equal(c[], data$id)
     })
 
 test_that("write_dm and read_dm work with levels", {
   tmpyaml <- tempfile()
-  levels(laf)[["V1"]] <- data.frame(levels=1:10, labels=paste0("C", 1:10)) 
+  levels(laf)[["V1"]] <- data.frame(levels=1:10, labels=paste0("C", 1:10), 
+    stringsAsFactors = FALSE) 
   write_dm(laf, modelfile=tmpyaml)
   model <- read_dm(tmpyaml)
   laf2 <- laf_open(model)
-  expect_that(laf[], equals(laf2[]))
+  expect_equal(laf[], laf2[])
   file.remove(tmpyaml)
 })
 
@@ -58,7 +61,8 @@ test_that("levels work with process_blocks (regression test issue 2", {
   writeLines(lines, tmpcsv)
   dm <- detect_dm_csv(tmpcsv, sep=";")
   laf <- laf_open(dm)
-  levels(laf)[[2]] <- data.frame(levels=1:2, labels=c("een", "twee"))
+  levels(laf)[[2]] <- data.frame(levels=1:2, labels=c("een", "twee"), 
+    stringsAsFactors = FALSE)
   test <- process_blocks(laf, nrow=2, function(d, r) { 
       if (is.null(r)) r <- FALSE
       r <- r || any(unlist(is.na(d)))

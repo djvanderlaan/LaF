@@ -4,9 +4,18 @@
 \alias{detect_dm_csv}
 \title{Automatically detect data models for CSV-files}
 \usage{
-detect_dm_csv(filename, sep = ",", dec = ".", header = FALSE,
-  nrows = 1000, nlines = NULL, sample = FALSE,
-  factor_fraction = 0.4, ...)
+detect_dm_csv(
+  filename,
+  sep = ",",
+  dec = ".",
+  header = FALSE,
+  nrows = 1000,
+  nlines = NULL,
+  sample = FALSE,
+  stringsAsFactors = TRUE,
+  factor_fraction = 0.4,
+  ...
+)
 }
 \arguments{
 \item{filename}{character containing the filename of the csv-file.}
@@ -27,6 +36,10 @@ first calculated.}
 \item{sample}{by default the first \code{nrows} lines are read in for
 determining the column types. When sample is used random lines from the file
 are used. This is more robust, but takes longer.}
+
+\item{stringsAsFactors}{passed on to \code{\link{read.table}}. Set to 
+\code{FALSE} to read all text columns as character. In that case 
+\code{factor_fraction} is ignored.}
 
 \item{factor_fraction}{the fraction of unique string in a column below which
 the column is converted to a factor/categorical. For more information see
@@ -62,7 +75,8 @@ testdata <- data.frame(
     a = 1:ntest,
     b = sample(1:2, ntest, replace=TRUE),
     c = round(runif(ntest), 13),
-    d = sample(c("jan", "pier", "tjores", "corneel"), ntest, replace=TRUE)
+    d = sample(c("jan", "pier", "tjores", "corneel"), ntest, replace=TRUE),
+    stringsAsFactors = FALSE
     )
 # Write test data to csv file
 write.table(testdata, file="tmp.csv", row.names=FALSE, col.names=TRUE, sep=',')

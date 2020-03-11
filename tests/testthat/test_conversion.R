@@ -24,7 +24,7 @@ test_that("conversion of numeric formats works", {
       column_widths=c(6)
     )
   testdata <- laf$V1[]
-  expect_that(testdata, equals(data))
+  expect_equal(testdata, data)
   file.remove(fn)
 })
 

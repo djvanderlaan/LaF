@@ -4,9 +4,16 @@
 \alias{laf_open_csv}
 \title{Create a connection to a comma separated value (CSV) file.}
 \usage{
-laf_open_csv(filename, column_types, column_names = paste("V",
-  seq_len(length(column_types)), sep = ""), sep = ",", dec = ".",
-  trim = FALSE, skip = 0, ignore_failed_conversion = FALSE)
+laf_open_csv(
+  filename,
+  column_types,
+  column_names = paste("V", seq_len(length(column_types)), sep = ""),
+  sep = ",",
+  dec = ".",
+  trim = FALSE,
+  skip = 0,
+  ignore_failed_conversion = FALSE
+)
 }
 \arguments{
 \item{filename}{character containing the filename of the CSV-file}

@@ -2,7 +2,8 @@ context("Ignore failed conversion option")
 
 dta <- data.frame(
   foo = c(1,2,NA,3,4,NA),
-  bar = c(2.3,3.3,4.4,NA,NA,6.6)
+  bar = c(2.3,3.3,4.4,NA,NA,6.6),
+  stringsAsFactors = TRUE
 )
 
 test_that("ignore_failed_conversion works for CSV", {

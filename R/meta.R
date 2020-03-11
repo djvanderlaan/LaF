@@ -35,6 +35,9 @@
 #' @param factor_fraction the fraction of unique string in a column below which
 #'   the column is converted to a factor/categorical. For more information see
 #'   details.
+#' @param stringsAsFactors passed on to \code{\link{read.table}}. Set to 
+#'   \code{FALSE} to read all text columns as character. In that case 
+#'   \code{factor_fraction} is ignored. 
 #' @param ... additional arguments are passed on to \code{\link{read.table}}.
 #'   However, be careful with using these as some of these arguments are not
 #'   supported by \code{\link{laf_open_csv}}.
@@ -65,7 +68,8 @@
 #'     a = 1:ntest,
 #'     b = sample(1:2, ntest, replace=TRUE),
 #'     c = round(runif(ntest), 13),
-#'     d = sample(c("jan", "pier", "tjores", "corneel"), ntest, replace=TRUE)
+#'     d = sample(c("jan", "pier", "tjores", "corneel"), ntest, replace=TRUE),
+#'     stringsAsFactors = FALSE
 #'     )
 #' # Write test data to csv file
 #' write.table(testdata, file="tmp.csv", row.names=FALSE, col.names=TRUE, sep=',')
@@ -79,12 +83,14 @@
 #' @importFrom utils read.table 
 #' @export
 detect_dm_csv <- function(filename, sep=",", dec=".", header=FALSE, 
-        nrows=1000, nlines=NULL, sample=FALSE, factor_fraction=0.4, ...) {
+        nrows=1000, nlines=NULL, sample=FALSE, stringsAsFactors = TRUE, 
+        factor_fraction=0.4, ...) {
     if (sample) {
         lines <- sample_lines(filename, n=nrows, nlines=nlines)
         con <- textConnection(lines)
     } else con <- file(filename, "rt")
-    data  <- read.table(con, nrows=nrows, sep=sep, dec=dec, header=header, ...)
+    data  <- read.table(con, nrows=nrows, sep=sep, dec=dec, header=header, 
+      stringsAsFactors = stringsAsFactors, ...)
     close(con)
     name <- names(data)
     type <- sapply(data, function(d) {

@@ -187,6 +187,7 @@ setMethod(
             levels <- data.frame(
                 levels = levels$levels[order(levels$levels)],
                 labels = levels$labels[order(levels$levels)])
+                stringsAsFactors = FALSE
         }
         return(levels)
     }

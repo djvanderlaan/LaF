@@ -4,9 +4,15 @@
 \alias{laf_open_fwf}
 \title{Create a connection to a fixed width file.}
 \usage{
-laf_open_fwf(filename, column_types, column_widths,
+laf_open_fwf(
+  filename,
+  column_types,
+  column_widths,
   column_names = paste("V", seq_len(length(column_types)), sep = ""),
-  dec = ".", trim = TRUE, ignore_failed_conversion = FALSE)
+  dec = ".",
+  trim = TRUE,
+  ignore_failed_conversion = FALSE
+)
 }
 \arguments{
 \item{filename}{character containing the filename of the CSV-file.}

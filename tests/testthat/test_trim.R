@@ -42,8 +42,8 @@ test_that(
             column_types=c("categorical", "string"),
             column_widths=c(2,10), trim=TRUE
             )
-        expect_that(as.character(laf$V1[]), equals(col1trimmed))
-        expect_that(laf$V2[], equals(col2trimmed))
+        expect_equal(as.character(laf$V1[]), col1trimmed)
+        expect_equal(laf$V2[], col2trimmed)
     })
 
 test_that(
@@ -53,8 +53,8 @@ test_that(
             column_types=c("categorical", "string"),
             column_widths=c(2,10), trim=FALSE
             )
-        expect_that(as.character(laf$V1[]), equals(col1))
-        expect_that(laf$V2[], equals(col2))
+        expect_equal(as.character(laf$V1[]), col1)
+        expect_equal(laf$V2[], col2)
     })
 
 

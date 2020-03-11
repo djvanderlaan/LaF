@@ -3,7 +3,8 @@ context("BOM")
 
 dta <- data.frame(
   foo = c(1,2,3,10),
-  bar = c(2.2, 3.3, 4.4, 9.9)
+  bar = c(2.2, 3.3, 4.4, 9.9),
+  stringsAsFactors = TRUE
 )
 
 bom <- raw(3)

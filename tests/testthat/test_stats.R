@@ -28,64 +28,64 @@ context("Test calculation of column statistics")
 test_that(
     "colmean works",
     {
-        expect_that(as.numeric(colmean(laf, 1)), 
-            equals(mean(data[,1], na.rm=TRUE)))
-        expect_that(as.numeric(colmean(laf, 3)), 
-            equals(mean(data[,3], na.rm=TRUE)))
-        expect_that(as.numeric(colmean(laf, 1, na.rm=FALSE)), 
-            equals(mean(data[,1], na.rm=FALSE)))
-        expect_that(as.numeric(colmean(laf, 3, na.rm=FALSE)), 
-            equals(mean(data[,3], na.rm=FALSE)))
-        expect_that(as.numeric(colmean(laf$V3, na.rm=FALSE)), 
-            equals(mean(data[,3], na.rm=FALSE)))
+        expect_equal(as.numeric(colmean(laf, 1)), 
+            mean(data[,1], na.rm=TRUE))
+        expect_equal(as.numeric(colmean(laf, 3)), 
+            mean(data[,3], na.rm=TRUE))
+        expect_equal(as.numeric(colmean(laf, 1, na.rm=FALSE)), 
+            mean(data[,1], na.rm=FALSE))
+        expect_equal(as.numeric(colmean(laf, 3, na.rm=FALSE)), 
+            mean(data[,3], na.rm=FALSE))
+        expect_equal(as.numeric(colmean(laf$V3, na.rm=FALSE)), 
+            mean(data[,3], na.rm=FALSE))
     })
 test_that(
     "colsum works",
     {
-        expect_that(as.numeric(colsum(laf, 1)), 
-            equals(sum(data[,1], na.rm=TRUE)))
-        expect_that(as.numeric(colsum(laf, 3)), 
-            equals(sum(data[,3], na.rm=TRUE)))
-        expect_that(as.numeric(colsum(laf, 1, na.rm=FALSE)), 
-            equals(sum(data[,1], na.rm=FALSE)))
-        expect_that(as.numeric(colsum(laf, 3, na.rm=FALSE)), 
-            equals(sum(data[,3], na.rm=FALSE)))
-        expect_that(as.numeric(colsum(laf$V3, na.rm=FALSE)), 
-            equals(sum(data[,3], na.rm=FALSE)))
+        expect_equal(as.numeric(colsum(laf, 1)), 
+            sum(data[,1], na.rm=TRUE))
+        expect_equal(as.numeric(colsum(laf, 3)), 
+            sum(data[,3], na.rm=TRUE))
+        expect_equal(as.numeric(colsum(laf, 1, na.rm=FALSE)), 
+            sum(data[,1], na.rm=FALSE))
+        expect_equal(as.numeric(colsum(laf, 3, na.rm=FALSE)), 
+            sum(data[,3], na.rm=FALSE))
+        expect_equal(as.numeric(colsum(laf$V3, na.rm=FALSE)), 
+            sum(data[,3], na.rm=FALSE))
     })
 test_that(
     "colrange works",
     {
-        expect_that(as.numeric(colrange(laf, 1)), 
-            equals(range(data[,1], na.rm=TRUE)))
-        expect_that(as.numeric(colrange(laf, 3)), 
-            equals(range(data[,3], na.rm=TRUE)))
-        expect_that(as.numeric(colrange(laf, 1, na.rm=FALSE)), 
-            equals(range(data[,1], na.rm=FALSE)))
-        expect_that(as.numeric(colrange(laf, 3, na.rm=FALSE)), 
-            equals(range(data[,3], na.rm=FALSE)))
-        expect_that(as.numeric(colrange(laf$V3, na.rm=FALSE)), 
-            equals(range(data[,3], na.rm=FALSE)))
+        expect_equal(as.numeric(colrange(laf, 1)), 
+            range(data[,1], na.rm=TRUE))
+        expect_equal(as.numeric(colrange(laf, 3)), 
+            range(data[,3], na.rm=TRUE))
+        expect_equal(as.numeric(colrange(laf, 1, na.rm=FALSE)), 
+            range(data[,1], na.rm=FALSE))
+        expect_equal(as.numeric(colrange(laf, 3, na.rm=FALSE)), 
+            range(data[,3], na.rm=FALSE))
+        expect_equal(as.numeric(colrange(laf$V3, na.rm=FALSE)), 
+            range(data[,3], na.rm=FALSE))
     })
 test_that(
     "colnmissing works",
     {
-        expect_that(as.numeric(colnmissing(laf, 1:ncol(laf))), 
-            equals(as.numeric(apply(data, 2, function(a) sum(is.na(a))))))
+        expect_equal(as.numeric(colnmissing(laf, 1:ncol(laf))), 
+            as.numeric(apply(data, 2, function(a) sum(is.na(a)))))
     })
 test_that(
     "colfreq works",
     {
-        expect_that(as.numeric(colfreq(laf, 1)), 
-            equals(as.numeric(table(data[, 1], useNA="ifany"))))
-        expect_that(as.numeric(colfreq(laf, 1, useNA="always")), 
-            equals(as.numeric(table(data[, 1], useNA="always"))))
-        expect_that(as.numeric(colfreq(laf, 1, useNA="no")), 
-            equals(as.numeric(table(data[, 1], useNA="no"))))
-        expect_that(as.numeric(colfreq(laf, 2)), 
-            equals(as.numeric(table(data[, 2], useNA="ifany"))))
-        expect_that(as.numeric(colfreq(laf, 3)), 
-            equals(as.numeric(table(as.integer(data[, 3]), useNA="ifany"))))
+        expect_equal(as.numeric(colfreq(laf, 1)), 
+            as.numeric(table(data[, 1], useNA="ifany")))
+        expect_equal(as.numeric(colfreq(laf, 1, useNA="always")), 
+            as.numeric(table(data[, 1], useNA="always")))
+        expect_equal(as.numeric(colfreq(laf, 1, useNA="no")), 
+            as.numeric(table(data[, 1], useNA="no")))
+        expect_equal(as.numeric(colfreq(laf, 2)), 
+            as.numeric(table(data[, 2], useNA="ifany")))
+        expect_equal(as.numeric(colfreq(laf, 3)), 
+            as.numeric(table(as.integer(data[, 3]), useNA="ifany")))
     })
 
 

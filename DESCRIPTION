@@ -1,10 +1,10 @@
 Package: LaF
 Type: Package
 Title: Fast Access to Large ASCII Files
-Version: 0.8.1
-Date: 2018-10-18
+Version: 0.8.2
+Date: 2020-03-11
 Author: Jan van der Laan
-Maintainer: Jan van der Laan <djvanderlaan@unrealizedtime.nl>
+Maintainer: Jan van der Laan <r@eoos.dds.nl>
 Description: Methods for fast access to large ASCII files.  Currently the
     following file formats are supported: comma separated format (CSV) and fixed
     width format. It is assumed that the files are too large to fit into memory,
@@ -36,4 +36,4 @@ Collate:
     'textutils.R'
     'types.R'
     'utility.R'
-RoxygenNote: 6.1.0
+RoxygenNote: 7.0.2
