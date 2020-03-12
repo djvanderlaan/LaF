@@ -37,7 +37,7 @@ int IntColumn::get_value() const {
     if (ignore_failed_conversion_) return NA_INTEGER;
     std::ostringstream message;
     message << "Conversion to int failed; line=" << reader_->get_current_line()-1
-      << "; column=" << column_ 
+      << "; column=" << (column_ + 1L)
       << "; string='" << std::string(buffer, length) << "'";
     throw std::runtime_error(message.str());
   }
