@@ -34,11 +34,17 @@
 #' specified, or random lines.
 #'
 #' @examples
+#' # Create temporary filename
+#' tmpcsv  <- tempfile(fileext="csv")
+#'
 #' # Generate file
-#' writeLines(letters[1:20], con="tmp.csv")
+#' writeLines(letters[1:20], con=tmpcsv)
 #'
 #' # Count the lines
-#' determine_nlines("tmp.csv")
+#' determine_nlines(tmpcsv)
+#'
+#' # Cleanup
+#' file.remove(tmpcsv)
 #'
 #' @export
 determine_nlines <- function(filename) {
@@ -66,8 +72,14 @@ determine_nlines <- function(filename) {
 #' \code{\link{sample_lines}} can be used to read in random lines.
 #'
 #' @examples
-#' writeLines(letters[1:20], con="tmp.csv")
-#' get_lines("tmp.csv", c(1, 10))
+#' # Create temporary filename
+#' tmpcsv  <- tempfile(fileext="csv")
+#'
+#' writeLines(letters[1:20], con=tmpcsv)
+#' get_lines(tmpcsv, c(1, 10))
+#'
+#' # Cleanup
+#' file.remove(tmpcsv)
 #'
 #' @export
 get_lines <- function(filename, line_numbers) {
@@ -108,8 +120,14 @@ get_lines <- function(filename, line_numbers) {
 #' \code{\link{get_lines}} can be used to read in specified lines.
 #'
 #' @examples
-#' writeLines(letters[1:20], con="tmp.csv")
-#' sample_lines("tmp.csv", 10)
+#' # Create temporary filename
+#' tmpcsv  <- tempfile(fileext="csv")
+#'
+#' writeLines(letters[1:20], con=tmpcsv)
+#' sample_lines(tmpcsv, 10)
+#'
+#' # Cleanup
+#' file.remove(tmpcsv)
 #'
 #' @export
 sample_lines <- function(filename, n, nlines = NULL) {

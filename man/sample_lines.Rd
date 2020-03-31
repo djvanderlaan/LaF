@@ -30,8 +30,14 @@ from the first \code{nlines} line by specifying a value for \code{nlines} that
 is smaller than the number of lines in the file.
 }
 \examples{
-writeLines(letters[1:20], con="tmp.csv")
-sample_lines("tmp.csv", 10)
+# Create temporary filename
+tmpcsv  <- tempfile(fileext="csv")
+
+writeLines(letters[1:20], con=tmpcsv)
+sample_lines(tmpcsv, 10)
+
+# Cleanup
+file.remove(tmpcsv)
 
 }
 \seealso{

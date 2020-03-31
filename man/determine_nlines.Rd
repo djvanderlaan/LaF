@@ -23,11 +23,17 @@ end in a line ending, but does contain character, this line is also counted.
 The file size is not limited by the amount of memory in the computer.
 }
 \examples{
+# Create temporary filename
+tmpcsv  <- tempfile(fileext="csv")
+
 # Generate file
-writeLines(letters[1:20], con="tmp.csv")
+writeLines(letters[1:20], con=tmpcsv)
 
 # Count the lines
-determine_nlines("tmp.csv")
+determine_nlines(tmpcsv)
+
+# Cleanup
+file.remove(tmpcsv)
 
 }
 \seealso{

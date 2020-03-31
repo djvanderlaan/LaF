@@ -61,6 +61,9 @@
 #' can be used to open a file using \code{\link{laf_open}}.
 #' 
 #' @examples
+#' # Create temporary filename
+#' tmpcsv  <- tempfile(fileext="csv")
+#'
 #' # Generate test data
 #' ntest <- 10
 #' column_types <- c("integer", "integer", "double", "string")
@@ -72,13 +75,16 @@
 #'     stringsAsFactors = FALSE
 #'     )
 #' # Write test data to csv file
-#' write.table(testdata, file="tmp.csv", row.names=FALSE, col.names=TRUE, sep=',')
+#' write.table(testdata, file=tmpcsv, row.names=FALSE, col.names=TRUE, sep=',')
 #' 
 #' # Detect data model
-#' model <- detect_dm_csv("tmp.csv", header=TRUE)
+#' model <- detect_dm_csv(tmpcsv, header=TRUE)
 #' 
 #' # Create LaF-object
 #' laf <- laf_open(model)
+#'
+#' # Cleanup
+#' file.remove(tmpcsv)
 #'
 #' @importFrom utils read.table 
 #' @export
@@ -168,6 +174,11 @@ detect_dm_csv <- function(filename, sep=",", dec=".", header=FALSE,
 #' file using \code{\link{laf_open}}.
 #' 
 #' @examples
+#' # Create some temporary files
+#' tmpcsv  <- tempfile(fileext="csv")
+#' tmp2csv <- tempfile(fileext="csv")
+#' tmpyaml <- tempfile(fileext="yaml")
+#' 
 #' # Generate test data
 #' ntest <- 10
 #' column_types <- c("integer", "integer", "double", "string")
@@ -178,27 +189,32 @@ detect_dm_csv <- function(filename, sep=",", dec=".", header=FALSE,
 #'     d = sample(c("jan", "pier", "tjores", "corneel"), ntest, replace=TRUE)
 #'     )
 #' # Write test data to csv file
-#' write.table(testdata, file="tmp.csv", row.names=FALSE, col.names=FALSE, sep=',')
+#' write.table(testdata, file=tmpcsv, row.names=FALSE, col.names=FALSE, sep=',')
 #' 
 #' # Create LaF-object
-#' laf <- laf_open_csv("tmp.csv", column_types=column_types)
+#' laf <- laf_open_csv(tmpcsv, column_types=column_types)
 #' 
 #' # Write data model to stdout() (screen)
 #' write_dm(laf, stdout())
 #' 
 #' # Write data model to file
-#' write_dm(laf, "tmp.yaml")
+#' write_dm(laf, tmpyaml)
 #' 
 #' # Read data model and open file
-#' laf2 <- laf_open(read_dm("tmp.yaml"))
+#' laf2 <- laf_open(read_dm(tmpyaml))
 #' 
 #' # Write test data to second csv file
-#' write.table(testdata, file="tmp2.csv", row.names=FALSE, col.names=FALSE, sep=',')
+#' write.table(testdata, file=tmp2csv, row.names=FALSE, col.names=FALSE, sep=',')
 #' 
 #' # Read data model and open seconde file, demonstrating the use of the optional
 #' # arguments to read_dm
-#' laf2 <- laf_open(read_dm("tmp.yaml", filename="tmp2.csv"))
+#' laf2 <- laf_open(read_dm(tmpyaml, filename=tmp2csv))
 #' 
+#' # Cleanup
+#' file.remove(tmpcsv)
+#' file.remove(tmp2csv)
+#' file.remove(tmpyaml)
+#'
 #' @rdname datamodels
 #' @export
 read_dm <- function(modelfile, ...) {
@@ -294,6 +310,11 @@ write_dm <- function(model, modelfile) {
 #'
 #'
 #' @examples
+#' # Create some temporary files
+#' tmpcsv  <- tempfile(fileext="csv")
+#' tmp2csv <- tempfile(fileext="csv")
+#' tmpyaml <- tempfile(fileext="yaml")
+#' 
 #' # Generate test data
 #' ntest <- 10
 #' column_types <- c("integer", "integer", "double", "string")
@@ -304,23 +325,28 @@ write_dm <- function(model, modelfile) {
 #'     d = sample(c("jan", "pier", "tjores", "corneel"), ntest, replace=TRUE)
 #'     )
 #' # Write test data to csv file
-#' write.table(testdata, file="tmp.csv", row.names=FALSE, col.names=FALSE, sep=',')
+#' write.table(testdata, file=tmpcsv, row.names=FALSE, col.names=FALSE, sep=',')
 #' 
 #' # Create LaF-object
-#' laf <- laf_open_csv("tmp.csv", column_types=column_types)
+#' laf <- laf_open_csv(tmpcsv, column_types=column_types)
 #' 
 #' # Write data model to file
-#' write_dm(laf, "tmp.yaml")
+#' write_dm(laf, tmpyaml)
 #' 
 #' # Read data model and open file
-#' laf <- laf_open(read_dm("tmp.yaml"))
+#' laf <- laf_open(read_dm(tmpyaml))
 #' 
 #' # Write test data to second csv file
-#' write.table(testdata, file="tmp2.csv", row.names=FALSE, col.names=FALSE, sep=',')
+#' write.table(testdata, file=tmp2csv, row.names=FALSE, col.names=FALSE, sep=',')
 #' 
-#' # Read data model and open seconde file, demonstrating the use of the optional
+#' # Read data model and open second file, demonstrating the use of the optional
 #' # arguments to laf_open
-#' laf2 <- laf_open(read_dm("tmp.yaml"), filename="tmp2.csv")
+#' laf2 <- laf_open(read_dm(tmpyaml), filename=tmp2csv)
+#'
+#' # Cleanup
+#' file.remove(tmpcsv)
+#' file.remove(tmp2csv)
+#' file.remove(tmpyaml)
 #'
 #' @export
 laf_open <- function(model, ...) {

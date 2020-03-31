@@ -23,8 +23,14 @@ Line numbers larger than the number of lines in the file are ignored. Missing
 values are returned for these.
 }
 \examples{
-writeLines(letters[1:20], con="tmp.csv")
-get_lines("tmp.csv", c(1, 10))
+# Create temporary filename
+tmpcsv  <- tempfile(fileext="csv")
+
+writeLines(letters[1:20], con=tmpcsv)
+get_lines(tmpcsv, c(1, 10))
+
+# Cleanup
+file.remove(tmpcsv)
 
 }
 \seealso{

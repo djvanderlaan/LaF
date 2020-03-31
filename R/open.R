@@ -55,6 +55,9 @@
 #' \code{\link{detect_dm_csv}} to automatically determine the column types. 
 #'
 #' @examples
+#' # Create temporary filename
+#' tmpcsv  <- tempfile(fileext="csv")
+#'
 #' # Generate test data
 #' ntest <- 10
 #' column_types <- c("integer", "integer", "double", "string")
@@ -65,10 +68,10 @@
 #'     d = sample(c("jan", "pier", "tjores", "corneel"), ntest, replace=TRUE)
 #'     )
 #' # Write test data to csv file
-#' write.table(testdata, file="tmp.csv", row.names=FALSE, col.names=FALSE, sep=',')
+#' write.table(testdata, file=tmpcsv, row.names=FALSE, col.names=FALSE, sep=',')
 #' 
 #' # Create LaF-object
-#' laf <- laf_open_csv("tmp.csv", column_types=column_types)
+#' laf <- laf_open_csv(tmpcsv, column_types=column_types)
 #' 
 #' # Read from file using indexing
 #' first_column <- laf[ , 1]
@@ -78,6 +81,9 @@
 #' begin(laf)
 #' first_block <- next_block(laf, nrows=2)
 #' second_block <- next_block(laf, nrows=2)
+#'
+#' # Cleanup
+#' file.remove(tmpcsv)
 #'
 #' @export
 laf_open_csv <-function(filename, column_types, 

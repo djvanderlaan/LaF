@@ -36,6 +36,10 @@
 #' can be used to open a file using \code{\link{laf_open}}.
 #'
 #' @examples
+#' # Create some temporary files
+#' tmpdat <- tempfile(fileext="dat")
+#' tmpbla <- tempfile(fileext="bla")
+#' 
 #' # Generate test data
 #' lines <- c(
 #'     " 1M 1.45Rotterdam ",
@@ -46,7 +50,7 @@
 #'     " 5M     Copenhagen",
 #'     " 6M-12.1          ",
 #'     " 7F   -1Oslo      ")
-#' writeLines(lines, con="tmp.dat")
+#' writeLines(lines, con=tmpdat)
 #' 
 #' # Create a file containing the data model
 #' writeLines(c( 
@@ -56,9 +60,13 @@
 #'     "  gender : STRING[1]", 
 #'     "  x      : REAL[5] {comment}", 
 #'     "  city   : STRING[10]", 
-#'     "ENDMODEL"), con="tmp.bla")
-#' model <- read_dm_blaise("tmp.bla", datafilename="tmp.dat")
+#'     "ENDMODEL"), con=tmpbla)
+#' model <- read_dm_blaise(tmpbla, datafilename=tmpdat)
 #' laf <- laf_open(model)
+#'
+#' # Cleanup
+#' file.remove(tmpbla)
+#' file.remove(tmpdat)
 #'
 #' @export
 read_dm_blaise <- function(filename, datafilename=NA) {

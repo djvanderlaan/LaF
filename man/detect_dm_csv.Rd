@@ -68,6 +68,9 @@ Therefore, for categorical columns with a very large number of (almost) unique
 levels can cause memory problems.
 }
 \examples{
+# Create temporary filename
+tmpcsv  <- tempfile(fileext="csv")
+
 # Generate test data
 ntest <- 10
 column_types <- c("integer", "integer", "double", "string")
@@ -79,13 +82,16 @@ testdata <- data.frame(
     stringsAsFactors = FALSE
     )
 # Write test data to csv file
-write.table(testdata, file="tmp.csv", row.names=FALSE, col.names=TRUE, sep=',')
+write.table(testdata, file=tmpcsv, row.names=FALSE, col.names=TRUE, sep=',')
 
 # Detect data model
-model <- detect_dm_csv("tmp.csv", header=TRUE)
+model <- detect_dm_csv(tmpcsv, header=TRUE)
 
 # Create LaF-object
 laf <- laf_open(model)
+
+# Cleanup
+file.remove(tmpcsv)
 
 }
 \seealso{

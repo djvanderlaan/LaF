@@ -27,6 +27,10 @@ the most common features found in Blaise files are supported. If part of the
 data model can not be parsed a warning is given.
 }
 \examples{
+# Create some temporary files
+tmpdat <- tempfile(fileext="dat")
+tmpbla <- tempfile(fileext="bla")
+
 # Generate test data
 lines <- c(
     " 1M 1.45Rotterdam ",
@@ -37,7 +41,7 @@ lines <- c(
     " 5M     Copenhagen",
     " 6M-12.1          ",
     " 7F   -1Oslo      ")
-writeLines(lines, con="tmp.dat")
+writeLines(lines, con=tmpdat)
 
 # Create a file containing the data model
 writeLines(c( 
@@ -47,9 +51,13 @@ writeLines(c(
     "  gender : STRING[1]", 
     "  x      : REAL[5] {comment}", 
     "  city   : STRING[10]", 
-    "ENDMODEL"), con="tmp.bla")
-model <- read_dm_blaise("tmp.bla", datafilename="tmp.dat")
+    "ENDMODEL"), con=tmpbla)
+model <- read_dm_blaise(tmpbla, datafilename=tmpdat)
 laf <- laf_open(model)
+
+# Cleanup
+file.remove(tmpbla)
+file.remove(tmpdat)
 
 }
 \seealso{
