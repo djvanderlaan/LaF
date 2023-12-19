@@ -186,11 +186,21 @@ unsigned int CSVReader::determine_ncolumns(const std::string& filename) {
   input.seekg(offset_, std::ios::beg);
   int ncolumns = 0;
   bool empty = true;
+  bool open_quote = false;
   while (true) {
     int c = input.get();
+    if (c == '"') {
+      if(open_quote){
+          open_quote = false;
+      }else{
+          open_quote = true;
+      }
+    }
     if (c == sep_) {
-      empty = false;
-      ncolumns++;
+      if (!open_quote) {
+        empty = false;
+        ncolumns++;
+      }
     } else if ((!c) || (c == '\n')) {
       if (!empty) ncolumns++;
       break;
