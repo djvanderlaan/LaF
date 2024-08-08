@@ -1,4 +1,9 @@
 
+LaF version 0.8.5
+===============================================================================
+* Allow user to set encoding for `read_dm_blaise`. As these files are usually
+  used on windows systems the default encoding is latin-1.
+
 LaF version 0.8
 ===============================================================================
 * Detects and ignores byte-order-mark
