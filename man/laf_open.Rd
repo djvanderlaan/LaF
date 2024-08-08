@@ -7,7 +7,7 @@
 laf_open(model, ...)
 }
 \arguments{
-\item{model}{a {data model}, such as one returned by \link{read_dm} or
+\item{model}{a data model, such as one returned by \link{read_dm} or
 \link{detect_dm_csv}.}
 
 \item{...}{additional arguments can be used to overwrite the values specified

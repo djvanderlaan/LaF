@@ -4,13 +4,15 @@
 \alias{read_dm_blaise}
 \title{Read in Blaise data models}
 \usage{
-read_dm_blaise(filename, datafilename = NA)
+read_dm_blaise(filename, datafilename = NA, encoding = "latin1")
 }
 \arguments{
 \item{filename}{the filename of the file containing the data model.}
 
 \item{datafilename}{the filename of the data file to which the data model
 belongs.}
+
+\item{encoding}{the encoding used in the file. See \code{\link{readLines}}.}
 }
 \value{
 Returns a data model (which is a list containing all the relevant information

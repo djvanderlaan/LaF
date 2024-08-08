@@ -287,7 +287,7 @@ write_dm <- function(model, modelfile) {
 #' all the information needed to open the file (column types, column widths,
 #' etc.). 
 #' 
-#' @param model a {data model}, such as one returned by \link{read_dm} or
+#' @param model a data model, such as one returned by \link{read_dm} or
 #'   \link{detect_dm_csv}.
 #' @param ... additional arguments can be used to overwrite the values specified
 #'   by the data model. These are listed in the argument documentation for
