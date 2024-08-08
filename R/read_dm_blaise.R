@@ -19,6 +19,7 @@
 #' @param filename the filename of the file containing the data model.
 #' @param datafilename the filename of the data file to which the data model
 #' belongs.
+#' @param encoding the encoding used in the file. See \code{\link{readLines}}.
 #'
 #' @details
 #' The function reads the data model from file and returns a list that can be
@@ -69,10 +70,10 @@
 #' file.remove(tmpdat)
 #'
 #' @export
-read_dm_blaise <- function(filename, datafilename=NA) {
+read_dm_blaise <- function(filename, datafilename=NA, encoding = "latin1") {
 
     # Read complete all lines in file
-    lines <- readLines(filename, warn=FALSE)
+    lines <- readLines(filename, warn=FALSE, encoding = encoding)
 
     # remove comments 
     # these are between { and } (we will assume that comments start and end on
