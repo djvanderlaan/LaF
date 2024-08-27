@@ -15,7 +15,7 @@ laf_open_fwf(
 )
 }
 \arguments{
-\item{filename}{character containing the filename of the CSV-file.}
+\item{filename}{character containing the filename of the fixed width file.}
 
 \item{column_types}{character vector containing the types of data in each of 
 the columns. Valid types are: double, integer, categorical and string.}
