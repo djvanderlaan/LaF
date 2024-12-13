@@ -190,13 +190,12 @@ unsigned int CSVReader::determine_ncolumns(const std::string& filename) {
   while (true) {
     int c = input.get();
     if (c == '"') {
-      if(open_quote){
-          open_quote = false;
-      }else{
-          open_quote = true;
+      if (open_quote){
+        open_quote = false;
+      } else {
+        open_quote = true;
       }
-    }
-    if (c == sep_) {
+    } else if (c == sep_) {
       if (!open_quote) {
         empty = false;
         ncolumns++;

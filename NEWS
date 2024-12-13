@@ -1,4 +1,8 @@
 
+LaF version 0.8.6
+===============================================================================
+* Bug fixed in csv-reader with separators in first line contained in quotes.
+
 LaF version 0.8.5
 ===============================================================================
 * Allow user to set encoding for `read_dm_blaise`. As these files are usually

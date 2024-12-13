@@ -1,8 +1,8 @@
 Package: LaF
 Type: Package
 Title: Fast Access to Large ASCII Files
-Version: 0.8.5
-Date: 2024-08-08
+Version: 0.8.6
+Date: 2024-12-13
 Author: Jan van der Laan
 Maintainer: Jan van der Laan <r@eoos.dds.nl>
 Description: Methods for fast access to large ASCII files.  Currently the
