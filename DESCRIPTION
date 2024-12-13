@@ -3,8 +3,12 @@ Type: Package
 Title: Fast Access to Large ASCII Files
 Version: 0.8.6
 Date: 2024-12-13
-Author: Jan van der Laan
-Maintainer: Jan van der Laan <r@eoos.dds.nl>
+Authors@R: 
+    person(given = "Jan",
+           family = "van der Laan",
+           role = c("aut", "cre"),
+           email = "r@eoos.dds.nl",
+           comment = c(ORCID = "0000-0002-0693-1514"))
 Description: Methods for fast access to large ASCII files.  Currently the
     following file formats are supported: comma separated format (CSV) and fixed
     width format. It is assumed that the files are too large to fit into memory,

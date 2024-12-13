@@ -58,6 +58,12 @@ used.
 
 The CSV-file should not contain headers. Use the \code{skip} option to skip 
 any headers.
+
+In case of an incomplete line (at line with less columns than it should
+have): when the line is completely empty the reader stops at that point and
+considers that as the end of the file. In other cases a warning is issued
+and the remaining columns are considered empty. For character columns this
+results in an empty string for numeric columns a \code{NA}.
 }
 \examples{
 # Create temporary filename

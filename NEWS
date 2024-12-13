@@ -2,6 +2,10 @@
 LaF version 0.8.6
 ===============================================================================
 * Bug fixed in csv-reader with separators in first line contained in quotes.
+* Bug fixed in csv-reader. In case of an incomplete line (with less columns than
+  it should have, the reader stopped without warning. It fill now generate a
+  warning and continue reading. The missing columns are read as empty strings
+  (resulting in NA for numeric fields).
 
 LaF version 0.8.5
 ===============================================================================

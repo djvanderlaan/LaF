@@ -43,3 +43,17 @@ test_that("Separator in second row in quote", {
 })
 
 
+
+# The bug above also lead to discovery that an incomplete line lead to 
+# incomplete reading of file
+test_that("Handle imcomplete line", {
+
+  tmpcsv  <- tempfile(fileext = "csv")
+  writeLines("1,2,3\n4,5\n6,7,8", tmpcsv)
+  laf <- LaF::laf_open_csv(tmpcsv, column_types = rep("integer", 3))
+  expect_warning(res <- laf[,])
+
+  expect_equal(res[[1]], c(1,4,6))
+  expect_equal(res[[2]], c(2,5,7))
+  expect_equal(res[[3]], c(3,NA,8))
+})

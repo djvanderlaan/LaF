@@ -76,6 +76,7 @@ void CSVReader::reset() {
   current_line_ = 0; 
 }
 
+#include <iostream>
 bool CSVReader::next_line() {
   pointer_++;
   unsigned int column_length = 0;
@@ -116,11 +117,22 @@ bool CSVReader::next_line() {
           column++;
           if (buffer_[pointer_] == '\n') {
             current_line_++;
-            return column == ncolumns_;
+            if (column > 1 && column < ncolumns_) {
+              Rcpp::warning("Warning: incomplete line found at line %i.", current_line_ );
+              for (unsigned int i = column; i != ncolumns_; ++i) {
+                lengths_[i] = 0;
+                positions_[i] = column_position;
+              }
+              return true;
+            }
             //return true;
+            // we don't return true in order to handle the case of a single empty
+            // line; this is considered the end of the file; should there be an 
+            // empty line in the middle reading stops
+            return column==ncolumns_;
           }
-          positions_[column] = column_position;
           if (column >= ncolumns_) throw std::runtime_error("Line has too many columns");
+          positions_[column] = column_position;
           column_length = 0;
         } else if (buffer_[pointer_] == '\r') {
           // ignore \r
