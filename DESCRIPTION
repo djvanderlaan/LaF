@@ -37,3 +37,4 @@ Collate:
     'types.R'
     'utility.R'
 RoxygenNote: 7.3.1
+Encoding: UTF-8

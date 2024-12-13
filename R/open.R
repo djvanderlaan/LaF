@@ -159,7 +159,7 @@ laf_open_csv <-function(filename, column_types,
 #' to read in blocks. For processing the file in blocks the (faster) convenience
 #' function process_blocks can be used. 
 #'
-#' @param filename character containing the filename of the CSV-file.
+#' @param filename character containing the filename of the fixed width file.
 #' @param column_types character vector containing the types of data in each of 
 #'   the columns. Valid types are: double, integer, categorical and string.
 #' @param column_widths numeric vector containing the width in number of character
